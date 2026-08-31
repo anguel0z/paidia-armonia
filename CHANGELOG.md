@@ -1,5 +1,17 @@
 # Changelog
 
+## v175 — 2026-08-31
+
+- **Design skill polish (Lager + Zo-Ai):** Linear-calm density on Armonia tokens — outlined Easy action tiles with icons, status-dot tide legend, product unit meta, pine selected pier chips, FAB list clearance.
+- **A11y (Web Interface Guidelines):** focus-visible rings on search/compose/±/close; `overscroll-behavior: contain` on chat sheet; 48px compose targets; tabular nums on qty/%.
+- Cache `paidia-v175`.
+
+## v174 — 2026-08-31
+
+- **Lager mobile:** compact status strip (not tall pantry hero), sticky house/search, chip zone pier, thumb-first ± rows, Easy 2×2 actions.
+- **Zo-Ai crop crash:** floating panel was clipped over page heroes (`overflow` + fixed 220px log + glass). Now a solid mobile sheet (~78dvh), flex-scrolling log, dim scrim; tap outside / × closes.
+- Cache `paidia-v174`.
+
 ## v173 — 2026-08-30
 
 - **Lagercheck Easy:** open check → product cards → big **OK / Wenig / Leer** (DE) · **OK / Λίγο / Άδειο** (EL) → Speichern.

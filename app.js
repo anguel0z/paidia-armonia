@@ -4,11 +4,11 @@
    ════════════════════════════════════════════════════════════════ */
 /** Keep in sync with build.json — shown on login. */
 const APP_BUILD = {
-  version: 173,
-  label: 'v173',
+  version: 175,
+  label: 'v175',
   changed: {
-    de: 'Lagercheck: OK / wenig / leer — große Buttons, klar speichern',
-    el: 'Έλεγχος αποθήκης: OK / λίγο / άδειο — μεγάλα κουμπιά',
+    de: 'Lager + Zo-Ai Design-Polish (Fokus, Chips, Senden klar)',
+    el: 'Αποθήκη + Zo-Ai polish (focus, chips, καθαρό Αποστολή)',
   },
 };
 const T = {
@@ -8382,10 +8382,10 @@ function viewStock(){
         </div></details>
       </div>
       ${hid!=='all'?`<div class="stock-easy-actions" role="toolbar" aria-label="${esc(t('headerStock'))}">
-        <button class="btn stock-easy-btn pine-settle" type="button" id="stockQuickAddEasy">${esc(t('stockQuickAdd'))}</button>
-        <button class="btn sec stock-easy-btn pine-settle" type="button" id="stockShiftCheckEasyBar">${esc(t('shiftStockCheckStart'))}</button>
-        <button class="btn sec stock-easy-btn pine-settle" type="button" id="stockPhotoRead">${esc(t('stockPhotoRead'))}</button>
-        <button class="btn pine-settle stock-easy-btn" type="button" id="stockEasySave"${easySaveOn?'':' disabled'}>${esc(easySaveLabel)}</button>
+        <button class="btn stock-easy-btn pine-settle" type="button" id="stockQuickAddEasy">${ui('u-plus','sm')} ${esc(t('stockQuickAdd'))}</button>
+        <button class="btn sec stock-easy-btn pine-settle" type="button" id="stockShiftCheckEasyBar">${ui('u-check','sm')} ${esc(t('shiftStockCheckStart'))}</button>
+        <button class="btn sec stock-easy-btn pine-settle" type="button" id="stockPhotoRead">${ui('u-camera','sm')} ${esc(t('stockPhotoRead'))}</button>
+        <button class="btn pine-settle stock-easy-btn" type="button" id="stockEasySave"${easySaveOn?'':' disabled'}>${ui('u-check','sm')} ${esc(easySaveLabel)}</button>
         <button class="btn sec stock-easy-btn" type="button" id="stockOrderRefresh"${orderFrozen?'':' disabled'}>${esc(t('stockOrderRefresh'))}</button>
       </div>`:''}
       ${orderFrozen?`<div class="stock-order-freeze-note" role="status"><span>${esc(t('stockOrderFrozen'))}</span><button type="button" class="btn sm sec" id="stockOrderRefreshNote">${esc(t('stockOrderRefresh'))}</button></div>`:''}
@@ -17550,6 +17550,7 @@ function paintTopChrome(){
   navChatBtn?.classList.toggle('on', !!state.chatOpen);
   navChatBtn?.setAttribute('aria-label', t('navChat'));
   document.getElementById('chatClose')?.setAttribute('aria-label', t('close'));
+  document.getElementById('chatScrim')?.setAttribute('aria-label', t('close'));
 
   paintUiModeToggle();
 }
@@ -17682,6 +17683,7 @@ function openChatPanel(mode='ai'){
     }
     const closeBtn=document.getElementById('chatClose');
     if(closeBtn) closeBtn.setAttribute('aria-label', t('close'));
+    document.getElementById('chatScrim')?.setAttribute('aria-label', t('close'));
     try{ paintTopChrome(); }catch{}
     paintChatPanel();
     try{ scheduleMeasureChrome(); }catch{}
@@ -19377,6 +19379,10 @@ document.getElementById('navChat')?.addEventListener('click', ()=>{
   feedback('tap');
   toggleChatPanel();
 });
+document.getElementById('chatScrim')?.addEventListener('click', ()=>{
+  feedback('tap');
+  closeChatPanel();
+});
 document.getElementById('chatClose')?.addEventListener('click', ()=>{
   feedback('tap');
   closeChatPanel();
@@ -20898,7 +20904,7 @@ async function registerPaidiaServiceWorker(timeoutMs){
       reg=await navigator.serviceWorker.getRegistration();
     }
     if(!reg){
-      const ver=(typeof APP_BUILD==='object'&&APP_BUILD&&APP_BUILD.version)||173;
+      const ver=(typeof APP_BUILD==='object'&&APP_BUILD&&APP_BUILD.version)||175;
       reg=await navigator.serviceWorker.register('./sw.js?v='+ver,{scope:'./'});
     }
     if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
