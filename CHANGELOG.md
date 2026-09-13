@@ -1,3 +1,20 @@
+# v251 — FriDge reference implementation
+
+- Rebuild storage from the supplied UI kit with Ubuntu, original food artwork, centered header, filter menu, horizontal featured rail, quantity badges and two-column mobile ingredient cards.
+- Keep live stock values and product detail editing; relocate house selection and inventory actions to the reference icon menus.
+- Verify fonts/assets, mobile/desktop dimensions, menus, Greek/German, categories and search.
+
+# v250 — Storage layout alignment
+
+- Replace tall product cards with equal-height rows and inline quantity controls.
+- Keep filter and action labels on one line; show secondary item actions in an overflow menu.
+- Verify narrow mobile and desktop layouts with long German and Greek names.
+
+# v249 — FriDge storage
+
+- White storage canvas, yellow category tabs, product card grid, low-stock strip, and compact quantity controls.
+- Retains inventory, shopping-list, draft, and stock-check actions in DE/EL on mobile and desktop.
+
 ## v248 · 2026-09-13
 
 True mobile site rebuild (staff + kids) per plan.

@@ -4,12 +4,12 @@
    ════════════════════════════════════════════════════════════════ */
 /** Keep in sync with build.json — shown on login. */
 const APP_BUILD = {
-  version: 246,
-  label: 'v246',
-  changed: {
-    de: 'Plan-A Redesign: sichtbare Lager-Entwürfe, lesbare Anwesenheit, Inbox auf Home, Liste öffnet den Supermarkt, weniger Chrome vor Inhalt.',
-    el: 'Plan-A redesign: ορατά πρόχειρα αποθήκης, αναγνώσιμη παρουσία, inbox στο Home, η Λίστα ανοίγει το σούπερ μάρκετ, λιγότερο chrome πριν το περιεχόμενο.',
-  },
+  "version": 251,
+  "label": "v251",
+  "changed": {
+    "de": "Lager nach dem FriDge-UI-Kit: Originalschrift und Bilder, zwei Produktspalten, Mengen-Badges und kompakte Filter.",
+    "el": "Αποθήκη με το FriDge UI Kit: αρχική γραμματοσειρά και εικόνες, δύο στήλες, ποσότητες και φίλτρα."
+  }
 };
 const T = {
   de: {
@@ -4046,7 +4046,7 @@ const state = {
   shopRequestWho: 'all',
   stockCheckRespAck: false,
   calendarMonth: null,
-  stockFilter: 'attention',
+  stockFilter: 'all',
   stockQuery: '',
   stockOpenCategories: null,
   stockTiles: localStorage.getItem('paidia.stockTiles')==='1',
@@ -4293,10 +4293,6 @@ function normalizeUiModeSurfaces(){
     if(state.kidsPane && !easyKidsPanes.has(state.kidsPane)){
       state.kidsPane = 'directory';
     }
-  }
-  if(state.mode==='staff' && state.tab==='stock' && state.stockFilter==='all'){
-    /* Easy Lager = attention/empty + search; full shelves are Pro. */
-    state.stockFilter = 'attention';
   }
   if(state.mode==='staff' && state.tab==='shop' && state.shopRequestFilter && state.shopRequestFilter!=='open'){
     state.shopRequestFilter = 'open';
@@ -10581,218 +10577,77 @@ function recentStockMoves(hid, limit=6){
     .slice(0, limit);
 }
 
+function fridgeKitIcon(name){
+  const paths={
+    grid:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
+    search:'<circle cx="10.5" cy="10.5" r="7.5"/><path d="m16 16 5 5"/>',
+    filters:'<path d="M14 7h6M4 17h6"/><circle cx="6" cy="7" r="2.5" fill="currentColor" stroke="none"/><circle cx="18" cy="17" r="2.5" fill="currentColor" stroke="none"/>',
+    bell:'<path d="M5 10a7 7 0 0 1 14 0v5l2 3H3l2-3z" fill="currentColor"/><path d="M9 21h6"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/>',
+    plus:'<path d="M12 5v14M5 12h14"/>'
+  };
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]||paths.grid}</svg>`;
+}
+function fridgeKitArt(p){
+  const name=norm(`${p.de||''} ${p.el||''} ${p.en||''}`);
+  const assets=[[/süßkart|sweet.potato|γλυκοπατ/,'sweet-potato'],[/kartoff|potato|πατάτ/,'potato'],[/pilz|shroom|mushroom|μανιτάρ/,'mushrooms'],[/knoblauch|garlic|σκόρδ/,'garlic'],[/joghurt|yogurt|γιαούρτ/,'yogurt'],[/tomatenso|tomato.sauce|σάλτσα ντομάτ/,'tomato-sauce'],[/quinoa|κινόα/,'quinoa'],[/reis|rice|ρύζι/,'rice'],[/walnu|walnut|καρύδ/,'walnuts'],[/aubergin|eggplant|μελιτζάν/,'eggplant'],[/olivenöl|oil|λάδι/,'oil'],[/pfeffer|pepper|πιπέρι/,'spices'],[/sushi|σούσι/,'sushi']];
+  const match=assets.find(([pattern])=>pattern.test(name));
+  return match?`<img src="/icons/fridge/${match[1]}.png" alt="" loading="lazy" decoding="async">`:`<span class="fk-art-fallback">${svgIcon(prodIconId(p),'prod-ico')}</span>`;
+}
 function viewStock(){
-  const hid = state.house;
-  const houses=(hid==='all'?DB.houses:[house(hid)]).filter(Boolean);
-  if(!houses.length){
-    return `<div class="stock-page">${emptyState(ui('u-leaf'), t('selectHouse'))}</div>`;
-  }
-  const productState=p=>stockProductStateFor(houses,p);
-  const allProducts=PRODUCTS();
-  const counts={empty:0,low:0,ok:0};allProducts.forEach(p=>counts[productState(p)]++);
-  const query=norm(state.stockQuery||'');
-  const visible=stockComputeVisible(houses, hid);
-  const orderFrozen=!!(state.stockOrderFreeze
-    && state.stockOrderFreeze.house===hid
-    && state.stockOrderFreeze.filter===state.stockFilter
-    && state.stockOrderFreeze.query===(state.stockQuery||''));
-  const draftPending=stockDraftEntries().length;
-  const easySaveLabel=draftPending?t('stockDraftSave'):t('stockOrderRefresh');
-  const easySaveOn=!!(draftPending||orderFrozen);
-  const catIcon = cid => svgIcon(catIconId(cid), 'cat-ico');
-  const jarHtml=(qty,p,st)=>{
-    const fill=stockFillPct(qty,p);
-    return `<span class="stock-jar ${st}" style="--fill:${fill}%" title="${esc(T[state.lang].stockJarAria(L(p),fill))}" aria-hidden="true"><span class="stock-jar-fill"></span></span>`;
-  };
-  const productCard=p=>{
-    const st=productState(p);
-    if(hid==='all'){
-      if(state.stockTiles){
-        const qtyLine=houses.map(h=>`${esc(h.short)} ${DB.stock[stockKey(h.id,p.id)]??0}`).join(' · ');
-        const avg=houses.reduce((s,h)=>s+(DB.stock[stockKey(h.id,p.id)]??0),0)/Math.max(1,houses.length);
-        return `<button class="stock-tile ${st}" type="button" data-stock-product="${p.id}" aria-label="${t('tapProduct')}: ${esc(L(p))}">
-          ${jarHtml(avg,p,st)}
-          <span class="stock-tile-name">${esc(L(p))}</span>
-          <b class="stock-tile-qty">${houses.map(h=>DB.stock[stockKey(h.id,p.id)]??0).join('/')}</b>
-          <span class="stock-tile-meta">${qtyLine}</span>
-        </button>`;
-      }
-      const quantities=houses.map(h=>`<div class="stock-qty"><span class="stock-state">${esc(h.short)}</span>${DB.stock[stockKey(h.id,p.id)]??0}<small>${esc(p.unit)}</small></div>`).join('');
-      return `<div class="stock-product ${st} multi-house">
-        <button class="stock-product-main" data-stock-product="${p.id}" type="button" aria-label="${t('tapProduct')}: ${esc(L(p))}"><div class="stock-product-name">${esc(L(p))}</div>
-        <div class="stock-product-meta">${t(st==='empty'?'stockOutState':st==='low'?'stockLow':'stockHealthy')}</div></button>
-        <button class="btn ghost sm stock-edit-btn" type="button" data-stock-edit="${p.id}" title="${esc(t('stockEdit'))}" aria-label="${esc(t('stockEditAria'))}: ${esc(L(p))}"><span aria-hidden="true">✎</span> ${esc(t('stockEdit'))}</button>
-        <div class="stock-product-side"><div class="stock-house-quantities">${quantities}</div></div></div>`;
-    }
-    const liveQty=DB.stock[stockKey(hid,p.id)]??0;
-    const draftDelta=Number(state.stockDraft[p.id]||0);
-    const qty=roundStock(liveQty+draftDelta);
-    const step=stepFor(p);
-    const thr=lowThreshold(p);
-    const selecting=state.selectMode==='stock' && hid!=='all';
-    const sel=selecting && isSelected(p.id);
-    const flash=state.stockFlashPid===p.id?(state.stockFlashDir==='IN'?'flash-in':'flash-out'):'';
-    const pendingOut=state.stockPendingStep?.pid===p.id
-      || !!(state.stockPendingStep?.bulkOut||[]).includes(p.id)
-      || !!(state.stockPendingStep?.commitDraft && draftDelta<0);
-    const onList=fridayEntries(hid).some(e=>['open','pending'].includes(e.status)&&(e.productId===p.id||norm(e.name)===norm(L(p))));
-    const lastMove=(typeof recentStockMoves==='function'?recentStockMoves(hid,40):[]).find(m=>m.productId===p.id);
-    const lastWho=lastMove?(emp(lastMove.employeeId)?.name||'') : '';
-    const lastWhen=lastMove?.ts?(typeof relativeTime==='function'?relativeTime(lastMove.ts):'') : '';
-    const lastBit=lastMove?`${lastMove.type==='IN'?'＋':'−'} ${lastWhen}${lastWho?` · ${lastWho}`:''}`:'';
-    const draftBit=draftDelta?` · ${draftDelta>0?'+':''}${draftDelta}`:'';
-    const stLabel=t(st==='empty'?'stockOutState':st==='low'?'stockLow':'stockHealthy');
-    return `<div class="stock-product stock-board-row stock-row-dense ${st} has-stepper ${flash} ${pendingOut?'await-reason':''} ${draftDelta?'has-draft':''} ${sel?'selected':''}" data-stock-row="${p.id}">
-      ${selecting?`<button class="bulk-check ${sel?'on':''}" type="button" data-bulk-toggle="${p.id}" aria-pressed="${sel?'true':'false'}" aria-label="${esc(t('selectMode'))}"></button>`:''}
-      <span class="stock-row-ico" aria-hidden="true">${svgIcon(prodIconId(p),'prod-ico')}</span>
-      <button class="stock-product-main" data-stock-product="${p.id}" type="button" aria-label="${t('tapProduct')}: ${esc(L(p))}">
-        <div class="stock-product-name">${esc(L(p))}</div>
-        <div class="stock-product-meta"><span class="stock-st-pill ${st}">${esc(stLabel)}</span> · min ${thr}${onList?` · ${esc(t('navShop'))}`:''}${draftBit?`<span class="muted">${esc(draftBit)}</span>`:''}${lastBit?` · ${esc(lastBit)}`:''}</div>
+  const hid=state.house, houses=(hid==='all'?DB.houses:[house(hid)]).filter(Boolean);
+  if(!houses.length)return `<div id="fridgeStorage">${emptyState(ui('u-leaf'),t('selectHouse'))}</div>`;
+  const allProducts=PRODUCTS(), productState=p=>stockProductStateFor(houses,p);
+  const selectedCategory=state.stockFridgeCategory||'all';
+  const visible=stockComputeVisible(houses,hid).filter(p=>selectedCategory==='all'||p.cat===selectedCategory);
+  const attention=allProducts.filter(p=>productState(p)!=='ok');
+  const el=state.lang==='el', location=hid==='all'?t('bothHouses'):house(hid)?.short;
+  const qtyFor=p=>houses.reduce((sum,h)=>sum+Number(DB.stock[stockKey(h.id,p.id)]||0),0)+(hid==='all'?0:Number(state.stockDraft[p.id]||0));
+  const statusFor=p=>t(productState(p)==='empty'?'stockOutState':productState(p)==='low'?'stockLow':'stockHealthy');
+  const labelCount=n=>`${n} ${el?'είδη':'Artikel'}`;
+  const card=p=>{
+    const st=productState(p),qty=roundStock(qtyFor(p)),draft=hid==='all'?0:Number(state.stockDraft[p.id]||0);
+    const fill=Math.max(0,Math.min(100,stockFillPct(qty,p)));
+    const selecting=state.selectMode==='stock'&&hid!=='all';
+    return `<article class="fk-product ${st} ${draft?'has-draft':''} ${hid==='all'?'multi-house':''}" data-stock-row="${esc(p.id)}">
+      <button type="button" class="fk-product-card" data-stock-product="${esc(p.id)}" aria-label="${esc(t('tapProduct'))}: ${esc(L(p))}">
+        <span class="fk-quantity-badge">${qty} ${esc(p.unit)}</span>
+        <span class="fk-product-art">${fridgeKitArt(p)}</span>
+        <span class="fk-health-track"><span style="width:${fill}%"></span></span>
+        <span class="fk-stock-state">${esc(statusFor(p))}</span>
       </button>
-      ${!selecting && !onList?`<button class="btn ghost sm stock-to-list" type="button" data-stock-want="${p.id}" title="${esc(t('bulkToList'))}" aria-label="${esc(t('bulkToList'))}">→</button>`:''}
-      ${!selecting?`<button class="btn ghost sm stock-edit-btn" type="button" data-stock-edit="${p.id}" title="${esc(t('stockEdit'))}" aria-label="${esc(t('stockEditAria'))}: ${esc(L(p))}">✎</button>`:''}
-      <div class="stock-stepper" role="group" aria-label="${esc(L(p))}">
-        <button class="stock-step out pine-settle" type="button" data-stock-step="OUT" data-pid="${p.id}" aria-label="${t('stockOut')} −${step} ${esc(p.unit)}" ${qty<=0?'disabled':''}><span class="stock-step-glyph" aria-hidden="true">−</span></button>
-        <label class="stock-qty-edit"><span class="sr-only">${esc(L(p))} qty</span>
-          <input class="stock-qty-input" type="number" inputmode="decimal" min="0" step="any" data-stock-qty="${p.id}" value="${qty}" aria-label="${esc(L(p))}">
-          <small>${esc(p.unit)}</small>
-        </label>
-        <button class="stock-step in pine-settle" type="button" data-stock-step="IN" data-pid="${p.id}" aria-label="${t('stockIn')} +${step} ${esc(p.unit)}"><span class="stock-step-glyph" aria-hidden="true">+</span></button>
-      </div>
-    </div>`;
+      <button type="button" class="fk-product-name" data-stock-product="${esc(p.id)}" title="${esc(L(p))}">${esc(L(p))}</button>
+      <span class="fk-product-note">${hid==='all'?houses.map(h=>`${esc(h.short)} ${DB.stock[stockKey(h.id,p.id)]||0}`).join(' · '):`${esc(location)} · min ${lowThreshold(p)} ${esc(p.unit)}`}${draft?` · ${draft>0?'+':''}${draft}`:''}</span>
+      ${selecting?`<button class="fk-select bulk-check ${isSelected(p.id)?'on':''}" type="button" data-bulk-toggle="${esc(p.id)}" aria-pressed="${isSelected(p.id)}" aria-label="${esc(t('selectMode'))}"></button>`:''}
+    </article>`;
   };
-  const openCats=Array.isArray(state.stockOpenCategories)?state.stockOpenCategories:null;
-  const categoryHtml=CATS().map((c,index)=>{
-    const products=visible.filter(p=>p.cat===c.id);if(!products.length)return '';
-    const hasFocus=hid!=='all'&&products.some(p=>state.stockFlashPid===p.id||state.stockPendingStep?.pid===p.id);
-    const catEmpty=products.filter(p=>productState(p)==='empty').length;
-    const catLow=products.filter(p=>productState(p)==='low').length;
-    const needsAttention=catEmpty+catLow>0;
-    const shouldOpen=hasFocus||(openCats?openCats.includes(c.id):(needsAttention||index===0));
-    const badges=`${catEmpty?`<span class="stock-shelf-badge empty">${catEmpty}</span>`:''}${catLow?`<span class="stock-shelf-badge low">${catLow}</span>`:''}`;
-    return `<details class="stock-category stock-shelf ${needsAttention?'needs-attention':''}" data-stock-category="${c.id}" data-default-open="${shouldOpen?'1':'0'}"${shouldOpen?' open':''}>
-      <summary>
-        <span class="stock-shelf-rail" aria-hidden="true"></span>
-        <span class="cat-ico-wrap">${catIcon(c.id)}</span>
-        <span class="stock-shelf-label">${esc(L(c))}</span>
-        ${badges}
-        <span class="stock-cat-count">${products.length}</span>
-      </summary>
-      <div class="stock-product-grid ${hid==='all'&&state.stockTiles?'tiles':''}">${products.map(productCard).join('')}</div>
-    </details>`;
-  }).join('');
-  const missing=(DB.listEntries||[]).filter(e=>e.status==='missing'&&(hid==='all'||e.houseId===hid));
-  const attention=counts.empty+counts.low;
-  const healthyPct=Math.round(counts.ok/Math.max(1,allProducts.length)*100);
-  const location=hid==='all'?t('bothHouses'):(house(hid)?.short||'');
-  const flatView=!!query||state.stockFilter!=='all';
-  const resultTitle=query?`${t('stockSearch')} · ${visible.length}`:state.stockFilter==='empty'?`${t('stockEmpty')} · ${visible.length}`:`${t('stockNeedsAction')} · ${visible.length}`;
-  const resultHint=query?state.stockQuery:state.stockFilter==='empty'?t('stockOutState'):T[state.lang].stockNeedsActionHint(visible.length);
-  const shelfCount=CATS().filter(c=>allProducts.some(p=>p.cat===c.id)).length;
-  const moves=recentStockMoves(hid, 6);
-  const recentHtml=isPro()?`<section class="stock-recent pro-only mode-pro-block" aria-label="${esc(t('stockRecentMoves'))}">
-      <header class="stock-section-heading compact"><div><p>${esc(t('stockRecentMoves'))}</p></div></header>
-      ${moves.length?`<ol class="stock-recent-ribbon">${moves.map((m,i)=>{
-        const p=prod(m.productId);
-        const who=emp(m.employeeId)?.name||'';
-        return `<li class="stock-recent-item ${m.type==='IN'?'in':'out'}" style="--i:${i}">
-          <span class="stock-recent-dot" aria-hidden="true"></span>
-          <span class="stock-recent-body">
-            <b>${esc(p?L(p):(m.text||'').split(' · ')[0]||'—')}</b>
-            <small>${m.type==='IN'?'+':'-'}${esc(m.qty??'')} ${esc(m.unit||'')} · ${esc(fmtDT(m.ts))}${who?` · ${esc(who)}`:''}</small>
-          </span>
-        </li>`;
-      }).join('')}</ol>`:`<p class="stock-recent-empty muted">${esc(t('stockNoRecent'))}</p>`}
-    </section>`:'';
-  const focusShelf = (!flatView && Array.isArray(state.stockOpenCategories) && state.stockOpenCategories.length===1)
-    ? state.stockOpenCategories[0] : null;
-  const boardVisible = focusShelf ? visible.filter(p=>p.cat===focusShelf) : visible;
-  const resultsHtml=flatView
-    ? `<section class="stock-priority" aria-label="${esc(resultTitle)}">
-        <header class="stock-section-heading"><div><p class="tide-line">${esc(resultTitle)}</p><span>${esc(resultHint)}</span></div>
-          ${!query&&state.stockFilter==='attention'&&attention&&hid!=='all'?`<button class="btn sec sm pine-settle" type="button" id="stockQuickList">${ui('u-cart','sm')} ${esc(t('stockQuickList'))}</button>`:''}
-        </header>
-        <div class="stock-priority-grid">${visible.map(productCard).join('')||emptyState(ui('u-check'),t('stockAllHealthy'),'',state.stockQuery?`<button class="btn sm sec" type="button" id="stockEmptyClear">${esc(t('stockClearSearch'))}</button>`:'')}</div>
-      </section>`
-    : (focusShelf || isEasy()?`<section class="stock-priority" aria-label="${esc(resultTitle)}">
-        <header class="stock-section-heading"><div><p class="tide-line">${esc(focusShelf?(L(CATS().find(c=>c.id===focusShelf)||{de:focusShelf,el:focusShelf})||focusShelf):resultTitle)}</p><span>${esc(resultHint)}</span></div></header>
-        <div class="stock-priority-grid">${boardVisible.map(productCard).join('')||emptyState(ui('u-check'),t('stockAllHealthy'),'',state.stockQuery?`<button class="btn sm sec" type="button" id="stockEmptyClear">${esc(t('stockClearSearch'))}</button>`:'')}</div>
-      </section>`:`<section class="stock-catalogue" aria-label="${esc(t('stockCatalogue'))}">
-        <header class="stock-section-heading"><div><p class="tide-line">${esc(t('stockShelves'))}</p><span>${esc(T[state.lang].stockShelfHint(shelfCount))} · ${allProducts.length} ${esc(t('productTypes'))}</span></div></header>
-        <div class="stock-categories stock-shelf-islands">${categoryHtml||emptyState(ui('u-search'),t('noStockResults'),t('noStockHint'))}</div>
-      </section>`);
-
-  return `<div class="stock-shell stock-layout-v2" data-tour="stock-main">
-    <div class="stock-layout-top">
-    <header class="stock-overview stock-pantry-hero">
-      <div class="stock-overview-copy">
-        <p class="brand-kicker">${esc(t('headerStock'))}</p>
-        <h2 class="tide-line">${esc(location)}</h2>
-        <span>${esc(t('stockHeroHint'))}</span>
-      </div>
-      <div class="stock-tide" role="img" aria-label="${esc(T[state.lang].inventoryHealthyPct(healthyPct))}">
-        <div class="stock-tide-meta"><b>${healthyPct}%</b><span>${esc(t('stockTideLabel'))}</span></div>
-        <div class="stock-tide-track"><span class="stock-tide-fill" style="width:${healthyPct}%"></span></div>
-        <div class="stock-tide-legend">
-          <span class="ok">${counts.ok} ${esc(t('stockHealthy'))}</span>
-          <span class="low">${counts.low} ${esc(t('stockLow'))}</span>
-          <span class="empty">${counts.empty} ${esc(t('stockEmpty'))}</span>
-        </div>
-      </div>
+  return `<div id="fridgeStorage" data-tour="stock-main">
+    <header class="fk-header">
+      <details class="fk-locations"><summary class="fk-icon-button" aria-label="${esc(t('filterHouse'))}" title="${esc(location)}">${fridgeKitIcon('grid')}</summary>
+        <div class="fk-popover"><div class="fk-menu-label">${esc(t('filterHouse'))}</div><div id="sHouse" data-tour="stock-houses">${DB.houses.map(h=>`<button type="button" data-h="${esc(h.id)}" aria-pressed="${hid===h.id}">${esc(h.short)}</button>`).join('')}<button type="button" data-h="all" aria-pressed="${hid==='all'}">${esc(t('bothHouses'))}</button></div></div>
+      </details>
+      <h2>${esc(t('headerStock'))}</h2>
+      <button type="button" class="fk-icon-button fk-alert-button" data-stock-filter="${state.stockFilter==='attention'?'all':'attention'}" aria-pressed="${state.stockFilter==='attention'}" aria-label="${esc(t('stockNeedsAction'))}: ${attention.length}">${fridgeKitIcon('bell')}${attention.length?'<i></i>':''}</button>
     </header>
-    <section class="stock-context" aria-label="${state.lang==='el'?'Πληροφορίες αποθέματος':'Bestandsinformationen'}">
-      <div><b>${allProducts.length}</b><span>${state.lang==='el'?'Είδη προϊόντων':'Artikelarten'}</span></div>
-      <div><b>${shelfCount}</b><span>${state.lang==='el'?'Κατηγορίες':'Kategorien'}</span></div>
-      <div><b>${(DB.listEntries||[]).filter(e=>['open','pending','missing'].includes(e.status)&&(hid==='all'||e.houseId===hid)).length}</b><span>${state.lang==='el'?'Στη λίστα αγορών':'Auf der Einkaufsliste'}</span></div>
-      <p>${state.lang==='el'?'Το ελάχιστο απόθεμα εμφανίζεται ανά προϊόν. Καταγράψτε κάθε παραλαβή και κατανάλωση ώστε η ομάδα να γνωρίζει τι υπάρχει.':'Der Mindestbestand steht bei jedem Artikel. Erfasse Zugänge und Verbrauch, damit das Team den aktuellen Vorrat kennt.'}</p>
+    <div class="fk-searchbar" data-tour="stock-command">
+      <label class="fk-search" data-tour="stock-search">${fridgeKitIcon('search')}<input id="stockSearch" value="${esc(state.stockQuery||'')}" placeholder="${esc(t('stockSearch'))}" aria-label="${esc(t('stockSearch'))}" autocomplete="off" enterkeyhint="search">${state.stockQuery?`<button type="button" id="stockClear" aria-label="${esc(t('stockClearSearch'))}">×</button>`:''}</label>
+      <details class="fk-filters"><summary class="fk-icon-button fk-filter-button" aria-label="${esc(t('stockMoreActions'))}">${fridgeKitIcon('filters')}</summary><div class="fk-popover">
+        <div class="fk-menu-label">${esc(t('stockCatalogue'))}</div>
+        <button type="button" data-stock-filter="all" aria-pressed="${state.stockFilter==='all'}">${el?'Όλα':'Alle'}</button>
+        <button type="button" data-stock-filter="attention" aria-pressed="${state.stockFilter==='attention'}">${esc(t('stockNeedsAction'))} <span>${attention.length}</span></button>
+        <button type="button" data-stock-filter="empty" aria-pressed="${state.stockFilter==='empty'}">${esc(t('stockEmpty'))}</button>
+        ${hid!=='all'?`<hr>${attention.length?`<button type="button" id="stockQuickList">${esc(t('stockQuickList'))}</button>`:''}${state.stockOrderFreeze?`<button type="button" id="stockOrderRefresh">${esc(t('stockOrderRefresh'))}</button>`:''}<button type="button" id="stockQuickAdd">${fridgeKitIcon('plus')}${esc(t('stockQuickAdd'))}</button><button type="button" id="stockPhotoRead">${esc(t('stockPhotoRead'))}</button><button type="button" id="stockShiftCheck">${esc(t('shiftStockCheck'))}</button>${isPro()?`<button type="button" id="stockSelectToggle">${esc(t(state.selectMode==='stock'?'selectDone':'selectMode'))}</button><button type="button" id="stockOpenBoard">${esc(t('stockBoardShort'))}</button>`:''}`:''}
+      </div></details>
+    </div>
+    <section class="fk-featured"><div class="fk-heading"><h3>${esc(t('stockNeedsAction'))}</h3><span>${labelCount(attention.length)}</span></div>
+      <div class="fk-featured-track">${attention.slice(0,8).map(p=>`<button class="fk-featured-card" type="button" data-stock-product="${esc(p.id)}"><span class="fk-featured-image">${fridgeKitArt(p)}</span><span class="fk-featured-info"><b>${esc(L(p))}</b><span class="fk-featured-qty">${roundStock(qtyFor(p))}</span><small>${fridgeKitIcon('clock')}${esc(statusFor(p))}</small></span></button>`).join('')||`<p class="fk-empty-featured">${esc(t('stockAllHealthy'))}</p>`}</div>
     </section>
-    <div class="stock-command stock-command-center" data-tour="stock-command" aria-label="${esc(t('headerStock'))}">
-      <div class="stock-command-core">
-      <div class="seg house-selector" id="sHouse" data-tour="stock-houses" aria-label="${t('filterHouse')}">
-        ${DB.houses.map(h=>`<button class="${hid===h.id?'on':''}" data-h="${h.id}">${ui('u-home','sm')} ${esc(h.short)}</button>`).join('')}
-        <button class="${hid==='all'?'on':''}" data-h="all">${t('bothHouses')}</button>
-      </div>
-      <div class="stock-command-row">
-        <label class="stock-search" data-tour="stock-search">${ui('u-search','sm')}<input id="stockSearch" value="${esc(state.stockQuery)}" placeholder="${t('stockSearch')}" aria-label="${t('stockSearch')}" autocomplete="off" enterkeyhint="search">${state.stockQuery?`<button type="button" id="stockClear" aria-label="${t('close')}">×</button>`:''}</label>
-        ${hid!=='all'&&isPro()?`<button class="btn stock-primary-action stock-quick-add-btn pine-settle" type="button" id="stockQuickAdd">${ui('u-plus')} ${esc(t('stockQuickAdd'))}</button>`:''}
-        <details class="stock-more pro-only mode-pro-block"><summary aria-label="${esc(t('stockMoreActions'))}">•••</summary><div class="stock-more-popover">
-          ${hid==='all'?`<button class="stock-more-action ${state.stockTiles?'on':''}" type="button" id="stockTilesToggle">${ui('u-tasks','sm')} ${esc(state.stockTiles?t('stockTilesOff'):t('stockTilesOn'))}</button>`:''}
-          ${hid!=='all'?`<button class="stock-more-action" type="button" id="stockOpenBoard">${ui('u-plus','sm')} ${esc(t('stockBoardShort'))}</button>
-          <button class="stock-more-action ${state.selectMode==='stock'?'on':''}" type="button" id="stockSelectToggle">${ui('u-check','sm')} ${esc(state.selectMode==='stock'?t('selectDone'):t('selectMode'))}</button>
-          <button class="stock-more-action" type="button" id="stockShiftCheck">${ui('u-check','sm')} ${esc(t('shiftStockCheck'))}</button>`:''}
-        </div></details>
-      </div>
-      </div>
-      ${hid!=='all'&&isEasy()?`<div class="stock-easy-actions" role="toolbar" aria-label="${esc(t('headerStock'))}">
-        <button class="btn stock-easy-btn pine-settle" type="button" id="stockQuickAddEasy">${ui('u-plus','sm')} ${esc(t('stockQuickAdd'))}</button>
-        <button class="btn sec stock-easy-btn pine-settle" type="button" id="stockPhotoRead">${ui('u-camera','sm')} ${esc(t('stockPhotoRead'))}</button>
-        <button class="btn sec stock-easy-btn pine-settle" type="button" id="stockShiftCheckEasyBar">${ui('u-check','sm')} ${esc(t('shiftStockCheckStart'))}</button>
-        <button class="btn pine-settle stock-easy-btn" type="button" id="stockEasySave"${easySaveOn?'':' disabled'}>${ui('u-check','sm')} ${esc(easySaveLabel)}</button>
-      </div>`:''}
-      ${orderFrozen?`<div class="stock-order-freeze-note" role="status"><span>${esc(t('stockOrderFrozen'))}</span><button type="button" class="btn sm sec" id="stockOrderRefreshNote">${esc(t('stockOrderRefresh'))}</button></div>`:''}
-    </div>
-    <div class="stock-view-tabs stock-zone-pier" role="toolbar" aria-label="${esc(t('stockZonePier'))}">
-      <button type="button" class="${state.stockFilter==='attention'?'on':''}" data-stock-filter="attention"><b>${attention}</b><span>${esc(t('stockAttention'))}</span><small>${counts.empty} ${esc(t('stockEmpty'))} · ${counts.low} ${esc(t('stockLow'))}</small></button>
-      <button type="button" class="${state.stockFilter==='empty'?'on':''}" data-stock-filter="empty"><b>${counts.empty}</b><span>${esc(t('stockEmpty'))}</span><small>${esc(t('stockOutState'))}</small></button>
-      ${isPro()?`<button type="button" class="pro-only mode-pro-block ${state.stockFilter==='all'?'on':''}" data-stock-filter="all"><b>${allProducts.length}</b><span>${esc(t('stockShelves'))}</span><small>${esc(t('stockCatalogue'))}</small></button>`:''}
-    </div>
-    </div>
+    <section class="fk-inventory"><div class="fk-heading"><h3>${el?'Προϊόντα':'Vorräte'}</h3><span>${labelCount(visible.length)}</span></div>
+      <nav class="fk-categories" aria-label="${esc(t('stockShelves'))}"><button type="button" data-fridge-category="all" aria-pressed="${selectedCategory==='all'}">${el?'Όλα':'Alle'}</button>${CATS().filter(c=>allProducts.some(p=>p.cat===c.id)).map(c=>`<button type="button" data-fridge-category="${esc(c.id)}" aria-pressed="${selectedCategory===c.id}">${esc(L(c))}</button>`).join('')}</nav>
+      <div class="fk-grid">${visible.map(card).join('')||`<div class="fk-empty"><p>${esc(t('noStockResults'))}</p><button type="button" id="fridgeReset">${el?'Εμφάνιση όλων':'Alle anzeigen'}</button></div>`}</div>
+    </section>
     ${shiftPresenceBannerHtml()}
     ${shiftStockCheckBannerHtml()}
-    ${missing.length?`<div class="stock-notice">${ui('u-alert','sm')}<b>${T[state.lang].missingFromShop(missing.length)}</b><button class="btn sec sm" id="stockToList">${t('openShopping')}</button></div>`:''}
-    <div class="stock-workspace">
-      ${!flatView && isPro()?`<nav class="stock-shelf-rail" aria-label="${esc(t('stockShelves'))}">
-        ${CATS().map(c=>{
-          const n=visible.filter(p=>p.cat===c.id).length; if(!n) return '';
-          const open=Array.isArray(state.stockOpenCategories)?state.stockOpenCategories.includes(c.id):true;
-          return `<button type="button" class="stock-rail-chip ${open?'on':''}" data-stock-rail="${c.id}"><span class="cat-ico-wrap">${catIcon(c.id)}</span><b>${esc(L(c))}</b><small>${n}</small></button>`;
-        }).join('')}
-      </nav>`:''}
-      <div class="stock-workspace-main">
-        <div class="stock-board-pane">${resultsHtml}</div>
-        ${recentHtml}
-      </div>
-    </div>
     ${state.selectMode==='stock'&&hid!=='all'?bulkBarHtml([
       {id:'in', label:t('bulkIn')},
       {id:'out', label:t('bulkOut')},
@@ -24460,6 +24315,11 @@ function wire(){
       };
     });
   }
+  v.querySelectorAll('[data-fridge-category]').forEach(b=>{
+    b.onclick=()=>{state.stockFridgeCategory=b.dataset.fridgeCategory;feedback('toggle');render();};
+  });
+  const fridgeReset=v.querySelector('#fridgeReset');
+  if(fridgeReset)fridgeReset.onclick=()=>{state.stockFridgeCategory='all';state.stockFilter='all';state.stockQuery='';render();};
   v.querySelectorAll('[data-stock-rail]').forEach(b=>{
     b.onclick=()=>{
       const id=b.dataset.stockRail;

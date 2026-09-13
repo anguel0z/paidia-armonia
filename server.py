@@ -5731,7 +5731,7 @@ class Handler(SimpleHTTPRequestHandler):
             "ui-v244.css",
             "ui-v245.css",
             "ui-v246.css",
-            "ui-v247.css",
+            "ui-v247.css", "stock-fridge.css", "icons/fridge/ubuntu-400.ttf", "icons/fridge/ubuntu-500.ttf", "icons/fridge/ubuntu-700.ttf",
             "sw.js",
             "manifest.webmanifest",
             # Login shows the running version + DE/EL "what changed" from this.

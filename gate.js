@@ -123,13 +123,13 @@
   // Fallback for the first paint, before build.json lands. Keep in step with
   // build.json on every release — it is what shows if the fetch fails.
   const APP_BUILD = {
-    version: 248,
-    label: 'v248',
-    changed: {
-      de: 'Echte Mobile-Site: /m/ mit m-ui.css und eigenen renderMobile*-Ansichten für Staff und Kids.',
-      el: 'Πραγματικό mobile site: /m/ με m-ui.css και ξεχωριστά renderMobile* για staff και kids.',
-    },
-  };
+  "version": 251,
+  "label": "v251",
+  "changed": {
+    "de": "Lager nach dem FriDge-UI-Kit: Originalschrift und Bilder, zwei Produktspalten, Mengen-Badges und kompakte Filter.",
+    "el": "Αποθήκη με το FriDge UI Kit: αρχική γραμματοσειρά και εικόνες, δύο στήλες, ποσότητες και φίλτρα."
+  }
+};
   const SW_BUILD_KEY = 'paidia.swBuild';
   const BUILD_RELOAD_KEY = 'paidia.buildReload';
   const CANONICAL_HOST = 'armonia-thassos.vercel.app';
