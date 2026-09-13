@@ -5750,6 +5750,7 @@ class Handler(SimpleHTTPRequestHandler):
             "shared/dirty.js",
             "mobile/index.html",
             "mobile/mobile.css",
+            "mobile/m-ui.css",
             "mobile/mobile-app.js",
             "desk/index.html",
             "desk/desk.css",
@@ -5776,7 +5777,7 @@ class Handler(SimpleHTTPRequestHandler):
             and static_rel.rsplit(".", 1)[-1].lower() in {"html", "js", "css", "txt", "md", "svg", "png", "webp"}
         )
         shell_alias = parsed.path in (
-            "/m", "/m/", "/m/mobile.css", "/m/mobile-app.js",
+            "/m", "/m/", "/m/mobile.css", "/m/m-ui.css", "/mobile/m-ui.css", "/m/mobile-app.js",
             "/desk", "/desk/", "/desk/desk.css", "/desk/desk-app.js",
             "/school", "/school/", "/school/school.css", "/school/school-app.js",
         )
@@ -5787,6 +5788,8 @@ class Handler(SimpleHTTPRequestHandler):
                 static_rel = "mobile/index.html"
             elif parsed.path in ("/m/mobile.css", "/mobile/mobile.css"):
                 static_rel = "mobile/mobile.css"
+            elif parsed.path in ("/m/m-ui.css", "/mobile/m-ui.css"):
+                static_rel = "mobile/m-ui.css"
             elif parsed.path in ("/m/mobile-app.js", "/mobile/mobile-app.js"):
                 static_rel = "mobile/mobile-app.js"
             elif parsed.path in ("/desk", "/desk/"):

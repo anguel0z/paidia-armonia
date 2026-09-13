@@ -42,6 +42,7 @@ def inject_shell(html: str, shell: str, ver: str) -> str:
     # (relative mobile.css under /m/ would request /m/mobile.css → 404).
     if shell == "m":
         extra_css = "/mobile/mobile.css"
+        extra_css_more = "/mobile/m-ui.css"
         extra_js = "/mobile/mobile-app.js"
         label = "Mobile"
     elif shell == "school":
@@ -59,6 +60,8 @@ def inject_shell(html: str, shell: str, ver: str) -> str:
     html = html.replace("<head>", "<head>\n" + head_bits, 1)
     # Load shell CSS last so it wins over ui-v110/ui-v213
     shell_css = f'<link rel="stylesheet" href="{extra_css}?v={ver}">\n'
+    if shell == "m":
+        shell_css += f'<link rel="stylesheet" href="{extra_css_more}?v={ver}">\n'
     if "</head>" in html:
         html = html.replace("</head>", shell_css + "</head>", 1)
     else:

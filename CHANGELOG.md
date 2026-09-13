@@ -1,3 +1,13 @@
+## v248 · 2026-09-13
+
+True mobile site rebuild (staff + kids) per plan.
+
+- `/m/` layout authority: new `mobile/m-ui.css` (wired last via shell builder).
+- Dedicated `renderMobile*` dispatch in `app.js` for every staff tab + kid view when `shell-m`.
+- Home is always the phone stack on `/m/` (not viewport-width gated).
+- Shell auto-correct: phones stay on `/m/` unless PC override is set.
+- Cache `paidia-v248`.
+
 ## v247 · 2026-09-08
 
 iPhone Playwright critique pass (`.qa-screens/v246-iphone/` + `CRITIQUE.md`).

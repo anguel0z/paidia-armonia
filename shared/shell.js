@@ -148,9 +148,17 @@
    * jump to the correct site immediately.
    */
   function autoCorrectToDevice() {
-    // An addressable shell URL is an explicit choice, including deep links.
-    const here=currentShellFromPath();
-    if(here)lock(here);
+    const forced = override();
+    const here = currentShellFromPath();
+    if (here) lock(here);
+    // Explicit override (PC/Phone button) wins — stay put.
+    if (forced) return false;
+    // On a shell URL that disagrees with hardware, bounce.
+    if (here) {
+      const want = detectFromDevice();
+      if (here !== want) return go(want, { replace: true });
+      return false;
+    }
     return false;
   }
 

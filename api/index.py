@@ -417,6 +417,7 @@ _STATIC_EXACT = frozenset({
     "shared/dirty.js",
     "mobile/index.html",
     "mobile/mobile.css",
+    "mobile/m-ui.css",
     "mobile/mobile-app.js",
     "desk/index.html",
     "desk/desk.css",
@@ -462,6 +463,8 @@ def _serve_static(rel: str):
         rel = "mobile/index.html"
     elif rel in ("m/mobile.css",):
         rel = "mobile/mobile.css"
+    elif rel in ("m/m-ui.css", "mobile/m-ui.css"):
+        rel = "mobile/m-ui.css"
     elif rel in ("m/mobile-app.js",):
         rel = "mobile/mobile-app.js"
     elif rel in ("desk", "desk/", "desk/index.html"):

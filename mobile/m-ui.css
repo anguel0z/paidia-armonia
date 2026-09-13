@@ -1,0 +1,305 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   m-ui.css — sole mobile layout authority for body.shell-m / html[data-shell=m]
+
+   Desktop ui-v110 / desk grids must not compose /m/. This file owns:
+   - stage + chrome + dock geometry
+   - single-column page shells (.m-page)
+   - staff + kid mobile typography / taps / rails
+   Loaded last on the mobile shell (after mobile.css).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html[data-shell="m"],
+body.shell-m {
+  --m-pad: 14px;
+  --m-gap: 10px;
+  --m-radius: 16px;
+  --m-tap: 48px;
+  --m-dock-h: 72px;
+  --rail-w: 0px !important;
+  --header-h: 52px;
+}
+
+/* Kill desktop layout drivers on the mobile site */
+body.shell-m.layout-desktop,
+body.shell-m {
+  /* keep class but never behave like desk */
+}
+body.shell-m #app.app-shell,
+body.shell-m.layout-desktop #app.app-shell {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  display: block !important;
+  grid-template-columns: none !important;
+}
+body.shell-m .desk-rail,
+body.shell-m .pc-rail,
+body.shell-m .workspace-rail,
+body.shell-m aside.nav-rail {
+  display: none !important;
+}
+
+/* Stage */
+body.shell-m main.app-stage#view,
+body.shell-m #view {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  margin: 0 !important;
+  padding: 10px var(--m-pad) calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 20px) !important;
+  box-sizing: border-box !important;
+  overflow-x: clip !important;
+}
+
+/* Page shell */
+body.shell-m #view .m-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m-gap);
+  min-width: 0;
+  width: 100%;
+}
+body.shell-m #view .m-hero {
+  display: grid;
+  gap: 4px;
+  padding: 4px 0 2px;
+}
+body.shell-m #view .m-hero .eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted, #5c6a63);
+}
+body.shell-m #view .m-hero h1,
+body.shell-m #view .m-hero h2 {
+  margin: 0;
+  font: 700 26px/1.15 var(--font-display, Fraunces, Georgia, serif);
+  color: var(--ink, #1a2822);
+}
+body.shell-m #view .m-hero p {
+  margin: 0;
+  color: var(--muted, #5c6a63);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+body.shell-m #view .m-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+body.shell-m #view .m-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--m-tap);
+  padding: 12px 14px;
+  border: 1px solid var(--line, #d5ddd8);
+  border-radius: var(--m-radius);
+  background: #fff;
+  text-align: left;
+  color: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+body.shell-m #view .m-row b {
+  display: block;
+  font-size: 15px;
+  line-height: 1.25;
+}
+body.shell-m #view .m-row small {
+  display: block;
+  color: var(--muted, #5c6a63);
+  font-size: 12px;
+  margin-top: 2px;
+}
+body.shell-m #view .m-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+body.shell-m #view .m-cta .btn,
+body.shell-m #view .m-page > .btn,
+body.shell-m #view .m-page .btn.m-primary {
+  min-height: var(--m-tap) !important;
+  width: 100%;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Rails (houses, days, kids) */
+body.shell-m #view .m-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  max-width: 100%;
+}
+body.shell-m #view .m-rail::-webkit-scrollbar { display: none; }
+body.shell-m #view .m-rail > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* Hide desktop-only chrome when mobile renderers wrap legacy bits */
+body.shell-m #view .m-page .pro-only.mode-pro-block:not(.m-keep-pro),
+body.shell-m #view .m-page .desk-only,
+body.shell-m #view .m-page .week-matrix-desktop,
+body.shell-m #view .m-page .stock-overview,
+body.shell-m #view .m-page .shop-overview-stats,
+body.shell-m #view .m-page .admin-ops-desktop,
+body.shell-m #view .m-page .ops-house-grid {
+  display: none !important;
+}
+
+/* Force single column product / list boards */
+body.shell-m #view .m-page .stock-priority-grid,
+body.shell-m #view .m-page .stock-workspace,
+body.shell-m #view .m-page .shop-board,
+body.shell-m #view .m-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  grid-template-columns: none !important;
+}
+body.shell-m #view .m-page .stock-product,
+body.shell-m #view .m-page .shop-item,
+body.shell-m #view .m-page .kid-dir-row {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Plan mobile: day strip + agenda, no week matrix */
+body.shell-m[data-tab="schedule"] #view .m-page .week-layout-seg,
+body.shell-m[data-tab="schedule"] #view .m-page .week-matrix-desktop,
+body.shell-m[data-tab="schedule"] #view .m-page .plan-week-chrome-actions .week-switcher,
+body.shell-m[data-tab="schedule"] #view .m-page .week-ai-bar {
+  display: none !important;
+}
+
+/* Talk full bleed */
+body.shell-m[data-tab="talk"] #view .m-page,
+body.shell-m[data-tab="talk"] #view #talkPageMount {
+  min-height: calc(100vh - var(--header-h) - var(--m-dock-h) - env(safe-area-inset-bottom, 0px) - 24px);
+}
+
+/* Kid portal */
+body.shell-m.mode-child #view .kid-shell.m-kid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: calc(var(--kid-dock-h, 84px) + env(safe-area-inset-bottom, 0px) + 24px);
+}
+body.shell-m.mode-child #view .m-kid .course-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+body.shell-m.mode-child #view .m-kid .course-tile {
+  min-height: 88px !important;
+  padding: 14px !important;
+}
+body.shell-m.mode-child #view .m-kid .arcade-rail {
+  display: flex !important;
+  overflow-x: auto !important;
+  gap: 10px;
+}
+body.shell-m.mode-child #view .m-kid .arcade-rail > .arcade-tile {
+  flex: 0 0 82%;
+  max-width: 82%;
+}
+
+/* Tap floor */
+body.shell-m #view .m-page :is(button.btn, .btn, .m-row, .m-rail > button) {
+  min-height: 44px;
+}
+body.shell-m #view .m-page input:not([type="checkbox"]):not([type="radio"]),
+body.shell-m #view .m-page select {
+  min-height: var(--m-tap) !important;
+  font-size: 16px !important; /* iOS zoom guard */
+}
+
+/* Section cards */
+body.shell-m #view .m-card {
+  background: #fff;
+  border: 1px solid var(--line, #d5ddd8);
+  border-radius: var(--m-radius);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+body.shell-m #view .m-card h3 {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted, #5c6a63);
+}
+
+/* Admin mobile index */
+body.shell-m #view .m-admin-panes {
+  display: grid;
+  gap: 8px;
+}
+body.shell-m #view .m-admin-panes a,
+body.shell-m #view .m-admin-panes button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--m-tap);
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 650;
+}
+
+/* Stock / Liste / Plan chrome trim on dedicated mobile pages */
+body.shell-m #view .m-stock .stock-pantry-hero .stock-security-legend,
+body.shell-m #view .m-stock .stock-context,
+body.shell-m #view .m-stock .stock-overview {
+  display: none !important;
+}
+body.shell-m #view .m-stock .stock-pantry-hero {
+  padding: 0 0 8px !important;
+}
+body.shell-m #view .m-stock .stock-pantry-hero h2 {
+  font-size: 22px !important;
+  margin: 0 !important;
+}
+body.shell-m #view .m-shop .shop-overview,
+body.shell-m #view .m-shop .shop-overview-stats {
+  display: none !important;
+}
+body.shell-m #view .m-plan .planner-chrome-wrap {
+  display: none !important;
+}
+body.shell-m #view .m-admin .admin-ops-desktop,
+body.shell-m #view .m-admin .ops-house-grid {
+  display: none !important;
+}
+body.shell-m #view .m-rail button {
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-weight: 650;
+  white-space: nowrap;
+}
+body.shell-m #view .m-rail button.on {
+  background: var(--brand, #2a6b52);
+  border-color: var(--brand, #2a6b52);
+  color: #fff;
+}

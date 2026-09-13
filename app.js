@@ -19667,7 +19667,7 @@ function renderChild(){
     window.__routeEnterTimer = setTimeout(()=>document.body.classList.remove('route-enter'), 520);
   }
   viewEl.innerHTML = `
-    <div class="kid-shell">
+    <div class="kid-shell${isMobileShellSite()?' m-kid':''}">
       ${kidFirstRunHtml(state.childView)}
       ${kidBackHtml()}
       ${kidGuideHtml(state.childView)}
@@ -22587,59 +22587,8 @@ function viewHome(){
   const heroPrimaryBtn = presenceNeedsLate
     ? `<button class="home-primary" type="button" id="homeHeroPresence" data-home-presence="1">${esc(primaryLabel)}</button>`
     : `<button class="home-primary" type="button" data-home-jump="day">${esc(primaryLabel)}</button>`;
-  if(window.matchMedia('(max-width:899px)').matches){
-    return `<div class="home-start home-start-mobile" data-tour="home-main">
-      <header class="home-start-hero">
-        <div class="home-start-date"><span>${esc(eventDayLabel(today))}</span><i aria-hidden="true"></i></div>
-        <p class="home-start-kicker">Armonia Thassos</p>
-        <div class="ui-mode-row">${uiModeToggleHtml({compact:true})}</div>
-        <h1>${esc(t('homeHello'))}${user?`, <span>${esc(user.name)}</span>`:''}</h1>
-        <p class="home-start-lede">${esc(t('homeOverview'))}</p>
-        ${isEasy()?`<p class="easy-only muted home-easy-hint">${esc(t('homeEasyHint'))}</p>`:''}
-      </header>
-      ${(()=>{
-        const inbox = staffInboxItems().slice(0,5);
-        if(!inbox.length) return '';
-        const rows = inbox.map(it=>`<button type="button" class="home-rail-notif" data-inbox-jump="${esc(it.jump||'')}">
-          <span class="w-stat-ico" aria-hidden="true">${ui(it.icon||'u-alert','sm')}</span>
-          <span class="grow"><b>${esc(it.title||'')}</b><small>${esc(it.meta||'')}</small></span>
-          <span aria-hidden="true">→</span>
-        </button>`).join('');
-        return `<section class="home-mobile-inbox" aria-label="${esc(t('homeMore'))}">
-          ${rows}
-          <button type="button" class="btn ghost sm" id="homeInboxAll">${esc(t('homeMore'))}</button>
-        </section>`;
-      })()}
-      ${shiftStartCard}
-      ${showJournalDuty?`<button class="mobile-alert-row" type="button" id="homeWriteBook">
-        ${ui('u-alert','sm')}<span><b>${esc(t('journalDutyHome'))}</b><small>${esc(t('bookJournalHint'))}</small></span><span>→</span>
-      </button>`:''}
-      ${teamNoticeBannerHtml()}
-      ${pulseBlock}
-      <section class="home-mobile-tasks" data-tour="home-tasks" aria-labelledby="mobileTasksTitle">
-        <header><div><span>${esc(eventDayLabel(today))}</span><h2 id="mobileTasksTitle">${esc(t('myTasks'))}</h2></div><b>${esc(String(todayOpen.length))}</b></header>
-        <div class="task-list">${todayAssignments.length
-          ? todayAssignments.map(e=>dashboardTaskCard(e,today,user.id)).join('')
-          : `<div class="mobile-empty-row"><span>${esc(t('noTasks'))}</span><button type="button" data-home-jump="day">${esc(t('homeOpenPlan'))}</button></div>`}
-        </div>
-      </section>
-      <nav class="home-mobile-actions" data-tour="home-actions" aria-label="${esc(t('homeMore'))}">
-        <button type="button" data-home-jump="day">${ui('u-calendar','sm')}<span>${esc(t('homeOpenPlan'))}</span></button>
-        <button type="button" id="homeQuickBook">${ui('u-note','sm')}<span>${esc(t('headerBook'))}</span></button>
-        <button type="button" data-home-jump="kids">${ui('u-person','sm')}<span>${esc(t('navKids'))}</span></button>
-      </nav>
-      <details class="home-mobile-more pro-only mode-pro-block">
-        <summary>${esc(t('homeMore'))}<span>＋</span></summary>
-        <div class="home-mobile-more-body">
-          ${homeMomentsStripHtml()}
-          <div class="home-foot-actions">
-            <button class="page-act ghost" type="button" data-page-act="tutorial">${ui('u-book','sm')} ${esc(t('topTutorial'))}</button>
-            <button class="page-act ghost" type="button" id="homeCalendar">${ui('u-calendar','sm')} ${esc(t('calTitle'))}</button>
-            <button class="page-act ghost" type="button" id="homeGalleryOpen">${ui('u-camera','sm')} ${esc(t('galleryTitle'))}</button>
-          </div>
-        </div>
-      </details>
-    </div>`;
+  if(isMobileShellSite() || window.matchMedia('(max-width:899px)').matches){
+    return renderMobileHome();
   }
   const main=`${shiftStartCard}
     ${showJournalDuty?`<button class="journal-duty-home" type="button" id="homeWriteBook">
@@ -23550,8 +23499,185 @@ function pageRenderFallbackHtml(err){
   </div>`;
 }
 
+function isMobileShellSite(){
+  try{
+    if(typeof window.__PAIDIA_SHELL__==='string' && window.__PAIDIA_SHELL__==='m') return true;
+    if(document.documentElement?.dataset?.shell==='m') return true;
+    if(document.body?.classList.contains('shell-m')) return true;
+    if(typeof PaidiaShell!=='undefined' && PaidiaShell.currentShellFromPath?.()==='m') return true;
+  }catch{}
+  return false;
+}
+
+function mPage(body, extraClass=''){
+  const id = state.mode==='child' ? (state.childView||'today') : (state.tab||'home');
+  return `<div class="m-page ${extraClass}" data-m-page="${esc(id)}">${body}</div>`;
+}
+
+/** Staff Home — phone composition (always on /m/, not only narrow viewport). */
+function renderMobileHome(){
+  const today=iso(new Date()), user=state.user;
+  const todayAssignments=user?dashboardAssignments(today, user.id):[];
+  const todayOpen=todayAssignments.filter(e=>!completionFor(today,e.id,user.id));
+  const overdue=[];
+  if(user) dashboardDates(-7,-1).forEach(dateStr=>dashboardAssignments(dateStr,user.id).forEach(e=>{
+    if(!completionFor(dateStr,e.id,user.id)) overdue.push({e,dateStr});
+  }));
+  const journalDue=!!(user && !(shiftNoteFor(user.id, today)?.text||'').trim());
+  const shiftStartCard=homeShiftStartCardHtml();
+  const showJournalDuty=journalDue && !shiftStartCard;
+  const openListCount = fridayEntries(shopHouse()).filter(e=>e.status==='open'||e.status==='pending').length;
+  const lowStockCount = PRODUCTS().filter(p=>{
+    const hid = state.house==='all'?'h1':state.house;
+    return (DB.stock[stockKey(hid,p.id)]??0) <= lowThreshold(p);
+  }).length;
+  const inbox = staffInboxItems().slice(0,5);
+  const inboxHtml = inbox.length ? `<section class="m-stack" aria-label="${esc(t('homeMore'))}">
+    ${inbox.map(it=>`<button type="button" class="m-row" data-inbox-jump="${esc(it.jump||'')}">
+      <span aria-hidden="true">${ui(it.icon||'u-alert','sm')}</span>
+      <span><b>${esc(it.title||'')}</b><small>${esc(it.meta||'')}</small></span>
+      <span aria-hidden="true">→</span>
+    </button>`).join('')}
+    <button type="button" class="btn ghost" id="homeInboxAll">${esc(t('homeMore'))}</button>
+  </section>` : '';
+  const signals = [
+    overdue.length?{jump:'inbox',v:overdue.length,l:t('overdue')}:null,
+    todayOpen.length?{jump:'day',v:todayOpen.length,l:t('dueToday')}:null,
+    openListCount?{jump:'shop',v:openListCount,l:t('homeSignalList')}:null,
+    lowStockCount?{jump:'stock',v:lowStockCount,l:t('homeSignalStock')}:null,
+  ].filter(Boolean).slice(0,2);
+  const pulse = signals.length ? `<div class="m-stack home-mobile-pulse" data-tour="home-pulse">${signals.map(s=>
+    `<button type="button" class="m-row" data-home-jump="${s.jump}"><b>${esc(String(s.v))}</b><span>${esc(s.l)}</span><span>→</span></button>`
+  ).join('')}</div>` : '';
+  return mPage(`
+    <header class="m-hero" data-tour="home-main">
+      <p class="eyebrow">${esc(eventDayLabel(today))} · Armonia</p>
+      <h1>${esc(t('homeHello'))}${user?`, ${esc(user.name)}`:''}</h1>
+      <div class="ui-mode-row">${uiModeToggleHtml({compact:true})}</div>
+    </header>
+    ${inboxHtml}
+    ${shiftStartCard||''}
+    ${showJournalDuty?`<button class="m-row" type="button" id="homeWriteBook">${ui('u-alert','sm')}<span><b>${esc(t('journalDutyHome'))}</b><small>${esc(t('bookJournalHint'))}</small></span><span>→</span></button>`:''}
+    ${teamNoticeBannerHtml()}
+    ${pulse}
+    <section class="m-card" data-tour="home-tasks">
+      <h3>${esc(t('myTasks'))} · ${todayOpen.length}</h3>
+      <div class="m-stack task-list">${todayAssignments.length
+        ? todayAssignments.map(e=>dashboardTaskCard(e,today,user.id)).join('')
+        : `<div class="m-row"><span>${esc(t('noTasks'))}</span><button type="button" class="btn sm" data-home-jump="day">${esc(t('homeOpenPlan'))}</button></div>`}
+      </div>
+    </section>
+    <nav class="m-cta" data-tour="home-actions" aria-label="${esc(t('homeMore'))}">
+      <button type="button" class="btn m-primary" data-home-jump="day">${esc(t('homeOpenPlan'))}</button>
+      <button type="button" class="btn sec" id="homeQuickBook">${esc(t('headerBook'))}</button>
+      <button type="button" class="btn ghost" data-home-jump="kids">${esc(t('navKids'))}</button>
+    </nav>
+  `, 'm-home');
+}
+
+function renderMobileSchedule(){
+  // Phone: day is the default authoring surface; week stays agenda-list not matrix.
+  if(!['day','week','calendar','events','shift'].includes(state.scheduleView)) setScheduleView('day',{persist:false});
+  if(state.scheduleView==='week'){
+    // Prefer day-focus week rail already in viewScheduleWeek; wrap as m-page.
+    return mPage(viewSchedule(), 'm-plan');
+  }
+  return mPage(viewSchedule(), 'm-plan');
+}
+
+function renderMobileStock(){
+  return mPage(viewStock(), 'm-stock');
+}
+
+function renderMobileShop(){
+  return mPage(viewShop(), 'm-shop');
+}
+
+function renderMobileTalk(){
+  return mPage(viewTalk(), 'm-talk');
+}
+
+function renderMobileKids(){
+  return mPage(viewKids(), 'm-kids');
+}
+
+function renderMobilePocket(){
+  return mPage(viewPocket(), 'm-pocket');
+}
+
+function renderMobileGallery(){
+  return mPage(viewGallery(), 'm-gallery');
+}
+
+function renderMobileBook(){
+  return mPage(viewBook(), 'm-book');
+}
+
+function renderMobileAdmin(){
+  if(!isAdminUser()) return renderMobileHome();
+  const pane = state.adminPane || 'ops';
+  const panes = [
+    {id:'ops', label: state.lang==='el'?'Επιχειρήσεις':'Lage'},
+    {id:'team', label: state.lang==='el'?'Ομάδα':'Team'},
+    {id:'supplies', label: state.lang==='el'?'Προμήθειες':'Supplies'},
+    {id:'school', label: t('navSchool')},
+    {id:'review', label: state.lang==='el'?'Έλεγχος':'Review'},
+    {id:'finance', label: state.lang==='el'?'Οικονομικά':'Finance'},
+    {id:'audit', label: state.lang==='el'?'Έλεγχος κινήσεων':'Audit'},
+    {id:'communications', label: state.lang==='el'?'Επικοινωνία':'Comms'},
+    {id:'automations', label: state.lang==='el'?'Αυτοματισμοί':'Automations'},
+    {id:'system', label: state.lang==='el'?'Σύστημα':'System'},
+  ];
+  const rail = `<div class="m-rail" role="tablist" aria-label="Admin">${panes.map(p=>
+    `<button type="button" class="${pane===p.id?'on':''}" data-admin-go="${p.id}">${esc(p.label)}</button>`
+  ).join('')}</div>`;
+  return mPage(`${rail}${viewAdminOps()}`, 'm-admin');
+}
+
+function renderMobileStaffTab(tab){
+  if(tab==='home') return renderMobileHome();
+  if(tab==='schedule') return renderMobileSchedule();
+  if(tab==='stock') return renderMobileStock();
+  if(tab==='shop') return renderMobileShop();
+  if(tab==='talk') return renderMobileTalk();
+  if(tab==='kids') return renderMobileKids();
+  if(tab==='pocket') return renderMobilePocket();
+  if(tab==='gallery') return renderMobileGallery();
+  if(tab==='book') return renderMobileBook();
+  if(tab==='admin') return renderMobileAdmin();
+  if(tab==='personnel') return mPage(viewPersonnel(), 'm-personnel');
+  if(tab==='school') return mPage(viewSchoolMoodle(), 'm-school');
+  if(tab==='rules') return mPage(viewRules(), 'm-rules');
+  if(tab==='account') return mPage(viewAccount(), 'm-account');
+  return renderMobileHome();
+}
+
+function renderMobileChildView(c){
+  const body = (()=>{
+    if(state.childView==='today') return childStartView(c);
+    if(state.childView==='plan') return childStundenplanView(c);
+    if(state.childView==='aufgaben') return childAufgabenView(c.id);
+    if(state.childView==='rewards') return childRewardsView(c.id);
+    if(state.childView==='learn') return state.gameId ? childGamesView() : childLearnHubView();
+    if(state.childView==='games') return childGamesView();
+    if(state.childView==='rate') return childBewertungenView(c.id);
+    if(state.childView==='pocket') return childPocketView(c.id);
+    if(state.childView==='bonus') return childBonusView(c.id);
+    if(state.childView==='notes') return childNotizenView(c.id);
+    if(state.childView==='events') return childEventsView(c.id);
+    if(state.childView==='gallery') return childGalleryView();
+    if(state.childView==='rules') return childRulesView();
+    return childStartView(c);
+  })();
+  return mPage(body, 'm-kid');
+}
+
 function staffViewHtml(){
   normalizeDbShape();
+  if(isMobileShellSite()){
+    try{ return renderMobileStaffTab(state.tab); }
+    catch(err){ console.error('mobile staff render', err); }
+  }
   if(state.tab==='home') return viewHome();
   if(state.tab==='gallery') return viewGallery();
   if(state.tab==='schedule') return viewSchedule();
@@ -23571,6 +23697,10 @@ function staffViewHtml(){
 function childViewHtml(c){
   normalizeDbShape();
   if(!c) return pageRenderFallbackHtml(new Error('missing child'));
+  if(isMobileShellSite()){
+    try{ return renderMobileChildView(c); }
+    catch(err){ console.error('mobile child render', err); }
+  }
   if(state.childView==='today') return childStartView(c);
   if(state.childView==='plan') return childStundenplanView(c);
   if(state.childView==='aufgaben') return childAufgabenView(c.id);
@@ -23586,6 +23716,7 @@ function childViewHtml(c){
   if(state.childView==='rules') return childRulesView();
   return childStartView(c);
 }
+
 
 function render(){
   window.PaidiaWorkspace?.restore(state);
