@@ -1,0 +1,22 @@
+/* ui-v293.css -- stock check (Elegxos apothikis): exact-quantity override.
+   Tapping "Ligo"/"Adeio" on a row reveals a number input (defaulting to the
+   auto-estimated quantity) so staff can log a precise count instead of the
+   rough estimate. "OK" needs no input. See shiftCheckQtyForMark() in app.js
+   for the auto-estimate and wireShiftStockCheckSheet() for the input wiring. */
+.shift-check-qty-edit{
+  display:none; align-items:center; gap:8px; margin-top:8px; padding-top:8px;
+  border-top:1px dashed var(--line,#dce2dd);
+  font-size:13px; font-weight:650; color:var(--muted,#5f6d65);
+}
+.shift-check-qty-edit.show{ display:flex; }
+.shift-check-qty-edit input{
+  flex:1; min-width:0; max-width:120px; height:40px; padding:0 10px;
+  border:1px solid var(--line,#dce2dd); border-radius:10px;
+  font-size:15px; font-weight:750; font-variant-numeric:tabular-nums;
+  color:var(--ink,#18231e); background:#fff;
+}
+.shift-check-qty-edit input:focus-visible{
+  outline:none; border-color:var(--brand,#286148);
+  box-shadow:0 0 0 2px color-mix(in srgb, var(--brand,#286148) 25%, transparent);
+}
+.shift-check-qty-edit i{ font-style:normal; color:var(--muted,#5f6d65); }

@@ -1,0 +1,23 @@
+/* ui-v294.css — Mobile QA pass (overflows, orphaned taps, clipped chrome).
+   Layout authority remains mobile/m-ui.css (loaded last on /m/). This file
+   covers sheets/overlays that sit outside #view. */
+body.shell-m .shift-check-actions {
+  grid-template-columns: 1fr !important;
+}
+body.shell-m .shift-check-actions .btn {
+  min-height: 48px !important;
+  white-space: normal !important;
+}
+body.shell-m .sheet-close,
+body.shell-m [data-sheet-close] {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+body.shell-m #view .section-shell-nav { display: none !important; }
+body.shell-m #view .section-shell-picker { display: block !important; }
+
+/* Ensure sheet backdrop never paints without an open panel (belt + suspenders) */
+body.shell-m:not(.sheet-open) #sheetBg.sheet-bg {
+  display: none !important;
+  pointer-events: none !important;
+}

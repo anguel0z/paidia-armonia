@@ -398,7 +398,8 @@ _STATIC_EXACT = frozenset({
     "ui-v244.css",
     "ui-v245.css",
     "ui-v246.css",
-    "ui-v247.css", "stock-fridge.css", "icons/fridge/ubuntu-400.ttf", "icons/fridge/ubuntu-500.ttf", "icons/fridge/ubuntu-700.ttf",
+    "ui-v247.css", "ui-v248.css", "ui-v249.css", "ui-v250.css", "ui-v251.css", "ui-v252.css", "ui-v283.css", "ui-v285.css", "ui-v287.css", "ui-v293.css", "ui-v294.css", "stock-fridge.css", "app-fonts.css", "icons/fridge/ubuntu-400.ttf", "icons/fridge/ubuntu-500.ttf", "icons/fridge/ubuntu-700.ttf",
+    "icons/fonts/fraunces-600.ttf", "icons/fonts/fraunces-700.ttf", "icons/fonts/outfit-400.ttf", "icons/fonts/outfit-500.ttf", "icons/fonts/outfit-600.ttf", "icons/fonts/outfit-700.ttf",
     "sw.js",
     "manifest.webmanifest",
     # Login shows the running version + DE/EL "what changed" from this.

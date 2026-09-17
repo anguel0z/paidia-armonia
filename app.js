@@ -4,16 +4,16 @@
    ════════════════════════════════════════════════════════════════ */
 /** Keep in sync with build.json — shown on login. */
 const APP_BUILD = {
-  "version": 251,
-  "label": "v251",
+  "version": 294,
+  "label": "v294",
   "changed": {
-    "de": "Lager nach dem FriDge-UI-Kit: Originalschrift und Bilder, zwei Produktspalten, Mengen-Badges und kompakte Filter.",
-    "el": "Αποθήκη με το FriDge UI Kit: αρχική γραμματοσειρά και εικόνες, δύο στήλες, ποσότητες και φίλτρα."
+    "de": "Mobile: überlaufende Leisten, abgeschnittene Dock-Labels, verwaiste Kinder-Buttons und die Wochenansicht — alles aufs Handy gelegt.",
+    "el": "Κινητό: διορθώθηκαν υπερχειλίσεις, κομμένες ετικέτες στο dock, ορφανά κουμπιά παιδιών και η εβδομαδιαία προβολή."
   }
 };
 const T = {
   de: {
-    appTitle:'Armonia Thassos', navHome:'Home', navSchedule:'Plan', navStock:'Lager', navShop:'Liste', navBook:'Buch', navGallery:'Momente', navTalk:'Talk', navKids:'Kinder', navPocket:'Taschengeld', navPersonnel:'Personal', navSchool:'Schule', navAdmin:'Admin', navMore:'Mehr',
+    appTitle:'Armonia Thassos', navHome:'Home', navSchedule:'Plan', navStock:'Lager', navShop:'Liste', navBook:'Buch', navGallery:'Momente', navTalk:'Talk', navKids:'Kinder', navPocket:'Taschengeld', navPersonnel:'Personal', navSchool:'Schule', navAdmin:'Admin', navMore:'Mehr', deskHandoff:'Am Computer öffnen',
     titleHome:'Home', titleSchedule:'Wochenplan', titleStock:'Lager', titleShop:'Listen & Einkauf', titleBook:'Buch', titleGallery:'Momente', titleTalk:'Team-Gespräch', titleKids:'Kinder & Schule', titlePocket:'Taschengeld', kidsHeroHint:'Schule, Entwicklung und Spiel-Fortschritt auf einen Blick', kidsEmpty:'Keine Kinder hinterlegt', kidAdd:'Kind hinzufügen', kidRemove:'Kind entfernen', kidEdit:'Kind bearbeiten', kidNamePh:'Vorname', kidPinPh:'PIN (4–6 Ziffern)', kidPinConfirm:'PIN bestätigen', kidAdded:'Kind gespeichert', kidRemoved:'Kind entfernt', kidRemoveConfirm:'Dieses Kind wirklich entfernen? Login wird gelöscht.', kidPinMismatch:'PIN stimmt nicht', kidNameRequired:'Name fehlt', kidAdminOnly:'Nur Admins können Kinder hinzufügen/entfernen', profilePhoto:'Profilfoto', profilePhotoChange:'Foto ändern', profilePhotoRemove:'Foto entfernen', profilePhotoHint:'Wird oben rechts angezeigt', schoolSubjects:'Fächer', schoolAttendance:'Anwesenheit', schoolHomework:'Hausaufgaben', schoolTimetable:'Stundenplan', thisWeek:'Diese Woche', gradeSaved:'Note gespeichert', attSaved:'Anwesenheit gespeichert', hwSaved:'Hausaufgabe gespeichert', ttSaved:'Stunde gespeichert', subSaved:'Fach gespeichert', subAdd:'Fach hinzufügen', subArchive:'Archivieren', subActivate:'Aktivieren', subEmpty:'Noch keine Fächer', att_present:'Da', att_absent:'Fehlt', att_excused:'Entschuldigt', hwEmpty:'Keine Hausaufgaben', hwAdd:'Hausaufgabe', hwTitlePh:'z.B. Mathe S.12', hwAllKids:'Alle Kinder', ttEmpty:'Keine Stunden', ttAdd:'Stunde hinzufügen', homeShiftRing:'Schicht', homeWeekSpark:'7 Tage erledigt', planDayLoad:'Tageslast', zoSavedLager:'Im Lager gespeichert', zoSavedListe:'In der Liste gespeichert', zoSavedPlan:'Im Plan gespeichert', zoSavedSchool:'Schule gespeichert', zoSavedNote:'Notiz gespeichert',
     kidsOverview:'Übersicht', kidsTracked:'Kinder', kidsOpenHomework:'Hausaufgaben offen',
     kidsWithGrades:'mit Noten', kidsAttNone:'kein Eintrag', kidsMetricEmpty:'—',
@@ -426,7 +426,7 @@ const T = {
     childHowToNotes:'Notizen: nur für dich',
     childHowToMore:'Mehr: Plan, Lernen, Sterne und Hilfe',
     kidGuideWelcome:'Willkommen in deiner App',
-    kidGuideWelcomeHint:'Unten findest du: Start, Spiele, Bewertung, Taschengeld, Notizen. Tippe „Mehr“ für Bonus, Plan und Sterne.',
+    kidGuideWelcomeHint:'Unten: Start, Spiele, Bewertung. Tippe „Mehr“ für Taschengeld, Notizen, Bonus, Plan und Sterne.',
     kidGuideGotIt:'Alles klar',
     kidGuideWhere:'Du bist hier',
     kidGuideNext:'Als Nächstes',
@@ -604,11 +604,26 @@ const T = {
     stockDraftNeedReason:'Für Ausgang einen Grund wählen.',
     stockDraftSummary:(n,ins,outs)=>`${n} · +${ins} / −${outs}`,
     stockDraftPending:'Noch nicht gespeichert',
+    unsavedLeaveTitle:'Ungespeicherte Änderungen',
     unsavedLeaveBody:'Du hast ungespeicherte Änderungen. Seite wirklich verlassen? Die Änderungen gehen verloren.',
-    unsavedLeaveStock:'Lager: ± noch nicht gespeichert',
+    unsavedLeaveStock:'Am Tresen liegen noch Artikel, die nicht eingeräumt sind',
     unsavedLeaveList:'Liste: Entfernungen noch nicht bestätigt',
     unsavedLeavePocket:'Taschengeld-Eingabe noch offen',
     unsavedLeaveDiscarded:'Änderungen verworfen',
+    unsavedLeaveStay:'Zurück',
+    unsavedLeaveDiscardBtn:'Verwerfen & verlassen',
+    stockCounter:'Tresen',
+    stockCounterHint:'Hier sammelst du Änderungen, bevor du sie bestätigst — wie an der Ladentheke.',
+    stockCounterEmpty:'Der Tresen ist leer.',
+    stockCounterResumeToast:n=>`Du hast noch ${n} ${n===1?'Artikel':'Artikel'} am Tresen von letztem Mal.`,
+    stockCounterRemoveItem:'Aus dem Tresen nehmen',
+    stockViewList:'Liste', stockViewTiles:'Kacheln',
+    stockReceiptOpen:'Prüfen & abschließen',
+    stockReceiptTitle:'Beleg',
+    stockReceiptHint:'Prüfe die Änderungen, bevor du sie bestätigst.',
+    stockReceiptDefaultReason:'Grund für entnommene Artikel',
+    stockReceiptChangeReason:'Grund ändern',
+    stockReceiptConfirm:'Bestätigen & einräumen',
     stockQuickAdd:'Hinzufügen',
     stockQuickAddTitle:'Produkt hinzufügen',
     stockQuickAddHint:'Name und Menge reichen. Ähnliche Namen werden sofort erkannt.',
@@ -871,7 +886,7 @@ const T = {
     kidTasksDue:n=>n===1?'1 heute fällig':`${n} heute fällig`,
     kidStarsCollected:n=>`${n} Sterne gesammelt`, kidGamesPlay:'Spielen',
     storageOffline:'Nicht dauerhaft gespeichert — Datenbank offline. Bitte Admin informieren.',
-    kidNavRate:'Bewertung', kidRateTitle:'Bewertungen', kidRateKicker:'Wie lief die Woche?',
+    kidNavRate:'Bewertung', kidNavRateShort:'Noten', kidNavPocketShort:'Geld', kidRateTitle:'Bewertungen', kidRateKicker:'Wie lief die Woche?',
     kidRateLead:'Noten von 1 bis 6 — wie in der Schule. Das Team bewertet; du schaust nur zu.',
     kidRateSchool:'Schule', kidRateHome:'Zuhause', kidRateFriends:'Freunde', kidRateMood:'Wie ich mich fühle',
     kidRateVerhalten:'Verhalten', kidRateMitarbeit:'Mitarbeit', kidRateActivities:'Mitmachen bei Aktivitäten',
@@ -1272,7 +1287,7 @@ const T = {
     pasteScreenshot:'Bild einfügen', pickScreenshot:'Bild / Foto wählen',
   },
   el: {
-    appTitle:'Armonia Thassos', navHome:'Αρχική', navSchedule:'Πρόγραμμα', navStock:'Αποθήκη', navShop:'Λίστα', navBook:'Βιβλίο', navGallery:'Στιγμές', navTalk:'Talk', navKids:'Παιδιά', navPocket:'Χαρτζιλίκι', navPersonnel:'Προσωπικό', navSchool:'Σχολείο', navAdmin:'Admin', navMore:'Άλλα',
+    appTitle:'Armonia Thassos', navHome:'Αρχική', navSchedule:'Πρόγραμμα', navStock:'Αποθήκη', navShop:'Λίστα', navBook:'Βιβλίο', navGallery:'Στιγμές', navTalk:'Talk', navKids:'Παιδιά', navPocket:'Χαρτζιλίκι', navPersonnel:'Προσωπικό', navSchool:'Σχολείο', navAdmin:'Admin', navMore:'Άλλα', deskHandoff:'Άνοιγμα στον υπολογιστή',
     titleHome:'Αρχική', titleSchedule:'Εβδομαδιαίο πρόγραμμα', titleStock:'Αποθήκη', titleShop:'Λίστες & Ψώνια', titleBook:'Βιβλίο', titleGallery:'Στιγμές', titleTalk:'Συνομιλία ομάδας', titleKids:'Παιδιά & Σχολείο', titlePocket:'Χαρτζιλίκι', kidsHeroHint:'Σχολείο, ανάπτυξη και πρόοδος παιχνιδιών με μια ματιά', kidsEmpty:'Δεν υπάρχουν παιδιά', kidAdd:'Προσθήκη παιδιού', kidRemove:'Αφαίρεση παιδιού', kidEdit:'Επεξεργασία παιδιού', kidNamePh:'Όνομα', kidPinPh:'PIN (4–6 ψηφία)', kidPinConfirm:'Επιβεβαίωση PIN', kidAdded:'Το παιδί αποθηκεύτηκε', kidRemoved:'Το παιδί αφαιρέθηκε', kidRemoveConfirm:'Να αφαιρεθεί αυτό το παιδί; Το login θα διαγραφεί.', kidPinMismatch:'Το PIN δεν ταιριάζει', kidNameRequired:'Λείπει το όνομα', kidAdminOnly:'Μόνο admins μπορούν να προσθέτουν/αφαιρούν παιδιά', profilePhoto:'Φωτογραφία προφίλ', profilePhotoChange:'Αλλαγή φωτογραφίας', profilePhotoRemove:'Αφαίρεση φωτογραφίας', profilePhotoHint:'Εμφανίζεται πάνω δεξιά', schoolSubjects:'Μαθήματα', schoolAttendance:'Παρουσία', schoolHomework:'Εργασίες', schoolTimetable:'Ωρολόγιο', thisWeek:'Αυτή την εβδομάδα', gradeSaved:'Ο βαθμός αποθηκεύτηκε', attSaved:'Η παρουσία αποθηκεύτηκε', hwSaved:'Η εργασία αποθηκεύτηκε', ttSaved:'Η ώρα αποθηκεύτηκε', subSaved:'Το μάθημα αποθηκεύτηκε', subAdd:'Προσθήκη μαθήματος', subArchive:'Αρχειοθέτηση', subActivate:'Ενεργοποίηση', subEmpty:'Δεν υπάρχουν μαθήματα', att_present:'Παρόν', att_absent:'Απών', att_excused:'Δικαιολογημένο', hwEmpty:'Καμία εργασία', hwAdd:'Εργασία', hwTitlePh:'π.χ. Μαθηματικά σ.12', hwAllKids:'Όλα τα παιδιά', ttEmpty:'Καμία ώρα', ttAdd:'Προσθήκη ώρας', homeShiftRing:'Βάρδια', homeWeekSpark:'7 ημέρες ολοκληρωμένα', planDayLoad:'Φόρτος ημέρας', zoSavedLager:'Αποθηκεύτηκε στο ψυγείο', zoSavedListe:'Αποθηκεύτηκε στη λίστα', zoSavedPlan:'Αποθηκεύτηκε στο πρόγραμμα', zoSavedSchool:'Αποθηκεύτηκε στο σχολείο', zoSavedNote:'Η σημείωση αποθηκεύτηκε',
     kidsOverview:'Επισκόπηση', kidsTracked:'παιδιά', kidsOpenHomework:'ανοιχτές εργασίες',
     kidsWithGrades:'με βαθμούς', kidsAttNone:'χωρίς καταχώρηση', kidsMetricEmpty:'—',
@@ -1685,7 +1700,7 @@ const T = {
     childHowToNotes:'Σημειώσεις: μόνο για σένα',
     childHowToMore:'Άλλα: Πρόγραμμα, Μάθηση, Αστέρια και βοήθεια',
     kidGuideWelcome:'Καλώς ήρθες στην εφαρμογή σου',
-    kidGuideWelcomeHint:'Κάτω βρίσκεις: Αρχή, Παιχνίδια, Αξιολόγηση, Χαρτζιλίκι, Σημειώσεις. Πάτα «Άλλα» για Μπόνους, Πρόγραμμα και Αστέρια.',
+    kidGuideWelcomeHint:'Κάτω: Αρχή, Παιχνίδια, Βαθμοί. Πάτα «Άλλα» για Χαρτζιλίκι, Σημειώσεις, Μπόνους, Πρόγραμμα και Αστέρια.',
     kidGuideGotIt:'Εντάξει',
     kidGuideWhere:'Είσαι εδώ',
     kidGuideNext:'Επόμενο',
@@ -1863,11 +1878,26 @@ const T = {
     stockDraftNeedReason:'Για έξοδο διάλεξε λόγο.',
     stockDraftSummary:(n,ins,outs)=>`${n} · +${ins} / −${outs}`,
     stockDraftPending:'Δεν αποθηκεύτηκε ακόμη',
+    unsavedLeaveTitle:'Μη αποθηκευμένες αλλαγές',
     unsavedLeaveBody:'Έχεις μη αποθηκευμένες αλλαγές. Να φύγεις από τη σελίδα; Οι αλλαγές θα χαθούν.',
-    unsavedLeaveStock:'Αποθήκη: ± δεν αποθηκεύτηκε',
+    unsavedLeaveStock:'Έχεις ακόμα είδη στο ταμείο που δεν τακτοποιήθηκαν',
     unsavedLeaveList:'Λίστα: αφαιρέσεις χωρίς επιβεβαίωση',
     unsavedLeavePocket:'Η καταχώρηση χαρτζιλικιού είναι ανοιχτή',
     unsavedLeaveDiscarded:'Οι αλλαγές ακυρώθηκαν',
+    unsavedLeaveStay:'Πίσω',
+    unsavedLeaveDiscardBtn:'Απόρριψη & έξοδος',
+    stockCounter:'Ταμείο',
+    stockCounterHint:'Εδώ μαζεύεις τις αλλαγές πριν τις επιβεβαιώσεις — σαν στο ταμείο του μαγαζιού.',
+    stockCounterEmpty:'Το ταμείο είναι άδειο.',
+    stockCounterResumeToast:n=>`Έχεις ακόμα ${n} ${n===1?'είδος':'είδη'} στο ταμείο από την προηγούμενη φορά.`,
+    stockCounterRemoveItem:'Αφαίρεση από το ταμείο',
+    stockViewList:'Λίστα', stockViewTiles:'Πλακίδια',
+    stockReceiptOpen:'Έλεγχος & ολοκλήρωση',
+    stockReceiptTitle:'Απόδειξη',
+    stockReceiptHint:'Έλεγξε τις αλλαγές πριν τις επιβεβαιώσεις.',
+    stockReceiptDefaultReason:'Λόγος για αφαιρεμένα είδη',
+    stockReceiptChangeReason:'Αλλαγή λόγου',
+    stockReceiptConfirm:'Επιβεβαίωση & τακτοποίηση',
     stockQuickAdd:'Προσθήκη',
     stockQuickAddTitle:'Προσθήκη προϊόντος',
     stockQuickAddHint:'Όνομα και ποσότητα αρκούν. Παρόμοια ονόματα εντοπίζονται αμέσως.',
@@ -2123,7 +2153,7 @@ const T = {
     kidNavStart:'Αρχή', kidNavPlan:'Πρόγραμμα', kidNavLearn:'Μάθηση', kidNavStars:'Αστέρια', kidNavGames:'Παιχνίδια',
     kidBack:'Πίσω',
     storageOffline:'Δεν αποθηκεύτηκε μόνιμα — η βάση είναι εκτός. Ενημέρωσε τον διαχειριστή.',
-    kidNavRate:'Αξιολόγηση', kidRateTitle:'Αξιολογήσεις', kidRateKicker:'Πώς πήγε η εβδομάδα;',
+    kidNavRate:'Αξιολόγηση', kidNavRateShort:'Βαθμοί', kidNavPocketShort:'Τσέπη', kidRateTitle:'Αξιολογήσεις', kidRateKicker:'Πώς πήγε η εβδομάδα;',
     kidRateLead:'Βαθμοί από 1 έως 6 — όπως στο σχολείο. Η ομάδα βαθμολογεί· εσύ μόνο κοιτάς.',
     kidRateSchool:'Σχολείο', kidRateHome:'Σπίτι', kidRateFriends:'Φίλοι', kidRateMood:'Πώς νιώθω',
     kidRateVerhalten:'Συμπεριφορά', kidRateMitarbeit:'Συμμετοχή στο μάθημα', kidRateActivities:'Συμμετοχή σε δραστηριότητες',
@@ -3699,6 +3729,7 @@ function applyProductOverride(p){
     cat: o.cat || p.cat,
     alias: Array.isArray(o.alias) ? o.alias : (p.alias || []),
     icon: o.icon != null ? o.icon : p.icon,
+    photo: o.photo !== undefined ? o.photo : p.photo,
   };
 }
 
@@ -3712,6 +3743,7 @@ function persistProductFields(pid, fields){
     if(fields.cat != null) custom.cat = fields.cat;
     if(fields.alias != null) custom.alias = fields.alias;
     if(fields.icon != null) custom.icon = fields.icon;
+    if(fields.photo !== undefined) custom.photo = fields.photo;
     return;
   }
   DB.productOverrides ||= {};
@@ -3720,6 +3752,7 @@ function persistProductFields(pid, fields){
     ...prev,
     ...fields,
     alias: fields.alias != null ? fields.alias : prev.alias,
+    photo: fields.photo !== undefined ? fields.photo : prev.photo,
   };
 }
 const house = id => (DB.houses||[]).find(h=>h.id===id);
@@ -4000,6 +4033,35 @@ function logEntry(type, text, extra = {}){
 }
 
 /* ════════════════════════════════════════════════════════════════
+   Lager-Tresen: ± Änderungen überleben Tab-Wechsel UND Neuladen/Schließen.
+   ("Counter" — Zähler-Metapher aus dem Laden: du sammelst Änderungen am
+   Tresen, bevor du sie mit Grund bestätigst. Getrennt vom Einkaufszettel.)
+   ════════════════════════════════════════════════════════════════ */
+const STOCK_COUNTER_CACHE_KEY = 'paidia.stockCounter';
+function loadStockCounterCache(){
+  try{
+    const raw = localStorage.getItem(STOCK_COUNTER_CACHE_KEY);
+    if(!raw) return null;
+    const parsed = JSON.parse(raw);
+    const draft = parsed && typeof parsed.draft === 'object' && parsed.draft && !Array.isArray(parsed.draft) ? parsed.draft : null;
+    if(!draft || !Object.keys(draft).some(k => Math.abs(Number(draft[k]) || 0) >= 0.0001)) return null;
+    const itemReasons = parsed.itemReasons && typeof parsed.itemReasons === 'object' && !Array.isArray(parsed.itemReasons) ? parsed.itemReasons : {};
+    return { draft, reason: parsed.reason || null, itemReasons, house: parsed.house || null };
+  }catch{ return null; }
+}
+function persistStockCounterCache(){
+  try{
+    const entries = stockDraftEntries();
+    if(!entries.length){ localStorage.removeItem(STOCK_COUNTER_CACHE_KEY); return; }
+    localStorage.setItem(STOCK_COUNTER_CACHE_KEY, JSON.stringify({
+      draft: state.stockDraft, reason: state.stockDraftReason || null,
+      itemReasons: state.stockDraftItemReasons || {}, house: state.house, ts: Date.now(),
+    }));
+  }catch{}
+}
+const __stockCounterCache = loadStockCounterCache();
+
+/* ════════════════════════════════════════════════════════════════
    Κατάσταση UI
    ════════════════════════════════════════════════════════════════ */
 const state = {
@@ -4039,7 +4101,7 @@ const state = {
   /** Sticky admin flag from /api/auth/session|login — survives PIN flows that replace state.user. */
   sessionAdmin: false,
   child: null,
-  house: 'h1',
+  house: __stockCounterCache?.house || 'h1',
   shopFriday: fridayFor(),
   shopPanel: 'plan',
   shopRequestFilter: 'open',
@@ -4050,8 +4112,9 @@ const state = {
   stockQuery: '',
   stockOpenCategories: null,
   stockTiles: localStorage.getItem('paidia.stockTiles')==='1',
-  stockDraft: {},
-  stockDraftReason: null,
+  stockDraft: __stockCounterCache?.draft || {},
+  stockDraftReason: __stockCounterCache?.reason || null,
+  stockDraftItemReasons: __stockCounterCache?.itemReasons || {},
   stockPendingStep: null, // {pid, dir} | {bulkOut} | {commitDraft:true}
   stockFlashPid: null,
   stockFlashDir: null,
@@ -4787,6 +4850,22 @@ function closeSheet(){
   const returnFocus=sheetReturnFocus;sheetReturnFocus=null;
   if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});
   scheduleMeasureChrome();
+}
+
+/** If sheet panel is gone but backdrop stayed `.on`, the whole UI is dead to taps. */
+function ensureSheetChromeConsistent(){
+  try{
+    if(!sheetBg) return;
+    const panelOpen = !!(sheetEl && sheetEl.classList.contains('on'));
+    const bodyOpen = document.body.classList.contains('sheet-open');
+    if(!panelOpen && !bodyOpen){
+      sheetBg.classList.remove('on');
+      const app = document.getElementById('app');
+      if(app) app.inert = false;
+    }else if(bodyOpen && !panelOpen && !(sheetEl?.childElementCount)){
+      closeSheet();
+    }
+  }catch{}
 }
 
 /** Shared Mehr / overflow row — plain label, optional short hint (Pro). */
@@ -7942,8 +8021,14 @@ function homeShiftStartCardHtml(){
       <span class="home-shift-step-label">${esc(label)}</span>
       ${ok
         ? `<span class="home-shift-step-done">${esc(t('homeShiftDoneMark'))}</span>`
-        : `<button type="button" class="home-shift-step-cta ${primary?'primary':''}" id="${id}">${esc(cta)}</button>`}
+        : (id === 'homeShiftJournal'
+          ? `<span class="home-shift-step-done muted">${esc(t('homeShiftJournalGo'))}</span>`
+          : `<button type="button" class="home-shift-step-cta ${primary?'primary':''}" id="${id}">${esc(cta)}</button>`)}
     </div>`;
+
+  const journalHeaderCta = (!journalDone && (active || journalDue))
+    ? `<button type="button" class="home-shift-primary" id="homeShiftJournal">${esc(t('homeShiftJournalGo'))}</button>`
+    : '';
 
   return `<section class="home-shift-start ${tone}" aria-label="${esc(t('homeShiftStart'))}">
     <header class="home-shift-start-head">
@@ -7952,12 +8037,12 @@ function homeShiftStartCardHtml(){
         <h2>${esc(title)}</h2>
         <p>${esc(allDone?t('homeShiftStartDone'):subtitle)}</p>
       </div>
-      ${!presenceDone && active && !heroOwnsLateCta ? `<button type="button" class="home-shift-primary" id="homeShiftPresence">${esc(t('homeShiftOpen'))}</button>` : ''}
+      ${!presenceDone && active && !heroOwnsLateCta ? `<button type="button" class="home-shift-primary" id="homeShiftPresence">${esc(t('homeShiftOpen'))}</button>` : journalHeaderCta}
     </header>
     <p class="home-shift-hint">${esc(t('homeShiftStartHint'))}</p>
     <div class="home-shift-steps">
       ${active ? step(presenceDone, t('homeShiftStepPresence'), t('presenceImThere'), 'homeShiftPresenceStep', true) : ''}
-      ${step(stockDone, t('homeShiftStepStock'), t('homeShiftStockGo'), 'homeShiftStock', !active || presenceDone)}
+      ${step(stockDone, t('homeShiftStepStock'), t('homeShiftStockGo'), 'homeShiftStock', false)}
       ${active || journalDue ? step(journalDone, t('homeShiftStepJournal'), t('homeShiftJournalGo'), 'homeShiftJournal', presenceDone && stockDone) : ''}
     </div>
   </section>`;
@@ -8249,21 +8334,7 @@ function routeFromHash(){
   return route;
 }
 
-function applyRouteFromHash(){
-  const route = routeFromHash();
-  if(!route) return false;
-  const leavingDirty =
-    hasUnsavedChanges() && (
-      route.tab !== state.tab
-      || (state.pocketCompose && route.pocketKidId && route.pocketKidId !== state.pocketKidId)
-    );
-  if(leavingDirty){
-    if(!confirmLeaveUnsaved()){
-      // replaceState does not fire hashchange — snap URL back to current tab.
-      syncLocationHash();
-      return false;
-    }
-  }
+function applyRoute(route){
   state.tab = route.tab;
   if(route.tab === 'schedule') ensureScheduleShowsToday();
   if(route.scheduleView) setScheduleView(route.scheduleView, {persist:true});
@@ -8280,6 +8351,24 @@ function applyRouteFromHash(){
   if(route.pocketKidId) state.pocketKidId = route.pocketKidId;
   if(route.schoolPane) state.schoolPane = route.schoolPane;
   return true;
+}
+function applyRouteFromHash(){
+  const route = routeFromHash();
+  if(!route) return false;
+  const leavingDirty =
+    hasUnsavedChanges() && (
+      route.tab !== state.tab
+      || (state.pocketCompose && route.pocketKidId && route.pocketKidId !== state.pocketKidId)
+    );
+  if(leavingDirty){
+    openUnsavedLeaveConfirm(()=>{ applyRoute(route); render(); });
+    // replaceState does not fire hashchange — snap URL back to current tab
+    // while the confirm sheet is open. A confirmed discard re-enters via the
+    // captured `route` above (not by re-reading the hash, which we just reverted).
+    syncLocationHash();
+    return false;
+  }
+  return applyRoute(route);
 }
 
 function hashForState(){
@@ -8544,8 +8633,9 @@ function scheduleAgendaEntry(e,dateStr,{compact=false}={}){
 
 function scheduleAgendaEmpty(dateStr,{compact=false, block='afternoon'}={}){
   const bid = blockDef(block) ? block : 'afternoon';
-  return `<button class="schedule-agenda-empty ${compact?'compact':''}" type="button" data-add="${esc(bid)}" data-add-date="${esc(dateStr)}">
-    <span aria-hidden="true">＋</span><b>${esc(t('agendaEmpty'))}</b>${compact?'':`<small>${esc(t('agendaEmptyHint'))}</small>`}
+  const slim = compact || isMobileShellSite();
+  return `<button class="schedule-agenda-empty ${slim?'compact':''}" type="button" data-add="${esc(bid)}" data-add-date="${esc(dateStr)}">
+    <span aria-hidden="true">＋</span><b>${esc(t('agendaEmpty'))}</b>${slim?'':`<small>${esc(t('agendaEmptyHint'))}</small>`}
   </button>`;
 }
 
@@ -8578,12 +8668,12 @@ function weekAgendaBoardHtml(week, byDate, stamps, today){
       const body = list.length
         ? list.map(e=>scheduleAgendaEntry(e, s.ds, {compact:true})).join('')
         : scheduleAgendaEmpty(s.ds, {compact:true, block:b.id});
-      return `<div class="week-agenda-block block-${b.id}">
+      return `<div class="week-agenda-block sched-block block-${b.id}">
         <div class="week-agenda-block-h"><span>${esc(t(b.id))}</span><b>${b.from}–${b.to}</b><i>${list.length}</i></div>
         <div class="week-agenda-block-list">${body}</div>
       </div>`;
     }).join('');
-    return `<article class="week-agenda-column ${s.ds===today?'is-today':''} ${s.ds===state.date?'is-focus':''}" data-date="${s.ds}" id="weekDay-${s.ds}">
+    return `<article class="week-agenda-column sched-col ${s.ds===today?'is-today':''} ${s.ds===state.date?'is-focus':''}" data-date="${s.ds}" id="weekDay-${s.ds}">
       <button type="button" class="week-agenda-head" data-week-focus="${s.ds}" aria-label="${esc(s.long)} ${esc(s.full)}">
         <span>${esc(s.long)}</span>
         <b>${esc(s.full)}</b>
@@ -8596,7 +8686,7 @@ function weekAgendaBoardHtml(week, byDate, stamps, today){
       </div>
     </article>`;
   }).join('');
-  return `<section class="week-agenda-shell week-full-program" aria-labelledby="weekAgendaTitle">
+  return `<section class="week-agenda-shell sched-board week-full-program" aria-labelledby="weekAgendaTitle">
     <header>
       <div><span>${esc(t('viewWeek'))}</span><h3 id="weekAgendaTitle">${esc(t('weekAgenda'))}</h3></div>
       <p class="week-full-hint muted">${esc(t('weekFullHint'))}</p>
@@ -8629,6 +8719,13 @@ function viewScheduleDay(){
   const jumpToday = state.date!==today
     ? `<button class="btn sm sec week-today-btn" type="button" data-week-today>${esc(t('today'))}</button>`
     : '';
+  const daySummary = (isMobileShellSite() && !all.length)
+    ? ''
+    : `<div class="plan-day-summary" aria-label="${esc(t('planDayLoad'))}">
+        <span><b>${all.length}</b><small>${esc(t('dueToday'))}</small></span>
+        <span><b>${unassignedCount}</b><small>${esc(t('unassignedStat'))}</small></span>
+        <span><b>${housesCount}</b><small>${esc(t('filterHouse'))}</small></span>
+      </div>`;
   return `
     <header class="plan-hero plan-day-hero">
       <div class="plan-hero-copy">
@@ -8638,11 +8735,7 @@ function viewScheduleDay(){
         ${jumpToday}
       </div>
       <button class="plan-hero-cta page-act primary" type="button" data-page-act="addEntry" data-tour="plan-add">${esc(t('topAdd'))}</button>
-      <div class="plan-day-summary" aria-label="${esc(t('planDayLoad'))}">
-        <span><b>${all.length}</b><small>${esc(t('dueToday'))}</small></span>
-        <span><b>${unassignedCount}</b><small>${esc(t('unassignedStat'))}</small></span>
-        <span><b>${housesCount}</b><small>${esc(t('filterHouse'))}</small></span>
-      </div>
+      ${daySummary}
     </header>
     <div class="plan-days days" role="tablist" aria-label="${esc(t('viewDay'))}">${days}</div>
     <div class="plan-day-flow plan-day-program" aria-label="${esc(t('dayAgenda'))}">${dayProgramFlowHtml(state.date, all)}</div>
@@ -8913,7 +9006,7 @@ function viewScheduleWeek(){
   document.body.classList.toggle('week-layout-matrix', effectiveLayout==='matrix');
   document.body.classList.toggle('week-full-mobile', !!portraitMobile || effectiveLayout==='agenda');
 
-  const weekJump = `<nav class="week-jump" aria-label="${esc(t('viewWeek'))}">
+  const weekJump = `<nav class="week-jump sched-daystrip" aria-label="${esc(t('viewWeek'))}">
     ${stamps.map(s=>{
       const count=byDate[s.ds].length;
       return `<button type="button" class="week-jump-day ${s.ds===today?'is-today':''} ${s.ds===focusDs?'is-selected':''}"
@@ -8981,7 +9074,7 @@ function viewScheduleWeek(){
 
   const first = new Date(week[0]+'T12:00:00'), last = new Date(week[6]+'T12:00:00');
   return `
-    <header class="plan-week-chrome">
+    <header class="plan-week-chrome sched-hero">
       <div class="plan-week-chrome-top">
         <div class="plan-week-range">
           <span class="brand-kicker">${esc(t('viewWeek'))}</span>
@@ -10588,46 +10681,232 @@ function fridgeKitIcon(name){
   };
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]||paths.grid}</svg>`;
 }
-function fridgeKitArt(p){
+/** Name→photo regex table (icons/fridge/*.png). Ordered specific-before-
+ * generic where one name is a substring of another after norm() strips
+ * spaces/accents (streukäse/frischkäse before käse, frühlingszwiebeln
+ * before zwiebeln, sprudelwasser before wasser, salz checked last since
+ * it's a substring of waschmaschinensalz). Shared by fridgeKitArt() (auto
+ * icon for a product) and productSuggestions() (autofill for new products
+ * that don't exist in the catalog yet). */
+const PHOTO_ASSET_PATTERNS=[[/süßkart|sweet.potato|γλυκοπατ/,'sweet-potato'],[/kartoff|potato|πατάτ/,'potato'],[/pilz|shroom|mushroom|μανιτάρ/,'mushrooms'],[/knoblauch|garlic|σκόρδ/,'garlic'],[/joghurt|yogurt|γιαούρτ/,'yogurt'],[/tomatenso|tomato.sauce|σάλτσα ντομάτ/,'tomato-sauce'],[/quinoa|κινόα/,'quinoa'],[/reis|rice|ρύζι/,'rice'],[/walnu|walnut|καρύδ/,'walnuts'],[/aubergin|eggplant|μελιτζάν/,'eggplant'],[/olivenöl|oil|λάδι/,'oil'],[/pfeffer|pepper|πιπέρι/,'spices'],[/sushi|σούσι/,'sushi'],
+    [/streukase|τριμμενοτυρι/,'shredded-cheese'],
+    [/frischkase|τυρικρεμα/,'cream-cheese'],
+    [/kase|τυρι/,'cheese-block'],
+    [/milch|γαλα/,'milk'],
+    [/butter|βουτυρο/,'butter'],
+    [/margarin|μαργαριν/,'margarine'],
+    [/feta|φετα/,'feta'],
+    [/eier|αυγα/,'eggs'],
+    [/schinken|ζαμπον/,'ham'],
+    [/salami|σαλαμι/,'salami'],
+    [/tomaten|ντοματ/,'tomato'],
+    [/gurken|αγγουρι/,'cucumber'],
+    [/fruhlingszwiebeln|κρεμμυδακ/,'spring-onion'],
+    [/zwiebeln|κρεμμυδ/,'onion'],
+    [/paprika/,'bell-pepper'],
+    [/zucchini|κολοκυθακ/,'zucchini'],
+    [/mohren|καροτ/,'carrot'],
+    [/spinat|σπανακ/,'spinach'],
+    [/petersilie|μαιντανο/,'parsley'],
+    [/nektarinen|νεκταριν/,'nectarine'],
+    [/apfel|μηλα/,'apple'],
+    [/bananen|μπανανε/,'banana'],
+    [/zitronen|λεμονι/,'lemon'],
+    [/wassermelone|καρπουζ/,'watermelon'],
+    [/toastbrot|ψωμιτοστ/,'toast-bread'],
+    [/deutschesbrot|γερμανικοψωμι/,'dark-bread'],
+    [/granola/,'granola'],
+    [/haferflocken|βρωμη/,'oat-flakes'],
+    [/kirschmarmelade|μαρμελαδακερασι/,'cherry-jam'],
+    [/makkaroni|μακαρονι/,'macaroni'],
+    [/spirelli|βιδες/,'fusilli'],
+    [/spaghetti|σπαγγετι/,'spaghetti'],
+    [/lasagneplatten|φυλλαλαζανια/,'lasagne-sheets'],
+    [/mais|καλαμποκι/,'corn'],
+    [/pfeffer/,'black-pepper'],
+    [/essigweiss|ξυδιλευκο/,'white-vinegar'],
+    [/essigrot|ξυδικοκκινο/,'red-vinegar'],
+    [/ketchup|κετσαπ/,'ketchup'],
+    [/blatterteig|φυλλοσφολιατας/,'puff-pastry'],
+    [/backpapier|λαδοκολλα/,'baking-paper'],
+    [/alufolie|αλουμινοχαρτο/,'aluminium-foil'],
+    [/wraps/,'wraps'],
+    [/vanillearoma|αρωμαβανιλιας/,'vanilla-extract'],
+    [/susssauerimglas|γλυκοξινοσεβαζο/,'sweet-sour-jar'],
+    [/sprudelwasser|ανθρακουχο/,'sparkling-water'],
+    [/wasser|νερο/,'water-bottle'],
+    [/klopapier|χαρτιυγειας/,'toilet-paper'],
+    [/kuchenrolle|χαρτικουζινας/,'paper-towels'],
+    [/feuchttucher|υγραμαντηλακια/,'wet-wipes'],
+    [/mullsacke|σακουλεσσκουπιδιων/,'trash-bags'],
+    [/schwamme|σφουγγαρια/,'sponges'],
+    [/spuli|υγροπιατων/,'dish-soap'],
+    [/bodenputzmittel|καθαριστικοδαπεδου/,'floor-cleaner'],
+    [/waschmaschinensalz|αλατιπλυντηριου/,'washing-machine-salt'],
+    [/besen|σκουπα/,'broom'],
+    [/cornflakes|κορνφλεικ/,'cornflakes'],
+    // "Salz" is a substring of "Waschmaschinensalz" — must stay last.
+    [/salz|αλατι/,'salt'],
+];
+/** Extra photo icons that aren't (yet) real catalog products — schnitzel,
+ * tuna, leek, etc. These exist purely so productSuggestions() can offer a
+ * ready-made icon + category + unit when staff type the name of something
+ * new, instead of only matching what's already in the catalog. */
+const PHOTO_ICON_LIBRARY=[
+  {file:'chili-pepper', de:'Chilischote', el:'Πιπεριά τσίλι', cat:'produce', unit:'Stk'},
+  {file:'potato', de:'Kartoffeln', el:'Πατάτες', cat:'produce', unit:'kg'},
+  {file:'leek', de:'Lauch', el:'Πράσο', cat:'produce', unit:'Stk'},
+  {file:'celery', de:'Staudensellerie', el:'Σέλινο', cat:'produce', unit:'Stk'},
+  {file:'ginger', de:'Ingwer', el:'Τζίντζερ', cat:'produce', unit:'Stk'},
+  {file:'red-cabbage', de:'Rotkohl', el:'Κόκκινο λάχανο', cat:'produce', unit:'Stk'},
+  {file:'schnitzel', de:'Schnitzel', el:'Σνίτσελ', cat:'fridge', unit:'g'},
+  {file:'deli-meat', de:'Aufschnitt', el:'Αλλαντικά', cat:'fridge', unit:'g'},
+  {file:'sausages', de:'Würstchen', el:'Λουκάνικα', cat:'fridge', unit:'Pkg'},
+  {file:'tuna-can', de:'Thunfisch (Dose)', el:'Τόνος (κονσέρβα)', cat:'dry', unit:'Stk'},
+  {file:'bougatsa', de:'Bougatsa', el:'Μπουγάτσα', cat:'dry', unit:'Stk'},
+  {file:'cake-slice', de:'Kuchen', el:'Κέικ', cat:'dry', unit:'Stk'},
+  {file:'baklava', de:'Baklava', el:'Μπακλαβάς', cat:'dry', unit:'Stk'},
+  {file:'frozen-spinach', de:'TK-Spinat', el:'Κατεψυγμένο σπανάκι', cat:'dry', unit:'Pkg'},
+  {file:'frozen-peas', de:'TK-Erbsen', el:'Κατεψυγμένος αρακάς', cat:'dry', unit:'Pkg'},
+  {file:'sparkling-water-glass', de:'Sprudelwasser (Glas)', el:'Ανθρακούχο νερό (γυάλινο)', cat:'drinks', unit:'Stk'},
+  {file:'fruit-juice', de:'Fruchtsaft', el:'Χυμός φρούτων', cat:'drinks', unit:'L'},
+  {file:'wheat-flour', de:'Mehl', el:'Αλεύρι', cat:'dry', unit:'kg'},
+  {file:'sugar', de:'Zucker', el:'Ζάχαρη', cat:'dry', unit:'kg'},
+  {file:'frappe-coffee', de:'Frappé Kaffee', el:'Καφές φραπέ', cat:'dry', unit:'Stk'},
+  {file:'tomato-paste', de:'Tomatenmark', el:'Πελτές ντομάτας', cat:'dry', unit:'Stk'},
+  {file:'oregano', de:'Oregano', el:'Ρίγανη', cat:'dry', unit:'Stk'},
+  {file:'vegetable-bouillon', de:'Gemüsebrühe', el:'Ζωμός λαχανικών', cat:'dry', unit:'Stk'},
+  {file:'honey', de:'Honig', el:'Μέλι', cat:'dry', unit:'Stk'},
+  {file:'canned-peaches', de:'Pfirsiche (Dose)', el:'Ροδάκινα (κονσέρβα)', cat:'dry', unit:'Stk'},
+  {file:'vanilla-pudding', de:'Vanillepudding', el:'Πουτίγκα βανίλια', cat:'dry', unit:'Stk'},
+  {file:'koulourakia', de:'Koulourakia', el:'Κουλουράκια', cat:'dry', unit:'Pkg'},
+  {file:'glass-cleaner', de:'Glasreiniger', el:'Καθαριστικό τζαμιών', cat:'household', unit:'Stk'},
+  {file:'fabric-softener', de:'Weichspüler', el:'Μαλακτικό ρούχων', cat:'household', unit:'Stk'},
+  {file:'rubber-gloves', de:'Gummihandschuhe', el:'Λαστιχένια γάντια', cat:'household', unit:'Pkg'},
+  {file:'napkins', de:'Servietten', el:'Χαρτοπετσέτες', cat:'household', unit:'Pkg'},
+  {file:'air-freshener', de:'Lufterfrischer', el:'Αποσμητικό χώρου', cat:'household', unit:'Stk'},
+];
+/** All photo filenames pickable in the icon picker: every unique file the
+ * regex table points at, plus the reference-only library above. */
+const PHOTO_ICON_ALL_FILES=[...new Set([
+  ...PHOTO_ASSET_PATTERNS.map(([,file])=>file),
+  ...PHOTO_ICON_LIBRARY.map(r=>r.file),
+])].sort();
+/** Explicit p.photo override wins; otherwise the regex table; otherwise
+ * null (caller falls back to the abstract SVG icon). Shared by
+ * fridgeKitArt() and productSuggestions(). */
+function resolvePhotoIcon(p){
+  if(!p) return null;
+  if(p.photo) return p.photo;
   const name=norm(`${p.de||''} ${p.el||''} ${p.en||''}`);
-  const assets=[[/süßkart|sweet.potato|γλυκοπατ/,'sweet-potato'],[/kartoff|potato|πατάτ/,'potato'],[/pilz|shroom|mushroom|μανιτάρ/,'mushrooms'],[/knoblauch|garlic|σκόρδ/,'garlic'],[/joghurt|yogurt|γιαούρτ/,'yogurt'],[/tomatenso|tomato.sauce|σάλτσα ντομάτ/,'tomato-sauce'],[/quinoa|κινόα/,'quinoa'],[/reis|rice|ρύζι/,'rice'],[/walnu|walnut|καρύδ/,'walnuts'],[/aubergin|eggplant|μελιτζάν/,'eggplant'],[/olivenöl|oil|λάδι/,'oil'],[/pfeffer|pepper|πιπέρι/,'spices'],[/sushi|σούσι/,'sushi']];
-  const match=assets.find(([pattern])=>pattern.test(name));
-  return match?`<img src="/icons/fridge/${match[1]}.png" alt="" loading="lazy" decoding="async">`:`<span class="fk-art-fallback">${svgIcon(prodIconId(p),'prod-ico')}</span>`;
+  const match=PHOTO_ASSET_PATTERNS.find(([pattern])=>pattern.test(name));
+  return match ? match[1] : null;
+}
+function fridgeKitArt(p){
+  const file=resolvePhotoIcon(p);
+  return file?`<img src="/icons/fridge/${esc(file)}.png" alt="" loading="lazy" decoding="async">`:`<span class="fk-art-fallback">${svgIcon(prodIconId(p),'prod-ico')}</span>`;
+}
+/** Grid of photo icons to pick from — used when adding/editing a product so
+ * staff can override the auto-matched photo. `selected` is a filename
+ * (without extension) or falsy for "no override, use auto-match". */
+function photoIconPickerHtml(selected){
+  return `<div class="photo-icon-picker" role="listbox" aria-label="${state.lang==='el'?'Εικόνα':'Foto'}">
+    <button type="button" class="photo-icon-opt photo-icon-opt-none ${selected?'':'on'}" data-photo-icon="" aria-pressed="${selected?'false':'true'}" title="${state.lang==='el'?'Αυτόματο':'Automatisch'}">
+      <span class="photo-icon-none-mark">∅</span>
+    </button>
+    ${PHOTO_ICON_ALL_FILES.map(file=>`<button type="button" class="photo-icon-opt ${file===selected?'on':''}" data-photo-icon="${esc(file)}" aria-pressed="${file===selected?'true':'false'}">
+      <img src="/icons/fridge/${esc(file)}.png" alt="" loading="lazy" decoding="async">
+    </button>`).join('')}
+  </div>`;
+}
+/** Smart "add product" autofill: merges real catalog/custom products
+ * (findStockNameMatches' pool) with the reference-only icon library, so
+ * typing the name of something not yet in the catalog ("τόνος") still
+ * suggests the right category/unit/photo instead of only matching what's
+ * already been added before. `kind:'existing'` entries carry a real
+ * product id (picking one behaves like today — adds/tops-up that product);
+ * `kind:'reference'` entries only pre-fill the form fields. */
+function productSuggestions(raw, limit=6){
+  const q=norm(raw||'');
+  if(!q || q.length<2) return [];
+  const existing=PRODUCTS().map(p=>{
+    const names=[p.de, p.el, ...(p.alias||[])].map(norm).filter(Boolean);
+    let score=0;
+    for(const n of names){ if(n===q) score=Math.max(score,100); else if(n.startsWith(q)) score=Math.max(score,80); else if(n.includes(q)) score=Math.max(score,50); }
+    return score>0 ? {kind:'existing', score, de:p.de, el:p.el, cat:p.cat, unit:p.unit, photo:resolvePhotoIcon(p), p} : null;
+  }).filter(Boolean);
+  const existingNames=new Set(PRODUCTS().flatMap(p=>[norm(p.de), norm(p.el)]));
+  const reference=PHOTO_ICON_LIBRARY.map(r=>{
+    if(existingNames.has(norm(r.de)) || existingNames.has(norm(r.el))) return null;
+    const names=[r.de, r.el].map(norm);
+    let score=0;
+    for(const n of names){ if(n===q) score=Math.max(score,100); else if(n.startsWith(q)) score=Math.max(score,80); else if(n.includes(q)) score=Math.max(score,50); }
+    return score>0 ? {kind:'reference', score, de:r.de, el:r.el, cat:r.cat, unit:r.unit, photo:r.file} : null;
+  }).filter(Boolean);
+  return [...existing, ...reference]
+    .sort((a,b)=>b.score-a.score || L({de:a.de,el:a.el}).localeCompare(L({de:b.de,el:b.el}), state.lang))
+    .slice(0, limit);
+}
+/** Shared "counter" (Tresen) — the cart-equivalent for house/stock: you don't
+ * put stock in a basket, you carry it to the counter. Reused by both view
+ * modes. Draft survives tab-switch (state) and reload/close (localStorage,
+ * see persistStockCounterCache) until committed with a reason. */
+/** Minimal always-on pill — count only. Tap opens the full receipt for
+ * review + reasons; nothing here interrupts the tap-tap-tap flow at the shelf. */
+/** Counter icon+badge, sits in the header — not a bottom bar, not a cart.
+ * A hand taking something off a shelf — this is a household pantry, not a
+ * shop. Tap opens the Receipt. Empty counter still renders the icon
+ * (disabled look) so its position never jumps as items are added/removed. */
+function stockCartBtnHtml(hid){
+  if(hid==='all') return '';
+  const n=stockDraftEntries().length;
+  return `<button type="button" class="lager-counter-btn${n?' has-items':''}" id="stockCounterOpen" aria-label="${esc(t('stockCounter'))}${n?': '+n:''}" title="${esc(t('stockCounter'))}" ${n?'':'disabled'}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 11V3a1.5 1.5 0 0 1 3 0v8"/><path d="M14 11.5V5a1.5 1.5 0 0 1 3 0v8"/><path d="M17 13V9a1.5 1.5 0 0 1 3 0v6c0 3.3-2.7 6-6 6h-1a6 6 0 0 1-6-6v-2.5A1.5 1.5 0 0 1 8.5 11c.6 0 1.1.3 1.4.8"/></svg>
+    ${n?`<span class="lager-counter-badge">${n}</span>`:''}
+  </button>`;
 }
 function viewStock(){
   const hid=state.house, houses=(hid==='all'?DB.houses:[house(hid)]).filter(Boolean);
   if(!houses.length)return `<div id="fridgeStorage">${emptyState(ui('u-leaf'),t('selectHouse'))}</div>`;
   const allProducts=PRODUCTS(), productState=p=>stockProductStateFor(houses,p);
   const selectedCategory=state.stockFridgeCategory||'all';
-  const visible=stockComputeVisible(houses,hid).filter(p=>selectedCategory==='all'||p.cat===selectedCategory);
+  const visibleAll=stockComputeVisible(houses,hid);
+  const visible=visibleAll.filter(p=>selectedCategory==='all'||p.cat===selectedCategory);
   const attention=allProducts.filter(p=>productState(p)!=='ok');
+  const emptyCount=allProducts.filter(p=>productState(p)==='empty').length;
   const el=state.lang==='el', location=hid==='all'?t('bothHouses'):house(hid)?.short;
   const qtyFor=p=>houses.reduce((sum,h)=>sum+Number(DB.stock[stockKey(h.id,p.id)]||0),0)+(hid==='all'?0:Number(state.stockDraft[p.id]||0));
   const statusFor=p=>t(productState(p)==='empty'?'stockOutState':productState(p)==='low'?'stockLow':'stockHealthy');
   const labelCount=n=>`${n} ${el?'είδη':'Artikel'}`;
+  const tiles=!!state.stockTiles;
+  const viewToggleBtn=`<button type="button" class="fk-icon-button lager-view-toggle" id="stockTilesToggle" aria-label="${esc(t(tiles?'stockViewList':'stockViewTiles'))}" title="${esc(t(tiles?'stockViewList':'stockViewTiles'))}">${fridgeKitIcon(tiles?'filters':'grid')}</button>`;
+
   const card=p=>{
     const st=productState(p),qty=roundStock(qtyFor(p)),draft=hid==='all'?0:Number(state.stockDraft[p.id]||0);
     const fill=Math.max(0,Math.min(100,stockFillPct(qty,p)));
     const selecting=state.selectMode==='stock'&&hid!=='all';
     return `<article class="fk-product ${st} ${draft?'has-draft':''} ${hid==='all'?'multi-house':''}" data-stock-row="${esc(p.id)}">
       <button type="button" class="fk-product-card" data-stock-product="${esc(p.id)}" aria-label="${esc(t('tapProduct'))}: ${esc(L(p))}">
-        <span class="fk-quantity-badge">${qty} ${esc(p.unit)}</span>
+        <span class="fk-quantity-badge">${qty} ${esc(unitLabel(p.unit))}</span>
         <span class="fk-product-art">${fridgeKitArt(p)}</span>
         <span class="fk-health-track"><span style="width:${fill}%"></span></span>
         <span class="fk-stock-state">${esc(statusFor(p))}</span>
       </button>
       <button type="button" class="fk-product-name" data-stock-product="${esc(p.id)}" title="${esc(L(p))}">${esc(L(p))}</button>
-      <span class="fk-product-note">${hid==='all'?houses.map(h=>`${esc(h.short)} ${DB.stock[stockKey(h.id,p.id)]||0}`).join(' · '):`${esc(location)} · min ${lowThreshold(p)} ${esc(p.unit)}`}${draft?` · ${draft>0?'+':''}${draft}`:''}</span>
+      <span class="fk-product-note">${hid==='all'?houses.map(h=>`${esc(h.short)} ${DB.stock[stockKey(h.id,p.id)]||0}`).join(' · '):`${esc(location)} · min ${lowThreshold(p)} ${esc(unitLabel(p.unit))}`}${draft?` · ${draft>0?'+':''}${draft}`:''}</span>
       ${selecting?`<button class="fk-select bulk-check ${isSelected(p.id)?'on':''}" type="button" data-bulk-toggle="${esc(p.id)}" aria-pressed="${isSelected(p.id)}" aria-label="${esc(t('selectMode'))}"></button>`:''}
     </article>`;
   };
-  return `<div id="fridgeStorage" data-tour="stock-main">
+
+  const tilesBody=()=>`
     <header class="fk-header">
+      ${viewToggleBtn}
       <details class="fk-locations"><summary class="fk-icon-button" aria-label="${esc(t('filterHouse'))}" title="${esc(location)}">${fridgeKitIcon('grid')}</summary>
         <div class="fk-popover"><div class="fk-menu-label">${esc(t('filterHouse'))}</div><div id="sHouse" data-tour="stock-houses">${DB.houses.map(h=>`<button type="button" data-h="${esc(h.id)}" aria-pressed="${hid===h.id}">${esc(h.short)}</button>`).join('')}<button type="button" data-h="all" aria-pressed="${hid==='all'}">${esc(t('bothHouses'))}</button></div></div>
       </details>
       <h2>${esc(t('headerStock'))}</h2>
       <button type="button" class="fk-icon-button fk-alert-button" data-stock-filter="${state.stockFilter==='attention'?'all':'attention'}" aria-pressed="${state.stockFilter==='attention'}" aria-label="${esc(t('stockNeedsAction'))}: ${attention.length}">${fridgeKitIcon('bell')}${attention.length?'<i></i>':''}</button>
+      ${stockCartBtnHtml(hid)}
     </header>
     <div class="fk-searchbar" data-tour="stock-command">
       <label class="fk-search" data-tour="stock-search">${fridgeKitIcon('search')}<input id="stockSearch" value="${esc(state.stockQuery||'')}" placeholder="${esc(t('stockSearch'))}" aria-label="${esc(t('stockSearch'))}" autocomplete="off" enterkeyhint="search">${state.stockQuery?`<button type="button" id="stockClear" aria-label="${esc(t('stockClearSearch'))}">×</button>`:''}</label>
@@ -10645,9 +10924,61 @@ function viewStock(){
     <section class="fk-inventory"><div class="fk-heading"><h3>${el?'Προϊόντα':'Vorräte'}</h3><span>${labelCount(visible.length)}</span></div>
       <nav class="fk-categories" aria-label="${esc(t('stockShelves'))}"><button type="button" data-fridge-category="all" aria-pressed="${selectedCategory==='all'}">${el?'Όλα':'Alle'}</button>${CATS().filter(c=>allProducts.some(p=>p.cat===c.id)).map(c=>`<button type="button" data-fridge-category="${esc(c.id)}" aria-pressed="${selectedCategory===c.id}">${esc(L(c))}</button>`).join('')}</nav>
       <div class="fk-grid">${visible.map(card).join('')||`<div class="fk-empty"><p>${esc(t('noStockResults'))}</p><button type="button" id="fridgeReset">${el?'Εμφάνιση όλων':'Alle anzeigen'}</button></div>`}</div>
-    </section>
+    </section>`;
+
+  /** Compact list: one shelf-walk, grouped by category, steppers over cards. */
+  const listRow=p=>{
+    const st=productState(p),qty=roundStock(qtyFor(p)),draft=hid==='all'?0:Number(state.stockDraft[p.id]||0);
+    return `<article class="lager-row ${st} ${draft?'has-draft':''}" data-stock-row="${esc(p.id)}">
+      <span class="lager-row-icon">${fridgeKitArt(p)}</span>
+      <button type="button" class="lager-row-name" data-stock-product="${esc(p.id)}" title="${esc(L(p))}">
+        <b>${esc(L(p))}</b><i class="lager-edit-mark" aria-hidden="true">✎</i>
+        <small>${hid==='all'?houses.map(h=>`${esc(h.short)} ${DB.stock[stockKey(h.id,p.id)]||0}`).join(' · '):`min ${lowThreshold(p)} ${esc(unitLabel(p.unit))}`}${draft?` · ${draft>0?'+':''}${draft}`:''}</small>
+      </button>
+      ${hid!=='all'?`<div class="lager-stepper" role="group" aria-label="${esc(L(p))}">
+        <button type="button" class="lager-step-btn" data-stock-step="OUT" data-pid="${esc(p.id)}" aria-label="${esc(t('stockOut'))}">−</button>
+        <span class="lager-step-val">${qty}<i>${esc(unitLabel(p.unit))}</i></span>
+        <button type="button" class="lager-step-btn" data-stock-step="IN" data-pid="${esc(p.id)}" aria-label="${esc(t('stockIn'))}">+</button>
+      </div>`:`<span class="lager-row-qty">${qty} ${esc(unitLabel(p.unit))}</span>`}
+    </article>`;
+  };
+  const listBody=()=>{
+    const catsWithItems=CATS().filter(c=>visibleAll.some(p=>p.cat===c.id));
+    const groups=catsWithItems.map(c=>{
+      const items=visibleAll.filter(p=>p.cat===c.id);
+      const catAllInHouse=allProducts.filter(p=>p.cat===c.id);
+      const catEmptyCount=catAllInHouse.filter(p=>productState(p)==='empty').length;
+      return `<section class="lager-cat">
+        <header class="lager-cat-head"><span class="lager-cat-name">${esc(L(c))}</span><span class="lager-cat-meta">${catAllInHouse.length}${catEmptyCount?` · <b>${catEmptyCount} ${esc(t('stockEmpty'))}</b>`:''}</span></header>
+        <div class="lager-cat-rows">${items.map(listRow).join('')}</div>
+      </section>`;
+    }).join('') || `<div class="lager-empty"><p>${esc(t('noStockResults'))}</p>${state.stockQuery||state.stockFilter!=='all'?`<button type="button" id="fridgeReset">${el?'Εμφάνιση όλων':'Alle anzeigen'}</button>`:''}</div>`;
+    return `
+      <header class="lager-head">
+        <h2>${esc(t('headerStock'))}</h2>
+        <div class="lager-head-actions">
+          ${viewToggleBtn}
+          ${stockCartBtnHtml(hid)}
+          ${hid!=='all'?`<button type="button" class="btn lager-add-btn" id="stockQuickAdd">${fridgeKitIcon('plus')}${esc(t('stockQuickAdd'))}</button>`:''}
+        </div>
+      </header>
+      <div class="lager-command" data-tour="stock-command">
+        <label class="lager-search" data-tour="stock-search">${fridgeKitIcon('search')}<input id="stockSearch" value="${esc(state.stockQuery||'')}" placeholder="${esc(t('stockSearch'))}" aria-label="${esc(t('stockSearch'))}" autocomplete="off" enterkeyhint="search">${state.stockQuery?`<button type="button" id="stockClear" aria-label="${esc(t('stockClearSearch'))}">×</button>`:''}</label>
+        <div id="sHouse" class="lager-houses" data-tour="stock-houses">${DB.houses.map(h=>`<button type="button" class="${hid===h.id?'on':''}" data-h="${esc(h.id)}">${esc(h.short)}</button>`).join('')}</div>
+      </div>
+      <div class="lager-tabs" role="tablist">
+        <button type="button" data-stock-filter="empty" class="${state.stockFilter==='empty'?'on':''}" role="tab" aria-selected="${state.stockFilter==='empty'}">${esc(t('stockEmpty'))} <b>${emptyCount}</b></button>
+        <button type="button" data-stock-filter="attention" class="${state.stockFilter==='attention'?'on':''}" role="tab" aria-selected="${state.stockFilter==='attention'}">${esc(t('stockAttention'))} <b>${attention.length}</b></button>
+        <button type="button" data-stock-filter="all" class="${state.stockFilter==='all'?'on':''}" role="tab" aria-selected="${state.stockFilter==='all'}">${esc(t('stockAll'))} <b>${allProducts.length}</b></button>
+      </div>
+      ${shiftStockCheckBannerHtml()}
+      <div class="lager-list">${groups}</div>`;
+  };
+
+  return `<div id="fridgeStorage" class="${tiles?'stock-tiles-mode':'stock-list-mode'}" data-tour="stock-main">
+    ${tiles?tilesBody():listBody()}
     ${shiftPresenceBannerHtml()}
-    ${shiftStockCheckBannerHtml()}
+    ${tiles?shiftStockCheckBannerHtml():''}
     ${state.selectMode==='stock'&&hid!=='all'?bulkBarHtml([
       {id:'in', label:t('bulkIn')},
       {id:'out', label:t('bulkOut')},
@@ -10656,31 +10987,6 @@ function viewStock(){
       {id:'to-list', label:t('bulkToList')},
       {id:'clear-empty', label:t('bulkClearEmpty'), danger:true},
     ]):''}
-    ${hid!=='all'?(()=>{
-      const draft=stockDraftEntries();
-      if(draft.length){
-        const ins=draft.filter(([,d])=>d>0).length;
-        const outs=draft.filter(([,d])=>d<0).length;
-        return `<div class="stock-footer-actions stock-draft-dock" aria-label="${t('stockDraftPending')}">
-          <div class="stock-draft-head">
-            <b>${T[state.lang].stockDraftSummary(draft.length,ins,outs)}</b>
-            <span class="muted">${outs?t('stockDraftNeedReason'):t('stockDraftPending')}</span>
-          </div>
-          <div class="stock-draft-actions">
-            <button class="btn sec" type="button" id="stockDraftClear">${t('stockDraftClear')}</button>
-            <button class="btn pine-settle" type="button" id="stockDraftSave">${ui('u-check','sm')} ${t('stockDraftSave')}</button>
-          </div>
-        </div>`;
-      }
-      if(state.stockDraftReason && !state.stockPendingStep){
-        const reasonLabel=L(REASONS().find(r=>r.id===state.stockDraftReason)||{de:'',el:''});
-        return `<div class="stock-reason-pill" aria-label="${esc(t('stockOutReasonBar'))}">
-          <span>${esc(t('stockOutReasonBar'))}: <b>${esc(reasonLabel)}</b></span>
-          <button type="button" class="stock-reason-clear" id="stockReasonClear" aria-label="${esc(t('stockDraftClear'))}">×</button>
-        </div>`;
-      }
-      return '';
-    })():''}
     ${stockOutReasonModalHtml()}
   </div>`;
 }
@@ -10689,7 +10995,8 @@ function sheetStockDetail(pid,hid=state.house){
   const p=prod(pid);if(!p)return;
   const houses=hid==='all'?DB.houses:[house(hid)].filter(Boolean);
   const allHouses=DB.houses;
-  const icon=svgIcon(prodIconId(p),'detail-ico');
+  const currentPhoto=resolvePhotoIcon(p);
+  const icon=currentPhoto?`<img src="/icons/fridge/${esc(currentPhoto)}.png" alt="" class="detail-ico">`:svgIcon(prodIconId(p),'detail-ico');
   const isPlanned=houseId=>fridayEntries(houseId).some(e=>['open','pending'].includes(e.status)&&e.productId===pid);
   const isCustom=!!p.custom || (DB.customProducts||[]).some(x=>x.id===pid);
   const aliasText=(p.alias||[]).join(', ');
@@ -10706,7 +11013,7 @@ function sheetStockDetail(pid,hid=state.house){
 
     <label class="f"><span>${t('productNameDe')}</span><input id="editProdDe" value="${esc(p.de||'')}" autocomplete="off"></label>
     <label class="f"><span>${t('productNameEl')}</span><input id="editProdEl" value="${esc(p.el||'')}" autocomplete="off"></label>
-    <div class="f"><span>${state.lang==='el'?'Εικονίδιο':'Icon'}</span>${foodIconPickerHtml(prodIconId(p))}</div>
+    <div class="f"><span>${state.lang==='el'?'Φωτο':'Foto'}</span>${photoIconPickerHtml(p.photo||'')}</div>
     <div class="row" style="gap:8px">
       <label class="f grow"><span>${t('stockFoodUnit')}</span>
         <select id="editProdUnit">${['Stk','L','g','kg'].map(u=>`<option value="${u}" ${p.unit===u?'selected':''}>${u}</option>`).join('')}</select>
@@ -10742,14 +11049,15 @@ function sheetStockDetail(pid,hid=state.house){
     return Number.isFinite(n) && n>=0 ? roundStock(n) : null;
   };
 
-  sheetEl.querySelectorAll('[data-food-icon]').forEach(btn=>{
+  sheetEl.querySelectorAll('[data-photo-icon]').forEach(btn=>{
     btn.onclick=()=>{
-      sheetEl.querySelectorAll('[data-food-icon]').forEach(b=>{
+      sheetEl.querySelectorAll('[data-photo-icon]').forEach(b=>{
         b.classList.toggle('on', b===btn);
         b.setAttribute('aria-pressed', b===btn?'true':'false');
       });
       const ico=sheetEl.querySelector('.stock-detail-icon');
-      if(ico) ico.innerHTML=svgIcon(btn.dataset.foodIcon,'detail-ico');
+      const file=btn.dataset.photoIcon;
+      if(ico) ico.innerHTML=file?`<img src="/icons/fridge/${esc(file)}.png" alt="" class="detail-ico">`:svgIcon(prodIconId(p),'detail-ico');
     };
   });
 
@@ -10758,7 +11066,8 @@ function sheetStockDetail(pid,hid=state.house){
     const el=(sheetEl.querySelector('#editProdEl')?.value||'').trim();
     const unit=sheetEl.querySelector('#editProdUnit')?.value||'Stk';
     const cat=sheetEl.querySelector('#editProdCat')?.value||'custom';
-    const icon=sheetEl.querySelector('.food-icon-opt.on')?.dataset.foodIcon || prodIconId(p);
+    const photoBtn=sheetEl.querySelector('.photo-icon-opt.on');
+    const photo=photoBtn ? (photoBtn.dataset.photoIcon || null) : (p.photo||null);
     const alias=(sheetEl.querySelector('#editProdAlias')?.value||'')
       .split(/[,;]+/).map(s=>s.trim()).filter(Boolean);
     if(!de && !el){ toast(t('productNameRequired'),'error'); return; }
@@ -10776,7 +11085,7 @@ function sheetStockDetail(pid,hid=state.house){
     if(badQty){ toast(t('needQty'),'error'); return; }
 
     const apply=()=>{
-      persistProductFields(pid, {de:nameDe, el:nameEl, unit, cat, alias, icon});
+      persistProductFields(pid, {de:nameDe, el:nameEl, unit, cat, alias, photo});
       qtyChanges.forEach(({houseId, prev, next})=>{
         DB.stock[stockKey(houseId,pid)]=next;
         const delta=roundStock(next-prev);
@@ -10854,7 +11163,7 @@ function shortagesCard(hid){
         e.decidedAt?' · '+fmtDT(e.decidedAt):''}${e.missReason?' · '+esc(missReasonLabel(e.missReason)):''}</div></div>
       <div class="row" style="flex:0 0 auto;gap:6px;align-items:center">
         ${e.missReason?missReasonPill(e.missReason):''}
-        <div class="muted">${e.qty} ${esc(e.unit)}</div>
+        <div class="muted">${e.qty} ${esc(unitLabel(e.unit))}</div>
       </div></div>`).join('')}
   </div>`;
 }
@@ -11038,6 +11347,14 @@ window.addEventListener('blur',            clearGhosts);
 function stepFor(p){
   return p.unit === 'g' ? 100 : p.unit === 'kg' ? 0.5 : 1;
 }
+/** Display unit — never show raw DE «Stk» in Greek UI. */
+function unitLabel(u){
+  const raw = String(u || 'Stk');
+  if(raw === 'Stk' || raw === 'stk' || raw === 'Stück'){
+    return state.lang === 'el' ? 'τμχ' : 'Stk';
+  }
+  return raw;
+}
 /** «Λίγο» σημαίνει άλλο πράγμα στα γραμμάρια απ' ό,τι στα τεμάχια. */
 function lowThreshold(p){
   return p.unit === 'g' ? 200 : p.unit === 'kg' ? 1 : 1;
@@ -11060,7 +11377,7 @@ function listEntryStockChipHtml(hid, entry){
   const empty = qty <= 0;
   const tone = empty ? 'is-empty' : (low ? 'is-low' : 'is-ok');
   const tag = empty ? t('shopStockEmpty') : (low ? t('shopStockLow') : '');
-  return `<span class="shop-stock-chip ${tone}">${esc(t('shopStockOnHand')(roundStock(qty), product.unit||entry.unit||''))}${tag?` · ${esc(tag)}`:''}</span>`;
+  return `<span class="shop-stock-chip ${tone}">${esc(t('shopStockOnHand')(roundStock(qty), unitLabel(product.unit||entry.unit||'')))}${tag?` · ${esc(tag)}`:''}</span>`;
 }
 
 /** Personal: «Θέλω να αγοραστεί» → ανοιχτή θέση στη λίστα Παρασκευής. */
@@ -11188,7 +11505,12 @@ function stockDraftEntries(){
 function clearStockDraft(){
   state.stockDraft = {};
   state.stockDraftReason = null;
+  state.stockDraftItemReasons = {};
   state.stockPendingStep = null;
+}
+/** Per-item reason if the receipt overrode it, else the receipt's global default. */
+function stockResolvedReasonId(pid){
+  return state.stockDraftItemReasons[pid] || state.stockDraftReason || (REASONS()[0]?.id || '');
 }
 
 /** An open-but-untouched Taschengeld form is not a change — only typed input counts. */
@@ -11242,16 +11564,35 @@ function discardUnsavedChanges(){
   state.pocketCompose=null;
   return had;
 }
-/** Confirm leave/discard. Returns false if the user stays. */
-function confirmLeaveUnsaved({silentDiscard=false}={}){
+/**
+ * In-app replacement for a `window.confirm()`-then-proceed guard. Native
+ * `confirm()` gets silently auto-dismissed (no visible dialog, instant
+ * "Cancel") inside embedded WebViews and automated browser contexts — that
+ * looked like navigation just refusing to happen with no explanation. This
+ * shows an actual sheet instead, which always renders. If there's nothing
+ * unsaved, runs `onConfirm` immediately.
+ */
+function openUnsavedLeaveConfirm(onConfirm){
   const parts=unsavedChangeParts();
-  if(!parts.length) return true;
-  const detail=parts.map(p=>`• ${p}`).join('\n');
-  const ok=window.confirm(`${t('unsavedLeaveBody')}\n\n${detail}`);
-  if(!ok) return false;
-  discardUnsavedChanges();
-  if(!silentDiscard) toast(t('unsavedLeaveDiscarded'),'info');
-  return true;
+  if(!parts.length){ onConfirm(); return; }
+  const items=parts.map(p=>`<li>${esc(p)}</li>`).join('');
+  openSheet(`<div class="unsaved-leave-sheet">
+    <h2>${esc(t('unsavedLeaveTitle'))}</h2>
+    <p class="muted">${esc(t('unsavedLeaveBody'))}</p>
+    <ul class="unsaved-leave-list">${items}</ul>
+    <div class="unsaved-leave-actions">
+      <button type="button" class="btn ghost" id="unsavedLeaveStay">${esc(t('unsavedLeaveStay'))}</button>
+      <button type="button" class="btn danger" id="unsavedLeaveDiscard">${esc(t('unsavedLeaveDiscardBtn'))}</button>
+    </div>
+  </div>`);
+  document.getElementById('unsavedLeaveStay').onclick=()=>closeSheet();
+  document.getElementById('unsavedLeaveDiscard').onclick=()=>{
+    discardUnsavedChanges();
+    closeSheet();
+    toast(t('unsavedLeaveDiscarded'),'info');
+    render();
+    onConfirm();
+  };
 }
 /**
  * Staff tab change with unsaved guard. Returns false if navigation was blocked.
@@ -11264,7 +11605,10 @@ function navigateStaffTab(next, opts={}){
   if(next===leaving && !opts.scheduleView && !opts.shopPanel && !opts.adminOps && !opts.kidReset){
     return true;
   }
-  if(next!==leaving && !confirmLeaveUnsaved()) return false;
+  if(next!==leaving && hasUnsavedChanges()){
+    openUnsavedLeaveConfirm(()=>navigateStaffTab(next, opts));
+    return false;
+  }
   if(leaving==='schedule' && next!=='schedule') rememberScheduleView(state.scheduleView || 'week');
   if(next==='schedule' && leaving!=='schedule'){
     ensureScheduleShowsToday();
@@ -11495,25 +11839,91 @@ function commitStockDraft(){
   const entries = stockDraftEntries();
   if(!entries.length){ toast(t('pickSomething')); return; }
   const outs = entries.filter(([,d])=>d<0);
-  const reasonId = state.stockDraftReason;
-  const reason = reasonId ? L(REASONS().find(r=>r.id===reasonId)) : '';
-  if(outs.length && !reason){
-    state.stockPendingStep = {commitDraft:true};
-    toast(t('stockDraftNeedReason'),'info');
-    render();
+  if(outs.length && !outs.every(([pid])=>stockResolvedReasonId(pid))){
+    // No usable reason anywhere yet — send them to the receipt to pick one.
+    sheetStockReceipt();
     return;
   }
-  const changes=entries.map(([productId,delta])=>({houseId:hid,productId,delta,reason:delta<0?reason:(state.lang==='el'?'Παραλαβή αποθέματος':'Wareneingang')}));
+  const changes=entries.map(([productId,delta])=>({
+    houseId:hid, productId, delta,
+    reason: delta<0 ? L(REASONS().find(r=>r.id===stockResolvedReasonId(productId))||{}) : (state.lang==='el'?'Παραλαβή αποθέματος':'Wareneingang'),
+  }));
   askPin(T[state.lang].bookN(entries.length), async who=>{
     setStaffUser(who);
-    if(!await runDomainOperation('stock.adjust',{changes},document.querySelector('#stockDraftSave')))return;
+    if(!await runDomainOperation('stock.adjust',{changes},document.querySelector('#receiptConfirm, #stockDraftSave')))return;
     // Remove only the submitted deltas; later taps remain in the draft.
     entries.forEach(([pid,delta])=>{
       const remaining=roundStock(Number(state.stockDraft[pid]||0)-delta);
-      if(Math.abs(remaining)<0.0001)delete state.stockDraft[pid];else state.stockDraft[pid]=remaining;
+      if(Math.abs(remaining)<0.0001){ delete state.stockDraft[pid]; delete state.stockDraftItemReasons[pid]; }
+      else state.stockDraft[pid]=remaining;
     });
-    clearStockOrderFreeze();render();feedback('save');toast(t('saved'),'success');
+    clearStockOrderFreeze();closeSheet();render();feedback('save');toast(t('saved'),'success');
   });
+}
+
+/** Receipt: review every counter line before it posts. One global default
+ * reason for all removed items (pick once, applies to all); tap a line's
+ * own reason chip to override just that one. No per-tap interruptions —
+ * this is the only place reasons are chosen. */
+function sheetStockReceipt(){
+  const entries = stockDraftEntries();
+  if(!entries.length){ toast(t('pickSomething')); return; }
+  if(!state.stockDraftReason) state.stockDraftReason = REASONS()[0]?.id || '';
+  const hasOut = entries.some(([,d])=>d<0);
+
+  const rowHtml=([pid,delta])=>{
+    const p=prod(pid); if(!p) return '';
+    const isOut=delta<0;
+    const reasonId=isOut?stockResolvedReasonId(pid):'';
+    const reasonLabel=isOut?L(REASONS().find(r=>r.id===reasonId)||{}):'';
+    return `<div class="receipt-row">
+      <span class="receipt-row-icon">${fridgeKitArt(p)}</span>
+      <span class="receipt-row-name">${esc(L(p))}</span>
+      <span class="receipt-row-qty ${isOut?'out':'in'}">${delta>0?'+':''}${delta} ${esc(p.unit)}</span>
+      ${isOut?`<button type="button" class="receipt-row-reason" data-receipt-reason-toggle="${esc(pid)}" aria-expanded="false">${esc(reasonLabel)}</button>`:'<span class="receipt-row-reason-spacer"></span>'}
+    </div>
+    ${isOut?`<div class="receipt-row-reason-picker" data-receipt-picker="${esc(pid)}" hidden>${REASONS().map(r=>`<button type="button" class="chip ${r.id===reasonId?'on':''}" data-receipt-set-reason="${esc(pid)}" data-reason-id="${esc(r.id)}">${esc(L(r))}</button>`).join('')}</div>`:''}`;
+  };
+
+  openSheet(`<div class="receipt-sheet">
+    <div class="receipt-sheet-head">
+      <div><h2>${esc(t('stockReceiptTitle'))}</h2><p class="muted">${esc(t('stockReceiptHint'))}</p></div>
+      <button type="button" class="receipt-discard-all" id="receiptDiscardAll">${esc(t('stockDraftClear'))}</button>
+    </div>
+    ${hasOut?`<label class="receipt-default-reason"><span>${esc(t('stockReceiptDefaultReason'))}</span>
+      <select id="receiptDefaultReason">${REASONS().map(r=>`<option value="${esc(r.id)}" ${r.id===state.stockDraftReason?'selected':''}>${esc(L(r))}</option>`).join('')}</select>
+    </label>`:''}
+    <div class="receipt-rows">${entries.map(rowHtml).join('')}</div>
+    <button class="btn pine-settle receipt-confirm" type="button" id="receiptConfirm">${ui('u-check','sm')} ${esc(t('stockReceiptConfirm'))}</button>
+  </div>`);
+
+  const discardAll=sheetEl.querySelector('#receiptDiscardAll');
+  if(discardAll) discardAll.onclick=()=>{ clearStockDraft(); closeSheet(); feedback('toggle'); render(); };
+
+  const defaultSel=sheetEl.querySelector('#receiptDefaultReason');
+  if(defaultSel) defaultSel.onchange=()=>{
+    state.stockDraftReason=defaultSel.value;
+    sheetStockReceipt();
+  };
+  sheetEl.querySelectorAll('[data-receipt-reason-toggle]').forEach(btn=>{
+    btn.onclick=()=>{
+      const pid=btn.dataset.receiptReasonToggle;
+      const picker=sheetEl.querySelector(`[data-receipt-picker="${CSS.escape(pid)}"]`);
+      const opening=picker?.hidden;
+      sheetEl.querySelectorAll('.receipt-row-reason-picker').forEach(p=>p.hidden=true);
+      sheetEl.querySelectorAll('[data-receipt-reason-toggle]').forEach(b=>b.setAttribute('aria-expanded','false'));
+      if(picker && opening){ picker.hidden=false; btn.setAttribute('aria-expanded','true'); }
+    };
+  });
+  sheetEl.querySelectorAll('[data-receipt-set-reason]').forEach(chip=>{
+    chip.onclick=()=>{
+      state.stockDraftItemReasons[chip.dataset.receiptSetReason]=chip.dataset.reasonId;
+      feedback('select');
+      sheetStockReceipt();
+    };
+  });
+  const confirm=sheetEl.querySelector('#receiptConfirm');
+  if(confirm) confirm.onclick=()=>commitStockDraft();
 }
 
 function shiftStockHouseId(){
@@ -11572,6 +11982,11 @@ function paintShiftStockCheckSheet(draft){
         <button type="button" class="shift-check-mark low ${mark==='low'?'on':''}" data-check-mark="low" data-check-pid="${p.id}">${esc(t('shiftStockCheckLow'))}</button>
         <button type="button" class="shift-check-mark empty ${mark==='empty'?'on':''}" data-check-mark="empty" data-check-pid="${p.id}">${esc(t('shiftStockCheckEmpty'))}</button>
       </div>
+      <label class="shift-check-qty-edit ${(mark==='low'||mark==='empty')?'show':''}" data-check-qty-wrap="${p.id}">
+        <span>${esc(t('shiftStockCheckQty'))}</span>
+        <input type="number" inputmode="decimal" min="0" step="any" class="shift-check-qty-input" data-check-qty-pid="${esc(p.id)}" value="${esc(String(qty))}">
+        <i>${esc(p.unit)}</i>
+      </label>
     </article>`;
   }).join('');
   return `<div class="shift-check-flow">
@@ -11640,6 +12055,12 @@ function wireShiftStockCheckSheet(draft){
     card.querySelectorAll('[data-check-mark]').forEach(btn=>{
       btn.classList.toggle('on', btn.dataset.checkMark===mark);
     });
+    const qtyWrap=card.querySelector('[data-check-qty-wrap]');
+    if(qtyWrap){
+      qtyWrap.classList.toggle('show', mark==='low'||mark==='empty');
+      const qtyInput=qtyWrap.querySelector('.shift-check-qty-input');
+      if(qtyInput && document.activeElement!==qtyInput) qtyInput.value=qty;
+    }
   };
   const applyMark=(pid, mark)=>{
     const p=prod(pid); if(!p) return;
@@ -11654,6 +12075,17 @@ function wireShiftStockCheckSheet(draft){
     const btn=ev.target.closest('[data-check-mark]');
     if(!btn) return;
     applyMark(btn.dataset.checkPid, btn.dataset.checkMark);
+  });
+  sheetEl.querySelector('#shiftCheckList')?.addEventListener('input', ev=>{
+    const input=ev.target.closest('.shift-check-qty-input');
+    if(!input) return;
+    const pid=input.dataset.checkQtyPid;
+    const p=prod(pid); if(!p) return;
+    const val=Math.max(0, Number(String(input.value).replace(',','.'))||0);
+    draft.qtys[pid]=val;
+    const card=sheetEl.querySelector(`.shift-check-card[data-check-pid="${pid}"]`);
+    const meta=card?.querySelector('.shift-check-meta');
+    if(meta) meta.textContent=`${val} ${p.unit}`;
   });
   sheetEl.querySelector('#shiftCheckAllYes')?.addEventListener('click',()=>{
     products().forEach(p=>{
@@ -11791,7 +12223,7 @@ function sheetStockQuickAdd(opts={}){
   let qty = 1;
   let unit = 'Stk';
   let cat = CATS()[0]?.id || 'custom';
-  let pickIcon = 'fork-knife';
+  let pickPhoto = null; // explicit user override; null = auto-match from name/reference
 
   const syncQtyField = ()=>{
     const q = sheetEl.querySelector('#qaQty');
@@ -11802,34 +12234,51 @@ function sheetStockQuickAdd(opts={}){
     if(Number.isFinite(n) && n>=0) qty = roundStock(n);
     syncQtyField();
   };
+  const syncPhotoPicker = ()=>{
+    sheetEl.querySelectorAll('[data-photo-icon]').forEach(b=>{
+      const on = (b.dataset.photoIcon||'') === (pickPhoto||'');
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on?'true':'false');
+    });
+  };
   const paint = ()=>{
     const name = (sheetEl.querySelector('#qaName')?.value || '').trim();
-    const matches = findStockNameMatches(name);
-    const exact = matches.find(m=>m.score>=100);
+    const suggestions = productSuggestions(name);
+    const exact = suggestions.find(m=>m.kind==='existing' && m.score>=100);
     if(exact) matchPid = exact.p.id;
-    else if(matchPid && !matches.some(m=>m.p.id===matchPid)) matchPid = null;
+    else if(matchPid && !suggestions.some(m=>m.kind==='existing' && m.p.id===matchPid)) matchPid = null;
     const matchBox = sheetEl.querySelector('#qaMatches');
     if(matchBox){
-      matchBox.innerHTML = matches.length
+      matchBox.innerHTML = suggestions.length
         ? `<div class="stock-qa-dup-hint ${exact?'exact':''}">${esc(exact?t('stockDupExact'):t('stockDupHint'))}</div>
-           <div class="stock-qa-matches">${matches.map(({p,score})=>`
-             <button type="button" class="stock-qa-match ${p.id===matchPid?'on':''}" data-match="${p.id}">
-               <span>${esc(L(p))}</span>
-               <small>${DB.stock[stockKey(hid,p.id)]??0} ${esc(p.unit)}${score>=100?' · ✓':''}</small>
-             </button>`).join('')}</div>`
+           <div class="stock-qa-matches">${suggestions.map((s,i)=>{
+             const stockCount = s.kind==='existing' ? (DB.stock[stockKey(hid,s.p.id)]??0) : null;
+             return `<button type="button" class="stock-qa-match stock-qa-match-photo ${s.kind==='existing' && s.p.id===matchPid?'on':''}" data-suggest="${i}">
+               <span class="stock-qa-match-thumb">${s.photo?`<img src="/icons/fridge/${esc(s.photo)}.png" alt="" loading="lazy">`:'🛒'}</span>
+               <span class="stock-qa-match-copy"><b>${esc(L({de:s.de,el:s.el}))}</b>
+               <small>${s.kind==='existing'?`${stockCount} ${esc(s.unit)}${s.score>=100?' · ✓':''}`:(state.lang==='el'?'Νέο προϊόν':'Neues Produkt')}</small></span>
+             </button>`;
+           }).join('')}</div>`
         : '';
-      matchBox.querySelectorAll('[data-match]').forEach(b=>{
+      matchBox.querySelectorAll('[data-suggest]').forEach(b=>{
         b.onclick=()=>{
-          matchPid = b.dataset.match;
-          const p = prod(matchPid);
-          if(p){
-            unit = p.unit;
-            cat = p.cat;
-            const u = sheetEl.querySelector('#qaUnit'); if(u) u.value = unit;
-            const c = sheetEl.querySelector('#qaCat'); if(c) c.value = cat;
-            qty = stepFor(p);
-            syncQtyField();
+          const s = suggestions[Number(b.dataset.suggest)];
+          if(!s) return;
+          if(s.kind==='existing'){
+            matchPid = s.p.id;
+            unit = s.unit; cat = s.cat; pickPhoto = s.photo||null;
+            qty = stepFor(s.p);
+          } else {
+            matchPid = null;
+            unit = s.unit; cat = s.cat; pickPhoto = s.photo||null;
+            qty = unit==='Stk'||unit==='Pkg' ? 1 : 0.5;
+            const nameField = sheetEl.querySelector('#qaName');
+            if(nameField) nameField.value = L({de:s.de,el:s.el});
           }
+          const u = sheetEl.querySelector('#qaUnit'); if(u) u.value = unit;
+          const c = sheetEl.querySelector('#qaCat'); if(c) c.value = cat;
+          syncQtyField();
+          syncPhotoPicker();
           paint();
         };
       });
@@ -11877,7 +12326,7 @@ function sheetStockQuickAdd(opts={}){
     <div class="stock-qa-meta">
       <label class="f"><span>${esc(t('stockFoodCat'))}</span>
         <select id="qaCat">${CATS().map(c=>`<option value="${esc(c.id)}">${esc(L(c))}</option>`).join('')}</select></label>
-      <div class="f"><span>${state.lang==='el'?'Εικονίδιο':'Icon'}</span>${foodIconPickerHtml('fork-knife')}</div>
+      <div class="f"><span>${state.lang==='el'?'Φωτο':'Foto'}</span>${photoIconPickerHtml('')}</div>
     </div>
     ${isPro()?`<details class="stock-qa-bulk pro-only mode-pro-block">
       <summary>${esc(t('stockBulkPaste'))}</summary>
@@ -11897,13 +12346,10 @@ function sheetStockQuickAdd(opts={}){
       paint();
     };
   });
-  sheetEl.querySelectorAll('[data-food-icon]').forEach(btn=>{
+  sheetEl.querySelectorAll('[data-photo-icon]').forEach(btn=>{
     btn.onclick=()=>{
-      pickIcon = btn.dataset.foodIcon || 'fork-knife';
-      sheetEl.querySelectorAll('[data-food-icon]').forEach(b=>{
-        b.classList.toggle('on', b===btn);
-        b.setAttribute('aria-pressed', b===btn?'true':'false');
-      });
+      pickPhoto = btn.dataset.photoIcon || null;
+      syncPhotoPicker();
     };
   });
   const nameInp = sheetEl.querySelector('#qaName');
@@ -11939,7 +12385,7 @@ function sheetStockQuickAdd(opts={}){
         unit=normalizeUnit(item.unit,'Stk');
         const u=sheetEl.querySelector('#qaUnit'); if(u) u.value=unit;
       }
-      matchPid=null; paint();
+      matchPid=null; pickPhoto=null; syncPhotoPicker(); paint();
       toast(t('ocrFilled'),'success');
     }catch(error){
       toast(friendlyAiError(error),'error',5200);
@@ -12001,7 +12447,7 @@ function sheetStockQuickAdd(opts={}){
       state.house = prevHouse;
     }
     DB.customProducts ||= [];
-    const created={id:'cp-'+uid(),cat,de:name,el:name,unit,alias:[],icon:pickIcon,custom:true};
+    const created={id:'cp-'+uid(),cat,de:name,el:name,unit,alias:[],photo:pickPhoto||undefined,custom:true};
     DB.customProducts.push(created);
     if(!save()){ DB.customProducts=DB.customProducts.filter(p=>p.id!==created.id); return; }
     commitOne(created.id, qty);
@@ -12600,7 +13046,7 @@ function entryRow(e, extra = ''){
       ${e.missReason?`<div class="muted" style="font-size:12px">${esc(missReasonLabel(e.missReason))}</div>`:''}
       ${by?`<div class="muted" style="font-size:12px">${t('byWhom')} ${esc(by.name)}</div>`:''}</div>
     <div class="row" style="flex:0 0 auto;gap:8px">
-      <span class="muted">${e.qty} ${esc(e.unit)}</span>${e.missReason?missReasonPill(e.missReason):''}${extra}</div></div>`;
+      <span class="muted">${e.qty} ${esc(unitLabel(e.unit))}</span>${e.missReason?missReasonPill(e.missReason):''}${extra}</div></div>`;
 }
 
 function listEntryFriday(e){
@@ -13312,7 +13758,7 @@ function viewPocket(){
       : `<li class="pocket-txn pocket-txn-empty muted">${esc(t('pocketMoneyEmpty'))}</li>`;
     body = `<section class="pocket-ledger" data-tour="pocket-ledger">
       <div class="pocket-ledger-top">
-        <header class="pocket-balance-card">
+        <header class="pocket-balance-card pocket-hero-v2">
           <div class="pocket-panel-titles">
             <span class="pocket-kicker">${esc(k?.name||'')}</span>
             <h2 class="pocket-panel-title">${esc(t('pocketMoneyBalance'))}</h2>
@@ -13325,10 +13771,10 @@ function viewPocket(){
           </div>
           ${pocketBySourceHtml(kidId, monthKey)}
         </header>
-        <div class="pocket-cal-wrap">${pocketMonthCalHtml(kidId)}</div>
+        <div class="pocket-cal-wrap pocket-cal-v2">${pocketMonthCalHtml(kidId)}</div>
       </div>
       ${pocketComposeHtml(kidId)}
-      <div class="pocket-staff-actions" role="group">
+      <div class="pocket-staff-actions pocket-actions-v2" role="group">
         <button type="button" class="btn" data-pocket-add="${esc(kidId)}">＋ ${esc(t('pocketMoneyIn'))}</button>
         <button type="button" class="btn sec" data-pocket-remove="${esc(kidId)}">− ${esc(t('pocketMoneyOut'))}</button>
         <button type="button" class="btn ghost" data-pocket-adjust="${esc(kidId)}">${esc(t('pocketMoneyAdjust'))}</button>
@@ -13357,12 +13803,12 @@ function viewPocket(){
       <h2>${esc(t('titlePocket'))}</h2>
       <p>${esc(t('pocketMoneyHeroHint'))}</p>
     </header>
-    <div class="pocket-pane-tabs" role="tablist">
+    <div class="pocket-pane-tabs pocket-tabs-v2" role="tablist">
       <button type="button" class="chip ${pane==='ledger'?'on':''}" data-pocket-pane="ledger">${esc(t('pocketMoneyHistory'))}</button>
       <button type="button" class="chip ${pane==='settings'?'on':''}" data-pocket-pane="settings">${esc(t('pocketMoneySettings'))}</button>
     </div>
     <div class="pocket-layout">
-      <aside class="pocket-kids-rail" aria-label="${esc(t('pocketMoneyPickKid'))}">${summary}</aside>
+      <aside class="pocket-kids-rail pocket-rail-v2" aria-label="${esc(t('pocketMoneyPickKid'))}">${summary}</aside>
       <div class="pocket-main-col">${body}</div>
     </div>
   </div>`;
@@ -13374,21 +13820,27 @@ function wirePocketView(v){
   wirePaidiaCal(v);
   v.querySelectorAll('.pocket-kid-card[data-pocket-kid]').forEach(btn=>{
     btn.onclick=()=>{
-      if(state.pocketCompose && !confirmLeaveUnsaved()) return;
-      state.pocketKidId = btn.dataset.pocketKid;
-      state.pocketPane = 'ledger';
-      state.pocketCompose = null;
-      state.pocketDay = null;
-      feedback('tap'); render();
+      const pick=()=>{
+        state.pocketKidId = btn.dataset.pocketKid;
+        state.pocketPane = 'ledger';
+        state.pocketCompose = null;
+        state.pocketDay = null;
+        feedback('tap'); render();
+      };
+      if(state.pocketCompose && hasUnsavedChanges()){ openUnsavedLeaveConfirm(pick); return; }
+      pick();
     };
   });
   v.querySelectorAll('[data-pocket-pane]').forEach(btn=>{
     btn.onclick=()=>{
-      if(state.pocketCompose && !confirmLeaveUnsaved()) return;
-      state.pocketPane = btn.dataset.pocketPane;
-      state.pocketCompose=null;
-      feedback('tap');
-      render();
+      const switchPane=()=>{
+        state.pocketPane = btn.dataset.pocketPane;
+        state.pocketCompose=null;
+        feedback('tap');
+        render();
+      };
+      if(state.pocketCompose && hasUnsavedChanges()){ openUnsavedLeaveConfirm(switchPane); return; }
+      switchPane();
     };
   });
   v.querySelectorAll('[data-pocket-filter]').forEach(btn=>{
@@ -14083,16 +14535,16 @@ function viewShop(){
   const shopSelecting = state.selectMode==='shop' && !inStore && state.shopPanel==='plan';
   const storeSelecting = state.selectMode==='store' && inStore;
   const reqSelecting = state.selectMode==='requests' && !inStore && state.shopPanel==='requests';
-  const hero=inStore?'':`<header class="shop-overview">
+  const hero=inStore?'':`<header class="shop-overview lager-plan-hero">
       <div class="shop-overview-copy"><p class="brand-kicker">${esc(t('shopTitle'))}</p><div class="ui-mode-row">${uiModeToggleHtml({compact:true})}</div><h2>${esc(houseShort(hid))}</h2><span>${esc(fridayText(friday))} · ${esc(T[state.lang].shopOverviewHint(open.length))}</span></div>
-      <div class="shop-overview-stats" role="group" aria-label="${esc(t('shopTitle'))}">
+      <div class="shop-overview-stats lager-plan-stats" role="group" aria-label="${esc(t('shopTitle'))}">
         <div><b>${open.length}</b><span>${esc(t('secOpen'))}</span></div>
         <div><b>${openReqCount}</b><span>${esc(t('shopRequests'))}</span></div>
         <div><b>${bought.length}</b><span>${esc(t('secBought'))}</span></div>
       </div>
     </header>
-    <section class="shop-command" data-tour="shop-command" aria-label="${esc(t('shopTitle'))}">
-      <div class="seg house-selector" id="shHouse" data-tour="shop-houses" aria-label="${t('chooseShoppingHouse')}">
+    <section class="shop-command lager-plan-command" data-tour="shop-command" aria-label="${esc(t('shopTitle'))}">
+      <div class="seg house-selector lager-plan-houses" id="shHouse" data-tour="shop-houses" aria-label="${t('chooseShoppingHouse')}">
         ${shoppingHouses().map(h=>`<button class="${hid===h.id?'on':''}" data-h="${h.id}">${ui('u-person','sm')} ${esc(h.short)}</button>`).join('')}
       </div>
       <div class="shop-flow-row">
@@ -14101,7 +14553,7 @@ function viewShop(){
           <label class="friday-date" title="${t('chooseFriday')}"><input type="date" id="shopFridayDate" value="${friday}"><b>${esc(fridayText(friday))}</b><span>${fridayState} · ${open.length}</span></label>
           <button data-friday-shift="7" aria-label="${t('nextFriday')}">›</button>
         </div>
-        <div class="seg shop-panel-seg" id="shopPanel">
+        <div class="seg shop-panel-seg lager-plan-tabs" id="shopPanel">
           <button class="${state.shopPanel==='plan'?'on':''}" data-shop-panel="plan" type="button">${t('shopPlan')}</button>
           <button class="${state.shopPanel==='take'?'on':''}" data-shop-panel="take" type="button" id="shopStoreModeBtn">${t('storeMode')}</button>
           <button class="${state.shopPanel==='requests'?'on':''}" data-shop-panel="requests" type="button">${t('shopRequests')}${openReqCount?` · ${openReqCount}`:''}</button>
@@ -14113,7 +14565,7 @@ function viewShop(){
           <button class="shop-more-action" type="button" data-page-act="shopHistory">${ui('u-book','sm')} ${esc(t('topHistory'))}</button>
         </div></details>
       </div>
-      ${state.shopPanel==='plan'?`<div class="shop-easy-strip" role="group" aria-label="${esc(t('shopPlan'))}">
+      ${state.shopPanel==='plan'?`<div class="shop-easy-strip lager-plan-quickrow" role="group" aria-label="${esc(t('shopPlan'))}">
           <button class="btn sec sm" type="button" id="shopAutoFill">${ui('u-sparkle','sm')} ${esc(isEasy()?t('shopEasyFill'):t('shopAutoFill'))}</button>
           ${open.length?`<button class="btn sm" type="button" id="startFridayTop">${esc(T[state.lang].cartReady(open.length))}</button>`:
             `<button class="btn sm sec" type="button" id="shopEasyFoto" data-page-act="shopScan">${ui('u-camera','sm')} ${esc(t('shopEasyFoto'))}</button>`}
@@ -14123,7 +14575,7 @@ function viewShop(){
           <span>${esc(t('shopPhotoHint'))}</span>
           <button type="button" class="btn ghost sm" data-page-act="shopScan">${esc(t('shopPhotoCta'))}</button>
         </p>`:''}
-        <div class="shop-add-row"><div class="cart-quick"><input id="cartQuickName" placeholder="${t('cartQuickAdd')}" aria-label="${t('cartQuickAdd')}" autocomplete="off" enterkeyhint="done"><button class="btn sm" id="cartQuickAdd" aria-label="${esc(t('addToCart'))}">＋ <span>${esc(t('addToCart'))}</span></button></div>
+        <div class="shop-add-row"><div class="cart-quick lager-plan-add"><input id="cartQuickName" placeholder="${t('cartQuickAdd')}" aria-label="${t('cartQuickAdd')}" autocomplete="off" enterkeyhint="done"><button class="btn sm" id="cartQuickAdd" aria-label="${esc(t('addToCart'))}">＋ <span>${esc(t('addToCart'))}</span></button></div>
         </div>`:''}
       ${state.shopPanel==='requests'?`<div class="shop-add-row req-easy-row">
         <button class="btn req-cta" type="button" id="shopRequestCreate">${ui('u-cart','sm')} ${esc(t('shopRequestBig'))}</button>
@@ -14241,9 +14693,9 @@ function viewShop(){
       ${storeSelecting?`<button class="bulk-check ${sel?'on':''}" type="button" data-bulk-toggle="${e.id}" aria-pressed="${sel?'true':'false'}" aria-label="${esc(t('selectMode'))}"></button>`:''}
       <button class="store-choice-main store-check-row" type="button" data-decision="${checked?'undo':'bought'}" data-entry="${e.id}" aria-pressed="${checked?'true':'false'}" aria-label="${checked?t('undoDecision'):t('markBought')}">
         <span class="store-check-box ${checked?'on':''}" aria-hidden="true">${checked?'✓':''}</span>
-        <span class="store-product-icon">${svgIcon(prodIconId(product),'prod-ico')}</span>
+        <span class="store-product-icon">${product?fridgeKitArt(product):svgIcon(prodIconId(product),'prod-ico')}</span>
         <span class="store-choice-copy"><span class="store-choice-name">${esc(e.name)}</span>
-        <span class="store-choice-qty"><b>${e.qty} ${esc(e.unit)}</b>${e.note?' · '+esc(e.note):''}</span>
+        <span class="store-choice-qty"><b>${e.qty} ${esc(unitLabel(e.unit))}</b>${e.note?' · '+esc(e.note):''}</span>
         ${listEntryStockChipHtml(hid, e)}</span>
       </button>
       <div class="store-choice-actions pro-only mode-pro-block" role="group" aria-label="${esc(e.name)}">
@@ -14314,24 +14766,26 @@ function viewShop(){
     </div>
   </section>` : '';
 
-  const openCard = (pending.length || state.shopPanel!=='plan')?'':`<section class="shop-list-card">
+  const openCard = (pending.length || state.shopPanel!=='plan')?'':`<section class="shop-list-card lager-plan-listcard">
     <header class="shop-list-heading"><div><p>${esc(t('secOpen'))}</p><span>${esc(T[state.lang].shopOverviewHint(open.length))}</span></div>
       <div class="row" style="gap:8px;flex-wrap:wrap">
         ${open.length&&!shopSelecting?`<button class="btn sm sec" type="button" id="listRemoveAll" ${open.length?'':'disabled'}>${esc(t('listRemoveAll'))}</button>`:''}
         ${open.length&&!shopSelecting?`<button class="btn sm" id="startFriday">${T[state.lang].cartReady(open.length)}</button>`:''}
       </div>
     </header>
-    ${open.length?`<div class="shop-items">${open.map(e=>{
+    ${open.length?`<div class="shop-items lager-plan-list">${open.map(e=>{
       const sel = shopSelecting && isSelected(e.id);
       const marked = !shopSelecting && (state.listPendingRemove||[]).map(String).includes(String(e.id));
-      return `<div class="shop-item ${sel?'selected':''} ${marked?'list-pending-mark':''}">
+      const eProd = e.productId?prod(e.productId):matchProduct(e.name);
+      return `<div class="shop-item lager-plan-row ${sel?'selected':''} ${marked?'list-pending-mark':''}">
       ${shopSelecting?`<button class="bulk-check ${sel?'on':''}" type="button" data-bulk-toggle="${e.id}" aria-pressed="${sel?'true':'false'}" aria-label="${esc(t('selectMode'))}"></button>`:''}
-      <div><div class="shop-item-name">${svgIcon(prodIconId(e.productId?prod(e.productId):matchProduct(e.name)),'prod-ico')}${esc(e.name)}</div>
-      <div class="shop-item-sub">${e.note?esc(e.note)+' · ':''}${esc(e.unit)} · ${listEntryStockChipHtml(hid, e)}</div></div>
+      <span class="lager-plan-row-icon">${eProd?fridgeKitArt(eProd):svgIcon(prodIconId(eProd),'prod-ico')}</span>
+      <div><div class="shop-item-name">${esc(e.name)}</div>
+      <div class="shop-item-sub">${e.note?esc(e.note)+' · ':''}${esc(unitLabel(e.unit))} · ${listEntryStockChipHtml(hid, e)}</div></div>
       ${shopSelecting?'':`<div class="cart-controls"><button class="cart-step" data-list-qty="-1" data-entry="${e.id}" aria-label="−">−</button><input class="cart-qty-input" data-list-q="${e.id}" value="${e.qty}" inputmode="decimal" aria-label="${esc(e.name)}"><button class="cart-step" data-list-qty="1" data-entry="${e.id}" aria-label="＋">＋</button><button class="mini-x ${marked?'on':''}" data-remove-list="${e.id}" aria-label="${t('close')}" aria-pressed="${marked?'true':'false'}">×</button></div>`}
       </div>`;
     }).join('')}</div>`:
-      `<div class="shop-empty">
+      `<div class="shop-empty lager-plan-empty">
         <div class="big">🧺</div>
         <h3>${t('startListTitle')}</h3>
         <p>${t('startListHint')}</p>
@@ -15473,7 +15927,10 @@ function ensureBookCalMonth(){
 }
 
 function openBookJournal({focusWrite=false, keepDay=false}={}){
-  if(state.tab!=='book' && !confirmLeaveUnsaved()) return;
+  if(state.tab!=='book' && hasUnsavedChanges()){
+    openUnsavedLeaveConfirm(()=>openBookJournal({focusWrite, keepDay}));
+    return;
+  }
   const today = iso(new Date());
   if(!keepDay){
     state.bookDate = today;
@@ -17036,6 +17493,11 @@ function childLessonPast(entry, dateStr){
 function kidDockActiveView(view){
   const v = view || state.childView || 'today';
   if(v==='aufgaben') return 'today';
+  /* /m/: 3 primary + Άλλα — pocket/notes live in More */
+  if(isMobileShellSite()){
+    if(['today','games','rate'].includes(v)) return v;
+    return 'more';
+  }
   if(['today','games','rate','pocket','notes'].includes(v)) return v;
   return 'more';
 }
@@ -17103,18 +17565,33 @@ function kidGuideHtml(view){
 }
 
 function kidPrimaryNavItems(){
+  const mobile = isMobileShellSite();
+  const rateLabel = mobile ? t('kidNavRateShort') : t('kidNavRate');
+  if(mobile){
+    return [
+      {id:'today', label:t('kidNavStart'), ico:'u-home', hint:t('kidGuideHintStart')},
+      {id:'games', label:t('kidNavGames'), ico:'u-party', hint:t('kidGuideHintGames')},
+      {id:'rate', label:rateLabel, ico:'u-target', hint:t('kidGuideHintRate')},
+    ];
+  }
+  const pocketLabel = t('pocketMoneyTitle');
   return [
     {id:'today', label:t('kidNavStart'), ico:'u-home', hint:t('kidGuideHintStart')},
     {id:'games', label:t('kidNavGames'), ico:'u-party', hint:t('kidGuideHintGames')},
-    {id:'rate', label:t('kidNavRate'), ico:'u-target', hint:t('kidGuideHintRate')},
-    {id:'pocket', label:t('pocketMoneyTitle'), ico:'u-receipt', hint:t('kidGuideHintPocket')},
+    {id:'rate', label:rateLabel, ico:'u-target', hint:t('kidGuideHintRate')},
+    {id:'pocket', label:pocketLabel, ico:'u-receipt', hint:t('kidGuideHintPocket')},
     {id:'notes', label:t('kidNotesTitle'), ico:'u-note', hint:t('kidGuideHintNotes')},
   ];
 }
 
 function kidMoreNavItems(){
   const easy = isEasy();
+  const mobile = isMobileShellSite();
   return [
+    ...(mobile ? [
+      {id:'pocket', label:t('pocketMoneyTitle'), ico:'u-receipt', hint:t('kidGuideHintPocket')},
+      {id:'notes', label:t('kidNotesTitle'), ico:'u-note', hint:t('kidGuideHintNotes')},
+    ] : []),
     {id:'bonus', label:t('kidBonusTitle'), ico:'u-sparkle', hint:t('kidGuideHintBonus')},
     {id:'plan', label:t('kidNavPlan'), ico:'u-calendar', hint:t('kidGuideHintPlan')},
     {id:'learn', label:t('kidNavLearn'), ico:'u-book', hint:t('kidGuideHintLearn')},
@@ -17142,7 +17619,7 @@ function kidDockHtml(active){
   return `<nav class="kid-dock" aria-label="${esc(t('kidMenuTitle'))}" data-kid-dock>
     <p class="kid-dock-label" aria-hidden="true">${esc(t('kidMenuPages'))}</p>
     ${items.map(it=>`
-    <button type="button" class="${active===it.id?'on':''}" data-child-view="${it.id}" data-tour="kid-nav-${it.id}">
+    <button type="button" class="${active===it.id?'on':''}" data-child-view="${it.id}" data-tour="kid-nav-${it.id}" aria-label="${esc(it.label)}">
       ${ui(it.ico,'nav-ico')}
       <span>${esc(it.label)}</span>
     </button>`).join('')}
@@ -17367,18 +17844,28 @@ function kidWeekTrendHtml(kidId){
 
 function kidHomeCtaHtml(){
   /* Dock destinations stay visible in Easy; Plan/Sterne are Pro extras. */
-  const items = [
-    {id:'games', label:t('kidHomeCtaGames'), ico:'u-party', tone:'out'},
-    {id:'rate', label:t('kidHomeCtaRate'), ico:'u-target', tone:'sea'},
-    {id:'pocket', label:t('kidHomeCtaPocket'), ico:'u-receipt', tone:'sea'},
-    {id:'bonus', label:t('kidHomeCtaBonus'), ico:'u-sparkle', tone:'sun'},
-    {id:'notes', label:t('kidHomeCtaNotes'), ico:'u-note', tone:''},
-    {id:'plan', label:t('kidHomeCtaPlan'), ico:'u-calendar', tone:'sea', pro:true},
-    {id:'rewards', label:t('kidHomeCtaStars'), ico:'u-sparkle', tone:'sun', pro:true},
-  ];
+  const mobile = isMobileShellSite();
+  const items = mobile
+    ? [
+        /* Two tiles clear the dock; notes stays in Άλλα to avoid under-dock tap theft. */
+        {id:'bonus', label:t('kidHomeCtaBonus'), ico:'u-sparkle', tone:'sun'},
+        {id:'pocket', label:t('kidHomeCtaPocket'), ico:'u-receipt', tone:'sea'},
+      ]
+    : [
+        {id:'games', label:t('kidHomeCtaGames'), ico:'u-party', tone:'out'},
+        {id:'rate', label:t('kidHomeCtaRate'), ico:'u-target', tone:'sea'},
+        {id:'pocket', label:t('kidHomeCtaPocket'), ico:'u-receipt', tone:'sea'},
+        {id:'bonus', label:t('kidHomeCtaBonus'), ico:'u-sparkle', tone:'sun'},
+        {id:'notes', label:t('kidHomeCtaNotes'), ico:'u-note', tone:''},
+        {id:'plan', label:t('kidHomeCtaPlan'), ico:'u-calendar', tone:'sea', pro:true},
+        {id:'rewards', label:t('kidHomeCtaStars'), ico:'u-sparkle', tone:'sun', pro:true},
+      ];
   const easy = isEasy();
-  const dockDup = new Set(['games','rate','pocket','notes']);
-  const shown = items.filter(it=>!(easy && dockDup.has(it.id)));
+  const dockDup = mobile
+    ? new Set(['games','rate'])
+    : new Set(['games','rate','pocket','notes']);
+  const hideDockDup = easy || mobile;
+  const shown = items.filter(it=>!(hideDockDup && dockDup.has(it.id)));
   if(!shown.length) return '';
   return `<div class="kid-home-cta" role="navigation" aria-label="${esc(t('kidHomeCtaTitle'))}">
     <div class="kid-panel-h"><b>${esc(t('kidHomeCtaTitle'))}</b></div>
@@ -17425,15 +17912,16 @@ function childStartView(c){
         <small>${esc(t('kidNextMeta')(30, 25))}</small>
       </div>
     </div>`;
-  })() : `<div class="next-up next-up-idle">
+  })() : (isMobileShellSite()
+    ? '' /* games is on the kid dock — idle next-up was under the dock and stole taps to Βαθμοί */
+    : `<button type="button" class="next-up next-up-idle" data-child-view="games" aria-label="${esc(t('kidHomeGoGames'))}">
       <div class="nu-ring">${ui('u-party')}</div>
       <div>
         <div class="eyebrow">${esc(t('kidGuideNext'))}</div>
         <b>${esc(t('kidHomeCtaGames'))}</b>
         <small>${esc(t('kidGuideHintGames'))}</small>
       </div>
-      <button type="button" class="chip on" data-child-view="games">${esc(t('kidHomeGoGames'))}</button>
-    </div>`;
+    </button>`);
   const subjectPeek = activeSubjects().slice(0,5).map(s=>{
     const sc = subjectGradeFor(c.id, s.id, summary.week);
     return `<button type="button" class="kid-sub-chip" data-child-view="rate">
@@ -18157,7 +18645,7 @@ function viewKidProfile(kidId){
   const bio = profilePref(k.id).bio || '';
   return `<div class="kids-shell kid-profile">
     <button type="button" class="btn ghost sm" id="kidProfileBack">← ${esc(t('navKids'))}</button>
-    <header class="kid-profile-mast">
+    <header class="kid-profile-mast kid-rating-hero-v2">
       <span class="kid-dir-av lg" style="background:${esc(k.color||'#c7d2fe')}">${esc((k.name||'?')[0])}</span>
       <div class="grow"><p class="brand-kicker">Armonia</p><h2>${esc(k.name)}</h2>
         <p class="profile-age-line">${age!=null?`${esc(t('profileAge'))}: ${age}`:''}${age!=null?' · ':''}${esc(t('xpTotal')(xp))} · ${esc(t('xpLevel')(lv))} · ${esc(t('pocketMoneyTitle'))} ${esc(pocketBal)}</p>
@@ -18165,7 +18653,7 @@ function viewKidProfile(kidId){
       </div>
       ${progressRingHtml(pct,'Lv '+lv)}
     </header>
-    <section class="kid-profile-kpis">
+    <section class="kid-profile-kpis kid-rating-kpis-v2">
       <div><b>${summary.gradeAverage||'—'}</b><span>${esc(t('gradeAverage'))}</span></div>
       <div><b>${summary.attendanceRecorded?`${summary.attendancePct}%`:'—'}</b><span>${esc(t('attendanceWeek'))}</span></div>
       <div><b>${summary.homeworkOpen}</b><span>${esc(t('homeworkOpen'))}</span></div>
@@ -18174,9 +18662,11 @@ function viewKidProfile(kidId){
     <section class="kid-profile-pocket">
       ${pocketMoneyPanelHtml(k.id, {mode:'staff', limit:8})}
     </section>
+    <div class="kid-rating-workspace">
+      <section class="card pine-settle kid-rating-subjects-v2"><div class="block-h"><span class="t">${esc(t('schoolSubjects'))}</span><span class="hrs">${esc(t('thisWeek'))}</span></div>${subs}</section>
+      <section class="card pine-settle kid-team-rating kid-rating-panel-v2">${staffRatingPanelHtml(k.id)}</section>
+    </div>
     <div class="kid-profile-grid">
-      <section class="card pine-settle kid-team-rating">${staffRatingPanelHtml(k.id)}</section>
-      <section class="card pine-settle"><div class="block-h"><span class="t">${esc(t('schoolSubjects'))}</span><span class="hrs">${esc(t('thisWeek'))}</span></div>${subs}</section>
       <section class="card pine-settle"><div class="block-h"><span class="t">${esc(t('gameProgress'))}</span><span class="hrs">${summary.gamePlays} ${esc(t('gameRounds'))}</span></div>${staffGameProgressHtml(k.id)}</section>
       <section class="card pine-settle"><div class="block-h"><span class="t">${esc(t('schoolAttendance'))}</span></div><div class="att-week">${attWeek.join('')}</div></section>
       <section class="card pine-settle"><div class="block-h"><span class="t">${esc(t('schoolHomework'))}</span><span class="hrs">${summary.homeworkOpen} ${esc(t('homeworkOpen'))}</span></div>${hw}</section>
@@ -21244,7 +21734,7 @@ function adminWorkerDetailHtml(employeeId){
   </div>`;
 }
 
-const ADMIN_SECTIONS=[['ops','Übersicht','Επισκόπηση'],['team','Team','Ομάδα'],['supplies','Häuser & Vorräte','Σπίτια & προμήθειες'],['school','Kinder & Schule','Παιδιά & σχολείο'],['review','Prüfung','Έλεγχος'],['finance','Finanzen','Οικονομικά'],['audit','Aktivität','Δραστηριότητα'],['communications','Mitteilungen','Επικοινωνία'],['automations','Automationen','Αυτοματισμοί'],['system','Systemstatus','Κατάσταση συστήματος']];
+const ADMIN_SECTIONS=[['ops','Übersicht','Επισκόπηση'],['team','Team','Ομάδα'],['supplies','Häuser & Vorräte','Σπίτια & προμήθειες'],['receipts','Belege','Αποδείξεις'],['school','Kinder & Schule','Παιδιά & σχολείο'],['review','Prüfung','Έλεγχος'],['finance','Finanzen','Οικονομικά'],['audit','Aktivität','Δραστηριότητα'],['communications','Mitteilungen','Επικοινωνία'],['automations','Automationen','Αυτοματισμοί'],['system','Systemstatus','Κατάσταση συστήματος']];
 
 /** Shared nested-page shell: desk sidebar + mobile horizontal subnav (Admin/Moments/Account). */
 function sectionShellHtml({title='', eyebrow='', nav=[], body='', tour=''}={}){
@@ -21289,6 +21779,33 @@ function adminSectionHtml(pane){
     record(text('Einkaufsanfragen','Αιτήματα αγορών'),`${(DB.listRequests||[]).filter(r=>r.status==='open').length} ${text('offen','ανοιχτά')}`,link('#shop/requests',text('Anfragen öffnen','Άνοιγμα αιτημάτων'))),
     record(text('Aufgaben und Nachweise','Εργασίες και αποδεικτικά'),text('Eingereichte Aufgaben im Kinderbereich prüfen.','Έλεγχος υποβλημένων εργασιών στην ενότητα παιδιών.'),link('#kids/homework',text('Aufgaben öffnen','Άνοιγμα εργασιών')))
   ]);
+  if(pane==='receipts'){
+    // Every counter commit already writes one audit row per product, all
+    // sharing one operationId — group those back into the "receipt" the
+    // carer saw at checkout. No separate image store: this re-renders the
+    // exact same data live, so it never goes stale or needs its own storage.
+    const groups={};
+    (DB.log||[]).forEach(r=>{
+      if(!['IN','OUT'].includes(r.type)||!r.operationId) return;
+      (groups[r.operationId] ||= {ts:r.ts, employeeId:r.employeeId, houseId:r.houseId, rows:[]}).rows.push(r);
+    });
+    const list=Object.values(groups).sort((a,b)=>Number(b.ts||0)-Number(a.ts||0)).slice(0,100);
+    const cards=list.map(g=>{
+      const staff=emp(g.employeeId)?.name||'—';
+      const houseName=house(g.houseId)?.short||g.houseId||'';
+      const itemsHtml=g.rows.map(r=>{
+        const p=prod(r.productId);
+        const name=p?L(p):(r.productId||'');
+        const sign=r.type==='IN'?'+':'−';
+        return `<div class="admin-receipt-row"><span>${esc(name)}</span><b class="${r.type==='IN'?'in':'out'}">${sign}${r.qty} ${esc(p?.unit||'')}</b>${r.type==='OUT'&&r.reason?`<small>${esc(r.reason)}</small>`:''}</div>`;
+      }).join('');
+      return `<article class="admin-receipt-card">
+        <header><b>${esc(fmtDT(g.ts))}</b><span>${esc(staff)} · ${esc(houseName)}</span></header>
+        <div class="admin-receipt-rows">${itemsHtml}</div>
+      </article>`;
+    }).join('');
+    return `<div class="admin-receipts">${cards||`<p class="muted">${text('Noch keine Belege.','Δεν υπάρχουν ακόμη αποδείξεις.')}</p>`}</div>`;
+  }
   if(pane==='audit'){
     const query=String(state.adminAuditQuery||'').toLocaleLowerCase();
     const filtered=(DB.log||[]).slice().sort((a,b)=>Number(b.ts||0)-Number(a.ts||0)).filter(r=>[r.text,r.reason,r.type,emp(r.employeeId)?.name,r.houseId,r.kidId].join(' ').toLocaleLowerCase().includes(query));
@@ -22391,6 +22908,37 @@ function paintNotifBadge(){
 }
 
 
+/** Bento shortcut row — Lager/Plan/Liste/Momente as clickable tiles with live
+ * counts, instead of leaving that navigation to the dock alone. Same data
+ * the old pulse chips used (lowStockCount/todayOpen/openListCount), just
+ * given permanent visual presence rather than only showing up to 2 at a
+ * time when non-zero. */
+function homeBentoRowHtml({lowStockCount, todayOpenCount, openListCount}){
+  const tile=(cls,jump,label,stat,ico)=>`<button type="button" class="home-bento-tile ${cls}" data-home-jump="${esc(jump)}">
+    <span class="home-bento-ico" aria-hidden="true">${ui(ico)}</span>
+    <span class="home-bento-copy"><b>${esc(label)}</b><small>${esc(stat)}</small></span>
+  </button>`;
+  const el=state.lang==='el';
+  const stockStat = lowStockCount ? (el?`${lowStockCount} χαμηλά`:`${lowStockCount} niedrig`) : (el?'Εντάξει':'Alles gut');
+  const planStat = todayOpenCount ? (el?`${todayOpenCount} ανοιχτά`:`${todayOpenCount} offen`) : (el?'Ελεύθερο':'Frei');
+  const listStat = openListCount ? (el?`${openListCount} ανοιχτά`:`${openListCount} offen`) : (el?'Άδειο':'Leer');
+  /* /m/: two tiles max above the fold — stock + plan. Shop/gallery via dock/CTA. */
+  if(isMobileShellSite()){
+    return `<div class="home-bento-row home-bento-m2" data-tour="home-bento">
+      ${tile('wide tone-amber','stock',t('navStock'),stockStat,'u-leaf')}
+      ${tile('wide tone-sea','day',t('navSchedule'),planStat,'u-calendar')}
+    </div>`;
+  }
+  const galleryStat = el?'Άνοιγμα':'Öffnen';
+  return `<div class="home-bento-row" data-tour="home-bento">
+    ${tile('wide tone-amber','stock',t('navStock'),stockStat,'u-leaf')}
+    <div class="home-bento-square-row">
+      ${tile('square tone-sea','day',t('navSchedule'),planStat,'u-calendar')}
+      ${tile('square tone-terra','shop',t('navShop'),listStat,'u-tasks')}
+    </div>
+    ${tile('slim tone-dark','gallery',t('navGallery'),galleryStat,'u-camera')}
+  </div>`;
+}
 function viewHome(){
   const today=iso(new Date()), user=state.user;
   const todayAssignments=user?dashboardAssignments(today,user.id):[];
@@ -22436,8 +22984,11 @@ function viewHome(){
   const pulseBlock = pulseHtml
     ? `<div class="home-mobile-pulse" data-tour="home-pulse" role="group" aria-label="${esc(t('homeSignals'))}">${pulseHtml}</div>`
     : '';
-  const pulseBlockDesk = pulseHtml
-    ? `<div class="home-command-pulse home-command-pulse-compact" data-tour="home-pulse" role="group" aria-label="${esc(t('homeSignals'))}">${pulseHtml}</div>`
+  // Desktop shows day/shop/stock permanently in the bento shortcut row below —
+  // only overdue still needs a pulse chip here, so it doesn't just repeat the same numbers.
+  const pulseHtmlDesk = pulsePool.filter(p=>p.jump==='inbox' && p.value>0).map(p=>signal(p.jump, p.value, p.label, p.icon, p.tone)).join('');
+  const pulseBlockDesk = pulseHtmlDesk
+    ? `<div class="home-command-pulse home-command-pulse-compact" data-tour="home-pulse" role="group" aria-label="${esc(t('homeSignals'))}">${pulseHtmlDesk}</div>`
     : '';
   const heroPrimaryBtn = presenceNeedsLate
     ? `<button class="home-primary" type="button" id="homeHeroPresence" data-home-presence="1">${esc(primaryLabel)}</button>`
@@ -22494,6 +23045,7 @@ function viewHome(){
       </div>
       ${pulseBlockDesk}
     </section>
+    ${homeBentoRowHtml({lowStockCount, todayOpenCount:todayOpen.length, openListCount})}
     <div class="home-command-grid">
       <div class="home-command-main">${main}</div>
       <aside class="home-command-rail" aria-label="${esc(t('homeRailNotifs'))}">
@@ -23200,6 +23752,12 @@ function wireAdaptiveChrome(root=document){
   });
 }
 
+function desktopRailWidth(childMode=false){
+  if(window.matchMedia('(max-width:900px)').matches) return '72px';
+  if(window.matchMedia('(max-width:1100px)').matches) return '200px';
+  return childMode?'200px':'220px';
+}
+
 function syncLayoutMode(){
   const shellLocked = document.documentElement.dataset.shell === 'm' || document.documentElement.dataset.shell === 'desk'
     || document.body.classList.contains('shell-m') || document.body.classList.contains('shell-desk')
@@ -23221,9 +23779,9 @@ function syncLayoutMode(){
   const kidDock=document.querySelector('nav.kid-dock');
   const staffRail=document.querySelector('nav.dock[data-staff-dock]')||document.querySelector('nav.dock');
   if(desktop && childMode && kidDock){
-    document.documentElement.style.setProperty('--rail-w', '200px');
+    document.documentElement.style.setProperty('--rail-w', desktopRailWidth(true));
   }else if(desktop && staffRail && staffRail.style.display!=='none' && !childMode){
-    document.documentElement.style.setProperty('--rail-w', '220px');
+    document.documentElement.style.setProperty('--rail-w', desktopRailWidth(false));
   }else{
     document.documentElement.style.setProperty('--rail-w', '0px');
   }
@@ -23245,8 +23803,9 @@ function measureChrome(){
       navH=0;
       root.style.setProperty('--kid-dock-h', '0px');
       document.body.style.setProperty('--kid-dock-h', '0px');
-      root.style.setProperty('--rail-w', '200px');
-      document.body.style.setProperty('--rail-w', '200px');
+      const railW=desktopRailWidth(true);
+      root.style.setProperty('--rail-w', railW);
+      document.body.style.setProperty('--rail-w', railW);
     }else{
       /* Mobile: hamburger site menu — no bottom dock. */
       navH=0;
@@ -23272,8 +23831,9 @@ function measureChrome(){
     if(!navHidden){
       if(desktop){
         navH=0;
-        root.style.setProperty('--rail-w', '220px');
-        document.body.style.setProperty('--rail-w', '220px');
+        const railW=desktopRailWidth(false);
+        root.style.setProperty('--rail-w', railW);
+        document.body.style.setProperty('--rail-w', railW);
       }else{
         navH=Math.ceil(nav.getBoundingClientRect().height);
         root.style.setProperty('--rail-w', '0px');
@@ -23366,7 +23926,11 @@ function isMobileShellSite(){
 
 function mPage(body, extraClass=''){
   const id = state.mode==='child' ? (state.childView||'today') : (state.tab||'home');
-  return `<div class="m-page ${extraClass}" data-m-page="${esc(id)}">${body}</div>`;
+  const deskChip = (typeof window.matchMedia==='function'
+    && window.matchMedia('(min-width:768px)').matches)
+    ? `<a class="m-desk-handoff" href="/desk/">${esc(t('deskHandoff'))}</a>`
+    : '';
+  return `<div class="m-page ${extraClass}" data-m-page="${esc(id)}">${body}${deskChip}</div>`;
 }
 
 /** Staff Home — phone composition (always on /m/, not only narrow viewport). */
@@ -23386,21 +23950,21 @@ function renderMobileHome(){
     const hid = state.house==='all'?'h1':state.house;
     return (DB.stock[stockKey(hid,p.id)]??0) <= lowThreshold(p);
   }).length;
-  const inbox = staffInboxItems().slice(0,5);
+  const inboxLimit = isMobileShellSite() ? 2 : 5;
+  const inboxAll = staffInboxItems();
+  const inbox = inboxAll.slice(0, inboxLimit);
   const inboxHtml = inbox.length ? `<section class="m-stack" aria-label="${esc(t('homeMore'))}">
     ${inbox.map(it=>`<button type="button" class="m-row" data-inbox-jump="${esc(it.jump||'')}">
       <span aria-hidden="true">${ui(it.icon||'u-alert','sm')}</span>
       <span><b>${esc(it.title||'')}</b><small>${esc(it.meta||'')}</small></span>
       <span aria-hidden="true">→</span>
     </button>`).join('')}
-    <button type="button" class="btn ghost" id="homeInboxAll">${esc(t('homeMore'))}</button>
   </section>` : '';
-  const signals = [
-    overdue.length?{jump:'inbox',v:overdue.length,l:t('overdue')}:null,
-    todayOpen.length?{jump:'day',v:todayOpen.length,l:t('dueToday')}:null,
-    openListCount?{jump:'shop',v:openListCount,l:t('homeSignalList')}:null,
-    lowStockCount?{jump:'stock',v:lowStockCount,l:t('homeSignalStock')}:null,
-  ].filter(Boolean).slice(0,2);
+  // Only overdue still needs a pulse row here — day/shop/stock live permanently
+  // in the bento shortcut row below instead of only showing up when non-zero.
+  // (Full inbox → header bell / #btnNotifs — avoid a trailing “Περισσότερα σήμερα”
+  // button that lands under the sticky dock on short phones.)
+  const signals = overdue.length ? [{jump:'inbox',v:overdue.length,l:t('overdue')}] : [];
   const pulse = signals.length ? `<div class="m-stack home-mobile-pulse" data-tour="home-pulse">${signals.map(s=>
     `<button type="button" class="m-row" data-home-jump="${s.jump}"><b>${esc(String(s.v))}</b><span>${esc(s.l)}</span><span>→</span></button>`
   ).join('')}</div>` : '';
@@ -23410,10 +23974,16 @@ function renderMobileHome(){
       <h1>${esc(t('homeHello'))}${user?`, ${esc(user.name)}`:''}</h1>
       <div class="ui-mode-row">${uiModeToggleHtml({compact:true})}</div>
     </header>
-    ${inboxHtml}
     ${shiftStartCard||''}
+    ${homeBentoRowHtml({lowStockCount, todayOpenCount:todayOpen.length, openListCount})}
     ${showJournalDuty?`<button class="m-row" type="button" id="homeWriteBook">${ui('u-alert','sm')}<span><b>${esc(t('journalDutyHome'))}</b><small>${esc(t('bookJournalHint'))}</small></span><span>→</span></button>`:''}
     ${teamNoticeBannerHtml()}
+    <nav class="m-cta" data-tour="home-actions" aria-label="${esc(t('homeMore'))}">
+      <button type="button" class="btn m-primary" data-home-jump="day">${esc(t('homeOpenPlan'))}</button>
+      <button type="button" class="btn sec" id="homeQuickBook">${esc(t('headerBook'))}</button>
+      <button type="button" class="btn ghost" data-home-jump="kids">${esc(t('navKids'))}</button>
+    </nav>
+    ${inboxHtml}
     ${pulse}
     <section class="m-card" data-tour="home-tasks">
       <h3>${esc(t('myTasks'))} · ${todayOpen.length}</h3>
@@ -23422,17 +23992,17 @@ function renderMobileHome(){
         : `<div class="m-row"><span>${esc(t('noTasks'))}</span><button type="button" class="btn sm" data-home-jump="day">${esc(t('homeOpenPlan'))}</button></div>`}
       </div>
     </section>
-    <nav class="m-cta" data-tour="home-actions" aria-label="${esc(t('homeMore'))}">
-      <button type="button" class="btn m-primary" data-home-jump="day">${esc(t('homeOpenPlan'))}</button>
-      <button type="button" class="btn sec" id="homeQuickBook">${esc(t('headerBook'))}</button>
-      <button type="button" class="btn ghost" data-home-jump="kids">${esc(t('navKids'))}</button>
-    </nav>
   `, 'm-home');
 }
 
 function renderMobileSchedule(){
   // Phone: day is the default authoring surface; week stays agenda-list not matrix.
   if(!['day','week','calendar','events','shift'].includes(state.scheduleView)) setScheduleView('day',{persist:false});
+  /* Landscape short viewports: week chrome fights the dock — force day. */
+  if(window.matchMedia('(max-height:420px) and (orientation:landscape)').matches
+    && state.scheduleView==='week'){
+    setScheduleView('day',{persist:false});
+  }
   if(state.scheduleView==='week'){
     // Prefer day-focus week rail already in viewScheduleWeek; wrap as m-page.
     return mPage(viewSchedule(), 'm-plan');
@@ -23475,6 +24045,7 @@ function renderMobileAdmin(){
     {id:'ops', label: state.lang==='el'?'Επιχειρήσεις':'Lage'},
     {id:'team', label: state.lang==='el'?'Ομάδα':'Team'},
     {id:'supplies', label: state.lang==='el'?'Προμήθειες':'Supplies'},
+    {id:'receipts', label: state.lang==='el'?'Αποδείξεις':'Belege'},
     {id:'school', label: t('navSchool')},
     {id:'review', label: state.lang==='el'?'Έλεγχος':'Review'},
     {id:'finance', label: state.lang==='el'?'Οικονομικά':'Finance'},
@@ -23484,7 +24055,7 @@ function renderMobileAdmin(){
     {id:'system', label: state.lang==='el'?'Σύστημα':'System'},
   ];
   const rail = `<div class="m-rail" role="tablist" aria-label="Admin">${panes.map(p=>
-    `<button type="button" class="${pane===p.id?'on':''}" data-admin-go="${p.id}">${esc(p.label)}</button>`
+    `<button type="button" class="${pane===p.id?'on':''}" data-admin-pane-go="${p.id}" aria-selected="${pane===p.id}">${esc(p.label)}</button>`
   ).join('')}</div>`;
   return mPage(`${rail}${viewAdminOps()}`, 'm-admin');
 }
@@ -23574,6 +24145,19 @@ function childViewHtml(c){
 
 
 function render(){
+  ensureSheetChromeConsistent();
+  persistStockCounterCache();
+  document.body.classList.toggle('stock-tiles-mode', !!state.stockTiles);
+  if(state.tab!=='stock') document.body.classList.remove('stock-counter-floating');
+  else document.body.classList.toggle('stock-counter-floating', currentScrollY() > 140);
+  if(!state._stockCounterGreeted && !document.body.classList.contains('auth-pending')){
+    state._stockCounterGreeted = true;
+    const leftCount = stockDraftEntries().length;
+    if(leftCount>0){
+      const msg = T[state.lang].stockCounterResumeToast(leftCount);
+      setTimeout(()=>toast(msg,'info'), 500);
+    }
+  }
   window.PaidiaWorkspace?.restore(state);
   const nextRoute = toastRouteContext();
   if(toastRouteKey && toastRouteKey !== nextRoute) dismissToast();
@@ -23621,6 +24205,14 @@ function render(){
   if(dockMoreLabel) dockMoreLabel.textContent=t('navMore');
   document.querySelectorAll('[data-nav]').forEach(s=>{
     s.textContent = t('nav' + s.dataset.nav[0].toUpperCase() + s.dataset.nav.slice(1));
+  });
+  /* Icon-only dock ≤360 hides visible labels — keep accessible names. */
+  document.querySelectorAll('nav.dock button[data-tab]').forEach(b=>{
+    const key = b.dataset.tab || '';
+    const span = b.querySelector('[data-nav]');
+    const label = (span?.textContent || '').trim()
+      || t('nav' + key.charAt(0).toUpperCase() + key.slice(1));
+    if(label) b.setAttribute('aria-label', label);
   });
   document.querySelectorAll('nav button[data-staff-only]').forEach(b=>{
     b.hidden = state.mode!=='staff';
@@ -23709,6 +24301,7 @@ function render(){
   try{ tipNotifyPageChange(); }catch{}
   try{ zoaiTipNotifySession(); }catch{}
   try{ paintPwaInstallBar(); }catch{}
+  try{ syncShellMFixedChrome(); }catch{}
 }
 
 function wire(){
@@ -23740,6 +24333,16 @@ function wire(){
       return;
     }
     sheetAdminStaff(button.dataset.adminStaff);
+  });
+  v.querySelectorAll('[data-admin-pane-go]').forEach(button=>button.onclick=()=>{
+    if(!isAdminUser()){ toast(t('adminRequired'),'error'); return; }
+    const pane=button.dataset.adminPaneGo;
+    if(pane===state.adminPane) return;
+    state.tab='admin';
+    state.adminPane=pane;
+    if(pane!=='team') state.adminWorkerId=null;
+    syncLocationHash();
+    render();
   });
   v.querySelectorAll('[data-admin-go]').forEach(button=>button.onclick=()=>{
     const destination=button.dataset.adminGo;
@@ -23890,11 +24493,12 @@ function wire(){
   });
   v.querySelectorAll('#sHouse button, #shHouse button').forEach(b=>{
     b.onclick = () => {
-      if(b.dataset.h!==state.house){
-        if(!confirmLeaveUnsaved()) return;
+      const switchHouse=()=>{ state.house = b.dataset.h; render(); };
+      if(b.dataset.h!==state.house && hasUnsavedChanges()){
+        openUnsavedLeaveConfirm(switchHouse);
+        return;
       }
-      state.house = b.dataset.h;
-      render();
+      switchHouse();
     };
   });
   v.querySelectorAll('.day').forEach(d=>{
@@ -24287,17 +24891,8 @@ function wire(){
       render();
     };
   });
-  const stockDraftClear=v.querySelector('#stockDraftClear');
-  if(stockDraftClear) stockDraftClear.onclick=()=>{ clearStockDraft(); feedback('toggle'); render(); };
-  const stockReasonClear=v.querySelector('#stockReasonClear');
-  if(stockReasonClear) stockReasonClear.onclick=()=>{
-    state.stockDraftReason=null;
-    state.stockPendingStep=null;
-    feedback('toggle');
-    render();
-  };
-  const stockDraftSave=v.querySelector('#stockDraftSave');
-  if(stockDraftSave) stockDraftSave.onclick=()=>commitStockDraft();
+  const stockCounterOpen=v.querySelector('#stockCounterOpen');
+  if(stockCounterOpen) stockCounterOpen.onclick=()=>sheetStockReceipt();
   const stockCategories=[...v.querySelectorAll('[data-stock-category]')];
   if(stockCategories.length){
     const forceOpen=!!state.stockQuery||state.stockFilter!=='all';
@@ -24981,9 +25576,9 @@ document.getElementById('dockZoAi')?.addEventListener('click', ()=>{
 });
 document.getElementById('btnProfiles').onclick = () => {
   feedback('tap');
-  if(hasUnsavedChanges() && !confirmLeaveUnsaved()) return;
-  if(state.user||state.child) logoutServerSession();
-  else openGate();
+  const leave=()=>{ if(state.user||state.child) logoutServerSession(); else openGate(); };
+  if(hasUnsavedChanges()){ openUnsavedLeaveConfirm(leave); return; }
+  leave();
 };
 
 /* ════════════════════════════════════════════════════════════════
@@ -26092,6 +26687,20 @@ window.addEventListener('resize', ()=>{
 });
 window.visualViewport?.addEventListener('resize', scheduleMeasureChrome);
 window.visualViewport?.addEventListener('scroll', scheduleMeasureChrome);
+/* Lager counter on PC: inline in the header while the header is on-screen;
+ * once scrolled past it, float bottom-right instead (mirrors the always-
+ * floating mobile FAB) so it's reachable without scrolling back up.
+ * main.app-stage has no overflow:auto of its own — the window/document
+ * scrolls — so this listens at the window level. Registered once here,
+ * not per-render, to avoid stacking duplicate listeners; the handler
+ * itself checks state.tab on every fire. */
+function currentScrollY(){
+  return window.scrollY || document.documentElement.scrollTop || document.getElementById('view')?.scrollTop || 0;
+}
+window.addEventListener('scroll', ()=>{
+  if(state.tab!=='stock') return;
+  document.body.classList.toggle('stock-counter-floating', currentScrollY() > 140);
+}, {passive:true});
 window.addEventListener('unhandledrejection', event=>{
   console.error('unhandled async error',event.reason);
   toast(t('unexpectedError'),'error');
@@ -27138,9 +27747,63 @@ function isPaidiaStandalone(){
   return false;
 }
 
+/**
+ * Mobile fixed chrome (book save / talk compose / store finish) must live on
+ * <body>. Ancestors with overflow-x:clip (#app/html) or route transforms make
+ * position:fixed resolve against a tall containing block — bars park
+ * off-screen until animation ends. Moving the node preserves listeners.
+ */
+function syncShellMFixedChrome(){
+  const hostId = 'mFixedChrome';
+  let host = document.getElementById(hostId);
+  const shellM = document.body.classList.contains('shell-m');
+  if(!shellM || state.mode==='child'){
+    host?.replaceChildren();
+    return;
+  }
+  if(!host){
+    host = document.createElement('div');
+    host.id = hostId;
+    host.setAttribute('data-tour', 'm-fixed-chrome');
+    document.body.appendChild(host);
+  }
+  const tab = state.tab || document.body.dataset.tab || '';
+  const want =
+    tab==='book' ? '.journal-write-actions' :
+    tab==='talk' ? '.talk-compose' :
+    (tab==='shop' && document.body.classList.contains('store-fullscreen')) ? '.store-finish.bottom-dock' :
+    null;
+  // Return any previously hosted nodes back into #view if tab changed
+  [...host.children].forEach(ch=>{
+    if(want && ch.matches?.(want)) return;
+    ch.remove();
+  });
+  if(!want){
+    host.replaceChildren();
+    return;
+  }
+  if(host.querySelector(want)) return;
+  const src = document.querySelector('#view '+want) || document.querySelector(want);
+  if(!src) return;
+  host.replaceChildren(src);
+}
+
 function paintPwaInstallBar(){
   const existing=document.getElementById('pwaInstallBar');
   if(isPaidiaStandalone()){
+    existing?.remove();
+    return;
+  }
+  // Mobile shell: never fight dock / store-finish / talk / book / kid primary chrome
+  const shellM = document.body.classList.contains('shell-m') || document.documentElement.getAttribute('data-shell')==='m';
+  const tab = document.body.dataset.tab || state?.tab || '';
+  const hideOnShell = shellM && (
+    document.body.classList.contains('store-fullscreen') ||
+    document.body.classList.contains('mode-child') ||
+    state?.mode==='child' ||
+    tab==='talk' || tab==='book' || tab==='shop'
+  );
+  if(hideOnShell){
     existing?.remove();
     return;
   }

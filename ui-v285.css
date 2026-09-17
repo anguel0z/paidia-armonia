@@ -1,0 +1,118 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ui-v285.css — Χαρτζιλίκι (Pocket money) visual overhaul, Figma "Concept A"
+   Desktop AND mobile. Additive compound classes on the existing .pocket-*
+   markup (same technique as the Λίστα/Εβδομάδα passes) — the Settings pane,
+   compose sheet, and search/filter logic are untouched.
+
+   mobile.css forces several pocket-balance-card/.pocket-stats text colors to
+   dark grey with !important (so they read on the old light card). Since the
+   hero is now a dark gradient, those need overriding at the same
+   body.shell-m #view specificity + !important — see the "mobile overrides"
+   block below.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Hero (balance card) ──────────────────────────────────────────────── */
+.pocket-balance-card.pocket-hero-v2{
+  background:linear-gradient(150deg, var(--brand,#286148) 0%, #16281f 100%);
+  border:0; box-shadow:0 14px 34px rgba(16,28,22,.22);
+  padding:26px 26px 22px;
+  position:relative; overflow:hidden;
+}
+.pocket-balance-card.pocket-hero-v2::after{
+  content:""; position:absolute; width:280px; height:280px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.10), transparent 70%);
+  top:-140px; right:-80px; pointer-events:none;
+}
+.pocket-hero-v2 .pocket-kicker{ color:rgba(255,255,255,.62); position:relative; }
+.pocket-hero-v2 .pocket-panel-title{ color:#fff; position:relative; }
+.pocket-hero-v2 .pocket-balance-big{ color:#fff; position:relative; }
+.pocket-hero-v2 .pocket-stats{ position:relative; margin-top:16px; gap:10px; }
+.pocket-hero-v2 .pocket-stats > span{
+  background:rgba(0,0,0,.22); border-radius:12px; padding:9px 13px;
+  color:#eaf1ec;
+}
+.pocket-hero-v2 .pocket-stats > span b{ color:#fff; }
+.pocket-hero-v2 .pocket-by-source{ position:relative; border-top-color:rgba(255,255,255,.18); }
+.pocket-hero-v2 .pocket-by-source-h{ color:rgba(255,255,255,.6); }
+.pocket-hero-v2 .pocket-by-source-list li{ color:rgba(255,255,255,.85); }
+.pocket-hero-v2 .pocket-by-source-list b{ color:#fff; }
+
+/* ── Kid rail (desktop: vertical sidebar list) ────────────────────────── */
+body.shell-desk #view .pocket-kids-rail.pocket-rail-v2{
+  background:#fff !important; border:1px solid var(--line) !important;
+  border-radius:18px !important; padding:10px !important;
+}
+body.shell-desk #view .pocket-rail-v2 .pocket-kid-card{
+  border:0 !important; border-radius:12px !important; background:none !important;
+  min-height:52px !important;
+}
+body.shell-desk #view .pocket-rail-v2 .pocket-kid-card.on{
+  background:color-mix(in srgb, var(--brand) 10%, #fff) !important;
+  box-shadow:none !important;
+}
+
+/* ── Kid rail (mobile: keep the horizontal-scroll pattern, reskin pills) ── */
+body.shell-m #view .pocket-rail-v2 .pocket-kid-card{
+  border-radius:16px !important;
+}
+body.shell-m #view .pocket-rail-v2 .pocket-kid-card.on{
+  background:color-mix(in srgb, var(--brand) 12%, #fff) !important;
+  border-color:color-mix(in srgb, var(--brand) 45%, var(--line)) !important;
+}
+
+/* Shared kid-card polish (avatar always a clean circle, both shells) */
+.pocket-kid-av{ font-weight:800; color:#16281f; }
+
+/* ── Pane tabs (Ιστορικό / Ρυθμίσεις) as a segmented control ─────────── */
+.pocket-pane-tabs.pocket-tabs-v2{
+  background:var(--bg-deep); border-radius:12px; padding:3px; gap:2px;
+  display:inline-flex; width:fit-content;
+}
+.pocket-tabs-v2 .chip{
+  border:0; background:none; border-radius:9px; color:var(--muted); font-weight:650;
+}
+.pocket-tabs-v2 .chip.on{
+  background:#fff; color:var(--ink); box-shadow:0 1px 2px rgba(20,30,25,.12);
+}
+
+/* ── Staff actions as pill buttons directly under the hero ───────────── */
+.pocket-staff-actions.pocket-actions-v2{
+  margin-top:-4px;
+}
+.pocket-actions-v2 .btn{
+  border-radius:999px !important;
+}
+.pocket-actions-v2 .btn:not(.sec):not(.ghost){
+  background:var(--sun,#e8a23a) !important; color:#20241a !important; border:0 !important;
+}
+.pocket-actions-v2 .btn.sec{
+  background:#fff !important; border:1.5px solid var(--line) !important; color:var(--ink) !important;
+}
+.pocket-actions-v2 .btn.ghost{
+  background:var(--bg-deep) !important; border:0 !important; color:var(--ink) !important;
+}
+
+/* ── Calendar card: align corner radius + shadow with the hero family ─── */
+.pocket-cal-wrap.pocket-cal-v2 .paidia-cal{
+  border-radius:18px; box-shadow:0 6px 18px rgba(20,30,25,.08);
+}
+
+/* ═══════════════════ Mobile color overrides (beat !important) ═══════════════════ */
+body.shell-m #view .pocket-hero-v2,
+body.shell-m #view .pocket-hero-v2 span,
+body.shell-m #view .pocket-hero-v2 small{
+  color:rgba(255,255,255,.85) !important;
+}
+body.shell-m #view .pocket-hero-v2 .pocket-balance-big{
+  color:#fff !important;
+}
+body.shell-m #view .pocket-hero-v2 .pocket-kicker{
+  color:rgba(255,255,255,.6) !important;
+}
+body.shell-m #view .pocket-hero-v2 .pocket-stats-v2 > span,
+body.shell-m #view .pocket-hero-v2 .pocket-stats > span{
+  color:rgba(255,255,255,.78) !important;
+}
+body.shell-m #view .pocket-hero-v2 .pocket-stats > span b{
+  color:#fff !important;
+}

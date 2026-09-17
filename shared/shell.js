@@ -45,6 +45,10 @@
       narrow = window.matchMedia('(max-width:1023px)').matches;
     } catch (e) {}
 
+    // A genuinely narrow window needs the phone composition even when a
+    // desktop browser UA is reported (resized windows, split screen, WebView).
+    if (narrow && global.innerWidth < 600) return 'phone';
+
     // Explicit phone UAs → mobile shell
     if (/iPhone|iPod|Windows Phone|IEMobile|BlackBerry|webOS/i.test(ua)) return 'phone';
     if (/Android/i.test(ua) && /Mobile/i.test(ua)) return 'phone';
@@ -189,4 +193,12 @@
     takeBootSession,
     ensureOnShellPage,
   };
+
+  let resizeTimer = 0;
+  global.addEventListener('resize', () => {
+    global.clearTimeout(resizeTimer);
+    resizeTimer = global.setTimeout(() => {
+      if (!override()) autoCorrectToDevice();
+    }, 120);
+  }, { passive: true });
 })(typeof window !== 'undefined' ? window : globalThis);

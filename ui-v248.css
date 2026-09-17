@@ -1,0 +1,397 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ui-v248.css — Lager compact list view ("Tresen" / counter workflow)
+
+   Storage/stock now has two view modes, toggled by #stockTilesToggle
+   (state.stockTiles, persisted in localStorage as paidia.stockTiles):
+
+   - list mode (default)  → house design system (Pine/Stone/Amber, Fraunces +
+     Outfit). Fast shelf-walk: grouped-by-category rows with a stepper.
+   - tiles mode            → the existing isolated FriDge-kit skin
+     (stock-fridge.css, gated behind body.stock-tiles-mode). Left untouched
+     here — this file only styles the .lager-* list-mode markup.
+
+   Both modes share the same underlying data hooks (adjustStockDraft,
+   commitStockDraft, stockOutReasonModalHtml, state.stockDraft) — this is a
+   visual layer only, no behaviour change.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#view #fridgeStorage.stock-list-mode{
+  font-family:var(--font-ui);
+  color:var(--ink);
+  max-width:720px;
+  min-width:0;
+  margin:0 auto;
+  padding:4px 4px 8px;
+}
+/* Fix: inside the mobile shell's column-flex page wrapper (.m-page), the
+   auto side-margins above (meant to center this on wide desktop screens)
+   override flexbox stretch and make this element shrink-to-fit its content
+   instead of filling the viewport — so a long product name or the house
+   pill row silently pushes the whole page wider than the screen, hiding
+   the stepper's "+" button off the right edge. Force full width on mobile,
+   where centering via max-width/margin:auto was never needed anyway. */
+body.shell-m #view #fridgeStorage.stock-list-mode{
+  width:100% !important; margin-left:0 !important; margin-right:0 !important;
+}
+
+/* ── Header: title + add ── */
+#view #fridgeStorage.stock-list-mode .lager-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; margin:2px 0 12px;
+}
+#view #fridgeStorage.stock-list-mode .lager-head h2{
+  font-family:var(--font-display); font-size:24px; font-weight:700;
+  margin:0; letter-spacing:-.01em; color:var(--ink);
+}
+#view #fridgeStorage.stock-list-mode .lager-head-actions{display:flex; align-items:center; gap:8px}
+#view #fridgeStorage.stock-list-mode .lager-add-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--brand); color:#f4faf6; border:0; border-radius:999px;
+  padding:0 16px; height:44px; font-weight:700; font-size:14px;
+  box-shadow:0 8px 20px rgba(42,107,82,.28);
+}
+#view #fridgeStorage.stock-list-mode .lager-add-btn svg{width:18px; height:18px}
+#view #fridgeStorage.stock-list-mode .lager-view-toggle{
+  display:grid; place-items:center; width:44px; height:44px; flex:none;
+  border-radius:var(--radius-sm); background:var(--card); border:1px solid var(--line);
+  color:var(--muted); box-shadow:var(--shadow);
+}
+#view #fridgeStorage.stock-list-mode .lager-view-toggle svg{width:20px; height:20px}
+
+/* ── Search ── */
+#view #fridgeStorage.stock-list-mode .lager-search{
+  display:flex; align-items:center; gap:10px;
+  height:48px; padding:0 14px; margin:0 0 12px;
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius-sm);
+  box-shadow:var(--shadow);
+}
+#view #fridgeStorage.stock-list-mode .lager-search svg{width:19px; height:19px; color:var(--muted); flex:none}
+#view #fridgeStorage.stock-list-mode .lager-search input{
+  flex:1; min-width:0; border:0; background:transparent; height:100%;
+  font-size:15px; color:var(--ink); font-family:var(--font-ui);
+}
+#view #fridgeStorage.stock-list-mode .lager-search input::placeholder{color:var(--muted)}
+#view #fridgeStorage.stock-list-mode .lager-search button{
+  border:0; background:none; font-size:20px; line-height:1; color:var(--muted); padding:0 2px;
+}
+
+/* ── House pills ── */
+#view #fridgeStorage.stock-list-mode .lager-houses{
+  display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;
+  margin:0 0 10px; padding:0 0 2px;
+}
+#view #fridgeStorage.stock-list-mode .lager-houses::-webkit-scrollbar{display:none}
+#view #fridgeStorage.stock-list-mode .lager-houses button{
+  flex:0 0 auto; height:38px; padding:0 16px; border-radius:999px;
+  background:var(--card); border:1px solid var(--line); color:var(--muted);
+  font-weight:600; font-size:13px; white-space:nowrap;
+}
+#view #fridgeStorage.stock-list-mode .lager-houses button.on{
+  background:var(--brand); border-color:var(--brand); color:#f4faf6;
+}
+
+/* ── Status tabs (Leer / Achtung / Alle) ── */
+#view #fridgeStorage.stock-list-mode .lager-tabs{
+  display:flex; gap:6px; background:var(--bg-deep); border-radius:999px;
+  padding:4px; margin:0 0 12px;
+}
+#view #fridgeStorage.stock-list-mode .lager-tabs button{
+  flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+  height:38px; border-radius:999px; border:0; background:transparent;
+  color:var(--muted); font-weight:700; font-size:13px;
+}
+#view #fridgeStorage.stock-list-mode .lager-tabs button b{
+  font-weight:800; font-variant-numeric:tabular-nums;
+}
+#view #fridgeStorage.stock-list-mode .lager-tabs button.on{
+  background:#fff; color:var(--ink); box-shadow:0 2px 8px rgba(26,40,34,.12);
+}
+#view #fridgeStorage.stock-list-mode .lager-tabs button[data-stock-filter="empty"].on b{color:var(--out)}
+#view #fridgeStorage.stock-list-mode .lager-tabs button[data-stock-filter="attention"].on b{color:var(--warn)}
+#view #fridgeStorage.stock-list-mode .lager-tabs button[data-stock-filter="all"].on b{color:var(--brand)}
+
+/* ── Lagercheck banner: reuse .shift-check-banner, just add flow spacing ── */
+#view #fridgeStorage.stock-list-mode .shift-check-banner{margin:0 0 12px}
+
+/* ── Grouped list ── */
+#view #fridgeStorage.stock-list-mode .lager-list{display:flex; flex-direction:column; gap:14px}
+#view #fridgeStorage.stock-list-mode .lager-cat{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow);
+}
+#view #fridgeStorage.stock-list-mode .lager-cat-head{
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+  padding:10px 14px; background:var(--bg-deep);
+}
+#view #fridgeStorage.stock-list-mode .lager-cat-name{
+  font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-soft);
+}
+#view #fridgeStorage.stock-list-mode .lager-cat-meta{font-size:12px; color:var(--meta); white-space:nowrap}
+#view #fridgeStorage.stock-list-mode .lager-cat-meta b{color:var(--out); font-weight:800}
+#view #fridgeStorage.stock-list-mode .lager-cat-rows{display:flex; flex-direction:column}
+
+#view #fridgeStorage.stock-list-mode .lager-row{
+  display:flex; align-items:center; gap:10px; padding:10px 14px;
+  border-top:1px solid var(--line); border-left:3px solid transparent;
+  background:transparent;
+}
+#view #fridgeStorage.stock-list-mode .lager-cat-rows .lager-row:first-child{border-top:0}
+#view #fridgeStorage.stock-list-mode .lager-row.low{border-left-color:var(--warn)}
+#view #fridgeStorage.stock-list-mode .lager-row.empty{border-left-color:var(--out)}
+#view #fridgeStorage.stock-list-mode .lager-row.has-draft{
+  background:color-mix(in srgb, var(--brand) 7%, #fff);
+  box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--brand) 45%, transparent);
+}
+#view #fridgeStorage.stock-list-mode .lager-row-icon{
+  flex:none; width:36px; height:36px; border-radius:50%; overflow:hidden;
+  display:grid; place-items:center; background:var(--bg-deep); color:var(--muted-soft);
+}
+#view #fridgeStorage.stock-list-mode .lager-row-icon img{width:100%; height:100%; object-fit:cover}
+#view #fridgeStorage.stock-list-mode .lager-row-icon svg{width:18px; height:18px}
+#view #fridgeStorage.stock-list-mode .lager-row-name{
+  flex:1; min-width:0; text-align:left; background:none; border:0; padding:0;
+  display:flex; flex-direction:column; gap:1px;
+}
+#view #fridgeStorage.stock-list-mode .lager-row-name b{
+  font-size:14.5px; font-weight:650; color:var(--ink);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%;
+}
+#view #fridgeStorage.stock-list-mode .lager-edit-mark{
+  font-style:normal; margin-left:6px; font-size:12px; color:var(--meta); opacity:.7;
+}
+#view #fridgeStorage.stock-list-mode .lager-row-name small{
+  font-size:12px; color:var(--meta);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%;
+}
+#view #fridgeStorage.stock-list-mode .lager-row-qty{font-size:13px; color:var(--muted); flex:none}
+
+#view #fridgeStorage.stock-list-mode .lager-stepper{
+  flex:none; display:flex; align-items:center; gap:0;
+  background:var(--bg-deep); border-radius:999px; padding:2px;
+}
+#view #fridgeStorage.stock-list-mode .lager-step-btn{
+  width:36px; height:36px; border-radius:50%; border:0; background:#fff;
+  color:var(--brand); font-size:18px; font-weight:800; line-height:1;
+  display:grid; place-items:center; box-shadow:0 1px 3px rgba(26,40,34,.15);
+}
+#view #fridgeStorage.stock-list-mode .lager-step-val{
+  min-width:40px; text-align:center; font-weight:800; font-size:14px; color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+#view #fridgeStorage.stock-list-mode .lager-step-val i{
+  display:block; font-style:normal; font-size:9px; font-weight:600; color:var(--meta); margin-top:-1px;
+}
+
+#view #fridgeStorage.stock-list-mode .lager-empty{
+  padding:28px 16px; text-align:center; color:var(--muted);
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+}
+#view #fridgeStorage.stock-list-mode .lager-empty button{
+  margin-top:10px; background:var(--brand); color:#fff; border:0; border-radius:999px;
+  padding:10px 18px; font-weight:700;
+}
+
+/* ── Counter ("Tresen") — a hand-taking-from-a-shelf icon in the header,
+   not a bottom bar, not a shopping cart. Badge shows the pending count;
+   tap opens the Receipt. Rendered disabled (no badge) when empty so its
+   position never shifts the header layout. ── */
+#view #fridgeStorage .lager-counter-btn{
+  position:relative; flex:none; display:grid; place-items:center;
+  width:44px; height:44px; border-radius:50%; border:1px solid var(--line);
+  background:var(--card); color:var(--muted-soft); box-shadow:var(--shadow);
+}
+#view #fridgeStorage .lager-counter-btn svg{width:20px; height:20px}
+#view #fridgeStorage .lager-counter-btn:disabled{opacity:.55}
+#view #fridgeStorage .lager-counter-btn.has-items{
+  color:var(--brand); border-color:color-mix(in srgb, var(--brand) 35%, var(--line));
+}
+#view #fridgeStorage .lager-counter-badge{
+  position:absolute; top:-4px; right:-4px; min-width:19px; height:19px;
+  padding:0 4px; border-radius:999px; background:var(--out); color:#fff6ee;
+  font-size:11px; font-weight:800; line-height:19px; text-align:center;
+  box-shadow:0 0 0 2px var(--card); font-variant-numeric:tabular-nums;
+}
+/* Inside the isolated FriDge (tiles) header, match its own chrome instead. */
+body.stock-tiles-mode #view #fridgeStorage .lager-counter-btn{
+  border:0; border-radius:12px; background:#fff; color:#141414; box-shadow:none;
+}
+body.stock-tiles-mode #view #fridgeStorage .lager-counter-btn.has-items{color:#141414}
+body.stock-tiles-mode #view #fridgeStorage .lager-counter-badge{box-shadow:0 0 0 2px #fff}
+
+/* ── Receipt sheet: review every line, one global reason + inline overrides ── */
+.receipt-sheet{display:flex; flex-direction:column; gap:2px}
+.receipt-sheet-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.receipt-sheet h2{font-family:var(--font-display); font-size:20px; margin:4px 0 0}
+.receipt-sheet > .receipt-sheet-head > p.muted, .receipt-sheet-head .muted{margin:0 0 10px; font-size:13px; color:var(--muted)}
+.receipt-discard-all{
+  flex:none; margin-top:6px; border:0; background:none; color:var(--out);
+  font-size:12.5px; font-weight:700; text-decoration:underline;
+}
+.receipt-default-reason{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:var(--bg-deep); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:10px;
+}
+.receipt-default-reason span{font-size:12.5px; font-weight:700; color:var(--muted-soft)}
+.receipt-default-reason select{
+  border:1px solid var(--line); border-radius:999px; background:#fff;
+  padding:6px 10px; font-size:13px; font-weight:700; color:var(--ink);
+}
+.receipt-rows{display:flex; flex-direction:column; border-top:1px dashed var(--line)}
+.receipt-row{
+  display:flex; align-items:center; gap:10px; padding:9px 2px;
+  border-bottom:1px dashed var(--line);
+}
+.receipt-row-icon{
+  flex:none; width:28px; height:28px; border-radius:50%; overflow:hidden;
+  display:grid; place-items:center; background:var(--bg-deep);
+}
+.receipt-row-icon img{width:100%; height:100%; object-fit:cover}
+.receipt-row-icon svg{width:15px; height:15px; color:var(--muted-soft)}
+.receipt-row-name{flex:1; min-width:0; font-size:13.5px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.receipt-row-qty{flex:none; font-weight:800; font-size:13px; font-variant-numeric:tabular-nums}
+.receipt-row-qty.in{color:var(--brand)}
+.receipt-row-qty.out{color:var(--out)}
+.receipt-row-reason{
+  flex:none; border:1px solid var(--line); background:#fff; border-radius:999px;
+  padding:4px 10px; font-size:11.5px; font-weight:700; color:var(--muted-soft); max-width:110px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.receipt-row-reason-spacer{flex:none; width:8px}
+.receipt-row-reason-picker{
+  display:flex; flex-wrap:wrap; gap:6px; padding:2px 2px 10px 38px;
+  border-bottom:1px dashed var(--line);
+}
+.receipt-row-reason-picker[hidden]{display:none}
+.receipt-row-reason-picker .chip{
+  border:1px solid var(--line); background:#fff; border-radius:999px;
+  padding:5px 11px; font-size:12px; font-weight:600; color:var(--muted);
+}
+.receipt-row-reason-picker .chip.on{background:var(--brand); border-color:var(--brand); color:#f4faf6}
+.receipt-confirm{width:100%; margin-top:14px; justify-content:center}
+
+/* ── Desktop: the 720px mobile column left most of a wide screen empty.
+   Widen to the shell's own content cap and give shelves two columns. ── */
+@media(min-width:960px){
+  body.shell-desk #view #fridgeStorage.stock-list-mode{
+    max-width:none; width:100%;
+  }
+  #view #fridgeStorage.stock-list-mode .lager-command{
+    display:flex; align-items:center; gap:16px;
+  }
+  #view #fridgeStorage.stock-list-mode .lager-search{flex:1 1 360px}
+  #view #fridgeStorage.stock-list-mode .lager-houses{flex:0 1 auto; margin:0}
+  #view #fridgeStorage.stock-list-mode .lager-cat-rows{
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:20px;
+  }
+  #view #fridgeStorage.stock-list-mode .lager-cat-rows > .lager-row{
+    border-top:1px solid var(--line); border-bottom:0;
+  }
+  #view #fridgeStorage.stock-list-mode .lager-cat-rows > .lager-row:nth-child(-n+2){
+    border-top:0;
+  }
+  /* Desktop-only: precise pointer means the rename affordance and the
+     destructive step can both afford to be louder than on a touch stepper. */
+  #view #fridgeStorage.stock-list-mode .lager-edit-mark{
+    font-size:14px; opacity:.55; transition:opacity .15s ease, color .15s ease;
+  }
+  #view #fridgeStorage.stock-list-mode .lager-row-name:hover .lager-edit-mark{
+    opacity:1; color:var(--brand);
+  }
+  #view #fridgeStorage.stock-list-mode .lager-step-btn[data-stock-step="OUT"]{
+    background:var(--out); color:#fff;
+    box-shadow:0 1px 3px color-mix(in srgb, var(--out) 45%, transparent);
+  }
+}
+@media(min-width:1280px){
+  #view #fridgeStorage.stock-list-mode .lager-cat-rows{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  #view #fridgeStorage.stock-list-mode .lager-cat-rows > .lager-row:nth-child(-n+3){
+    border-top:0;
+  }
+}
+
+/* ── Mobile: counter icon floats bottom-right instead of sitting in the
+   header row — thumb-reachable, and its position doesn't compete with the
+   title/search/tabs while scrolling. Desktop and the FriDge tile header
+   keep it inline (set above). ── */
+@media(max-width:899px){
+  body.shell-m #view #fridgeStorage .lager-counter-btn{
+    position:fixed; right:16px;
+    bottom:calc(var(--nav-total, 74px) + 16px);
+    width:56px; height:56px; z-index:40;
+    box-shadow:0 10px 24px rgba(26,40,34,.22);
+  }
+  body.shell-m #view #fridgeStorage .lager-counter-btn svg{width:24px; height:24px}
+  body.shell-m #view #fridgeStorage .lager-counter-badge{
+    top:-2px; right:-2px; min-width:21px; height:21px; line-height:21px; font-size:12px;
+  }
+  /* The view-toggle stays in the header flow; only the counter floats. */
+  body.shell-m.stock-tiles-mode #view #fridgeStorage .lager-counter-btn{
+    right:16px; bottom:calc(var(--nav-total, 74px) + 16px);
+  }
+}
+
+/* ── Desktop: header icon while the header is on-screen; once scrolled
+   past it, float bottom-right too (toggled by window scroll, see app.js).
+   Otherwise scrolling a long shelf list makes the counter unreachable
+   without scrolling back to the top. ── */
+body.shell-desk.stock-counter-floating #view #fridgeStorage .lager-counter-btn{
+  position:fixed; right:32px; bottom:32px; z-index:40;
+  width:52px; height:52px;
+  box-shadow:0 10px 26px rgba(26,40,34,.24);
+}
+body.shell-desk.stock-counter-floating #view #fridgeStorage .lager-counter-btn svg{width:22px; height:22px}
+body.shell-desk.stock-counter-floating #view #fridgeStorage .lager-counter-badge{
+  top:-3px; right:-3px; min-width:20px; height:20px; line-height:20px; font-size:11.5px;
+}
+
+/* ── Admin → Belege: receipt cards grouped from the existing audit log
+   (DB.log rows sharing one operationId), not a separately stored image —
+   always accurate, no extra storage, no capture library needed. ── */
+.admin-receipts{display:flex; flex-direction:column; gap:12px}
+.admin-receipt-card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); overflow:hidden; max-width:420px;
+}
+.admin-receipt-card header{
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+  padding:12px 14px; background:var(--bg-deep); font-family:var(--font-display);
+}
+.admin-receipt-card header b{font-size:14px; color:var(--ink)}
+.admin-receipt-card header span{font-size:12px; color:var(--muted-soft)}
+.admin-receipt-rows{padding:4px 14px}
+.admin-receipt-row{
+  display:flex; align-items:baseline; gap:8px; padding:7px 0;
+  border-top:1px dashed var(--line);
+}
+.admin-receipt-row:first-child{border-top:0}
+.admin-receipt-row span{flex:1; min-width:0; font-size:13px; color:var(--ink)}
+.admin-receipt-row b{flex:none; font-size:12.5px; font-weight:800; font-variant-numeric:tabular-nums}
+.admin-receipt-row b.in{color:var(--brand)}
+.admin-receipt-row b.out{color:var(--out)}
+.admin-receipt-row small{flex:none; font-size:11px; color:var(--meta)}
+
+@media(prefers-reduced-motion:reduce){
+  #view #fridgeStorage.stock-list-mode *{transition:none!important; animation:none!important}
+}
+
+/* ── Unsaved-changes confirm sheet: an in-app replacement for
+   window.confirm(), which gets silently auto-dismissed (no dialog, instant
+   "Cancel") in embedded/automated browser contexts. Used whenever leaving a
+   dirty Tresen/Liste/Taschengeld screen. ── */
+.unsaved-leave-sheet h2{font-family:var(--font-display); font-size:20px; margin:4px 0 0}
+.unsaved-leave-sheet > .muted{margin:8px 0 0; font-size:13.5px}
+.unsaved-leave-list{
+  list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:6px;
+}
+.unsaved-leave-list li{
+  padding:9px 12px; border-radius:12px; background:var(--bg-deep);
+  font-size:13px; color:var(--ink);
+}
+.unsaved-leave-actions{display:flex; gap:10px; margin-top:18px}
+.unsaved-leave-actions .btn{margin:0; flex:1}
+.btn.danger{
+  background:var(--out); color:#fff6ee; border:0;
+}

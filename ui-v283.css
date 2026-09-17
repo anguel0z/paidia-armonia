@@ -1,0 +1,181 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ui-v283.css — Πρόγραμμα · Εβδομάδα visual overhaul (desktop)
+
+   Additive compound classes on top of the existing .plan-week-chrome /
+   .week-jump / .week-agenda-* markup (same technique as the Λίστα pass in
+   ui-v252.css) — nothing here touches mobile (mobile.css / m-ui.css already
+   own their own dedicated schedule styling) or the Day view, which shares
+   .schedule-agenda-entry/.schedule-agenda-empty but not these compound
+   classes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+body.shell-desk #view .plan-week-chrome.sched-hero{
+  background:linear-gradient(150deg, var(--brand,#2a6b52) 0%, #16281f 100%);
+  border:0; border-radius:var(--radius,18px);
+  padding:22px 22px 18px; margin-bottom:14px; box-shadow:var(--shadow);
+}
+body.shell-desk #view .sched-hero .plan-week-range .brand-kicker{
+  display:block; color:rgba(255,255,255,.62); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; font-weight:700;
+}
+body.shell-desk #view .sched-hero .plan-week-range b{
+  font:600 26px/1.15 var(--font-display,serif); color:#fff; letter-spacing:-.01em;
+}
+body.shell-desk #view .sched-hero .plan-meet-chip{
+  background:rgba(255,255,255,.14); color:#fff;
+}
+body.shell-desk #view .sched-hero .week-layout-seg{
+  background:rgba(255,255,255,.12); border-radius:12px; padding:3px;
+}
+body.shell-desk #view .sched-hero .week-layout-seg button{
+  color:rgba(255,255,255,.72); border-radius:9px;
+}
+body.shell-desk #view .sched-hero .week-layout-seg button.on{
+  background:#fff; color:var(--ink); box-shadow:var(--shadow);
+}
+body.shell-desk #view .sched-hero .week-switcher .btn.sec{
+  background:rgba(255,255,255,.95); border:0; color:var(--ink);
+}
+body.shell-desk #view .sched-hero .week-switcher .week-pick{
+  border-radius:10px; border:0; background:rgba(255,255,255,.95);
+}
+body.shell-desk #view .sched-hero .plan-hero-cta{
+  background:var(--sun,#e8a23a); color:#20241a; border:0; font-weight:750;
+}
+body.shell-desk #view .sched-hero .week-ai-bar .btn{
+  background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.18);
+}
+body.shell-desk #view .sched-hero .week-ai-bar .btn.primary{
+  background:var(--sun,#e8a23a); color:#20241a; border-color:transparent;
+}
+body.shell-desk #view .sched-hero .plan-week-summary.compact{
+  margin-top:14px; gap:10px;
+}
+body.shell-desk #view .sched-hero .plan-week-summary.compact span{
+  background:rgba(255,255,255,.09); border-radius:12px; padding:9px 14px; flex-direction:column; gap:2px;
+}
+body.shell-desk #view .sched-hero .plan-week-summary.compact b{
+  font:600 19px/1 var(--font-display,serif); color:#fff;
+}
+body.shell-desk #view .sched-hero .plan-week-summary.compact small{
+  color:rgba(255,255,255,.66); font-size:10.5px;
+}
+
+/* ── Day strip ─────────────────────────────────────────────────────────── */
+body.shell-desk #view .week-jump.sched-daystrip{
+  display:flex; gap:8px; background:none; border:0; padding:0; margin:0 0 14px;
+}
+body.shell-desk #view .sched-daystrip .week-jump-day{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+  border-radius:14px; border:1px solid var(--line); background:#fff;
+  padding:10px 6px; box-shadow:none;
+}
+body.shell-desk #view .sched-daystrip .week-jump-day.is-today{
+  box-shadow:inset 0 0 0 1.5px var(--sun,#e8a23a);
+}
+body.shell-desk #view .sched-daystrip .week-jump-day.is-selected{
+  background:linear-gradient(160deg, var(--brand,#2a6b52), #1c3a2c);
+  border-color:transparent;
+}
+body.shell-desk #view .sched-daystrip .week-jump-day .wj-count{
+  min-width:18px; padding:1px 6px; border-radius:999px; background:var(--bg-deep);
+  color:var(--muted); font-size:11px;
+}
+body.shell-desk #view .sched-daystrip .week-jump-day.is-selected .wj-count{
+  background:rgba(255,255,255,.18); color:#fff;
+}
+
+/* ── Board / columns ───────────────────────────────────────────────────── */
+body.shell-desk[data-tab="schedule"] #view .week-agenda-shell.sched-board{
+  background:none; border:0; padding:0;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-board > header{
+  padding:0 2px 10px;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-board .week-agenda-board{
+  gap:10px;
+}
+body.shell-desk[data-tab="schedule"] #view .week-agenda-column.sched-col{
+  border:1px solid var(--line); border-radius:14px; background:#fff;
+  padding:0; overflow:hidden;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col.is-today{
+  border-color:color-mix(in srgb, var(--sun,#e8a23a) 55%, var(--line));
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col.is-focus{
+  box-shadow:inset 0 0 0 1.5px var(--brand);
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-head{
+  background:var(--bg-deep); border-bottom:1px solid var(--line); border-radius:0;
+  padding:10px 12px;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col.is-today .week-agenda-head{
+  background:color-mix(in srgb, var(--sun,#e8a23a) 14%, var(--bg-deep));
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-column-list{
+  padding:8px;
+}
+
+/* Fix: flex/grid children of the head + block header rows default to
+   min-width:auto, so at narrower desktop widths their non-wrapping text
+   couldn't shrink and blew out the column (clipped by overflow:hidden on
+   .sched-col, but visibly broken). Force them to actually shrink + ellipsis. */
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-head,
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-head span,
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-head b,
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block-h,
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block-h span{
+  min-width:0;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-head span,
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-head b,
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block-h span{
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+/* Block sub-sections: colored left rail per block type, quieter headers */
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block.sched-block{
+  border-bottom:0; border-radius:10px; margin-bottom:6px; padding-left:8px;
+  border-left:3px solid var(--line);
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block.sched-block.block-morning{
+  border-left-color:var(--sun,#e8a23a);
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block.sched-block.block-afternoon{
+  border-left-color:var(--sea,#3f7d8c);
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block.sched-block.block-evening{
+  border-left-color:var(--brand,#2a6b52);
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block-h{
+  padding:4px 0 4px 2px;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-block-h i{
+  background:var(--bg-deep); border-radius:999px; min-width:16px; text-align:center; font-size:10.5px; padding:1px 5px;
+}
+
+/* Entries as colorful accent chips (uses the existing --agenda-accent var) */
+body.shell-desk[data-tab="schedule"] #view .sched-col .schedule-agenda-entry{
+  background:color-mix(in srgb, var(--agenda-accent,#2f5a63) 10%, #fff);
+  border:1px solid color-mix(in srgb, var(--agenda-accent,#2f5a63) 28%, transparent);
+  border-radius:10px; margin-bottom:5px;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .agenda-entry-main b{
+  color:color-mix(in srgb, var(--agenda-accent,#2f5a63) 78%, var(--ink));
+}
+
+/* Empty cells: one quiet dashed tile instead of a wall of repeated text */
+body.shell-desk[data-tab="schedule"] #view .sched-col .schedule-agenda-empty{
+  min-height:0; padding:6px 8px; margin-bottom:5px; gap:6px;
+  border:1px dashed var(--line); border-radius:10px; background:none; box-shadow:none;
+  flex-direction:row; justify-content:flex-start;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .schedule-agenda-empty > span{
+  width:18px; height:18px; font-size:12px;
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .schedule-agenda-empty b{
+  font-size:11px; font-weight:600; color:var(--muted);
+}
+body.shell-desk[data-tab="schedule"] #view .sched-col .week-agenda-foot{
+  padding:8px 12px 12px; border-top:1px solid var(--line);
+}

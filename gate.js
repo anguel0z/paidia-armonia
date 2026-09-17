@@ -123,11 +123,11 @@
   // Fallback for the first paint, before build.json lands. Keep in step with
   // build.json on every release — it is what shows if the fetch fails.
   const APP_BUILD = {
-  "version": 251,
-  "label": "v251",
+  "version": 294,
+  "label": "v294",
   "changed": {
-    "de": "Lager nach dem FriDge-UI-Kit: Originalschrift und Bilder, zwei Produktspalten, Mengen-Badges und kompakte Filter.",
-    "el": "Αποθήκη με το FriDge UI Kit: αρχική γραμματοσειρά και εικόνες, δύο στήλες, ποσότητες και φίλτρα."
+    "de": "Mobile: überlaufende Leisten, abgeschnittene Dock-Labels, verwaiste Kinder-Buttons und die Wochenansicht — alles aufs Handy gelegt.",
+    "el": "Κινητό: διορθώθηκαν υπερχειλίσεις, κομμένες ετικέτες στο dock, ορφανά κουμπιά παιδιών και η εβδομαδιαία προβολή."
   }
 };
   const SW_BUILD_KEY = 'paidia.swBuild';
@@ -481,9 +481,25 @@
     </aside>`;
   }
 
+  /** Swaps the gate's content. Stays fully synchronous — view-wiring code
+   * (e.g. renderEntrance's `body.querySelectorAll(...)` right after this
+   * call) depends on the new markup already being in the DOM the instant
+   * this returns. `.gate-enter` drives a per-element fade-up on the incoming
+   * `.gate-head` children (see ui-v249.css); it's just a class + a cleanup
+   * timeout, so it can't affect that timing.
+   * (An earlier version tried `document.startViewTransition()` for a native
+   * cross-fade, but back-to-back paintGate() calls during boot triggered
+   * "Transition was aborted because of invalid state", which silently
+   * skipped the DOM swap entirely and left every gate button unwired —
+   * plain and reliable beats fancy and broken here.) */
   function paintGate(view, content) {
     body.dataset.gateView = view;
     body.innerHTML = `${gateLandmarkHtml()}<main class="gate-main">${content}</main>`;
+    body.classList.remove('gate-enter');
+    void body.offsetWidth;
+    body.classList.add('gate-enter');
+    clearTimeout(paintGate._enterTimer);
+    paintGate._enterTimer = setTimeout(() => body.classList.remove('gate-enter'), 520);
   }
 
   function renderEntrance() {

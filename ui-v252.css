@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ui-v252.css — Λίστα / Shop-Plan visual overhaul (Figma-approved concept)
+
+   Adds NEW classes alongside the existing .shop-* markup in viewShop()
+   rather than restyling the shared .shop-item/.shop-command selectors
+   directly — those are still used by other conditional states of the same
+   screen. Every rule here targets the COMPOUND class (e.g.
+   .shop-overview.lager-plan-hero) so it only ever applies to this pass's
+   markup, not the plain .shop-* elements used elsewhere.
+
+   desk.css has an earlier "compact desktop" pass for this exact screen
+   (body.shell-desk #view .shop-overview{...!important}, and the same for
+   .shop-command/.house-selector/.friday-picker/.shop-panel-seg/.cart-quick/
+   .shop-item/.shop-empty) that flattens it into a small white bar with
+   !important on every property. To reliably win: match its
+   `body.shell-desk #view` specificity prefix, add the compound class for
+   extra specificity, and use !important on the properties it also
+   !importants — anything less loses regardless of file load order.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body.shell-desk #view .shop-overview.lager-plan-hero{
+  display:block !important;
+  background:linear-gradient(150deg, var(--brand,#2a6b52) 0%, #16281f 100%) !important;
+  border-radius:var(--radius,18px) !important;
+  padding:26px 24px 22px !important;
+  margin-bottom:14px !important;
+  border:0 !important;
+  box-shadow:var(--shadow) !important;
+}
+body.shell-desk #view .shop-overview.lager-plan-hero .brand-kicker{
+  display:block !important;
+  color:rgba(255,255,255,.62) !important; font-size:11.5px; letter-spacing:.14em;
+}
+body.shell-desk #view .shop-overview.lager-plan-hero h2{
+  font:600 30px/1.1 var(--font-display,serif) !important;
+  color:#fff !important; margin:4px 0 2px !important; letter-spacing:-.02em !important;
+}
+body.shell-desk #view .shop-overview.lager-plan-hero .shop-overview-copy > span{
+  color:rgba(255,255,255,.72) !important; font-size:13px !important; max-width:none !important;
+}
+body.shell-desk #view .shop-overview.lager-plan-hero .shop-overview-stats.lager-plan-stats{
+  display:flex !important; gap:10px !important; margin-top:16px !important; flex-wrap:wrap;
+  border-radius:0 !important;
+}
+body.shell-desk #view .shop-overview.lager-plan-hero .lager-plan-stats > div{
+  background:rgba(255,255,255,.09) !important; border-radius:14px !important;
+  padding:11px 16px !important; flex:1; min-width:88px; border-right:0 !important;
+}
+body.shell-desk #view .shop-overview.lager-plan-hero .lager-plan-stats b{
+  font:600 21px/1 var(--font-display,serif) !important; color:#fff !important;
+}
+body.shell-desk #view .shop-overview.lager-plan-hero .lager-plan-stats span{
+  color:rgba(255,255,255,.68) !important; font-size:11px !important;
+}
+
+body.shell-desk #view .shop-command.lager-plan-command{
+  background:none !important; box-shadow:none !important; border:0 !important;
+  padding:0 !important; display:block !important;
+}
+body.shell-desk #view .house-selector.lager-plan-houses{
+  display:flex !important; flex-wrap:wrap; gap:8px !important; margin-bottom:10px;
+}
+body.shell-desk #view .house-selector.lager-plan-houses button{
+  border-radius:999px !important; border:1px solid var(--line) !important; background:#fff !important;
+  padding:9px 16px !important; font-weight:650 !important; color:var(--ink) !important;
+}
+body.shell-desk #view .house-selector.lager-plan-houses button.on{
+  background:var(--brand) !important; border-color:var(--brand) !important; color:#fff !important;
+}
+body.shell-desk #view .shop-command.lager-plan-command .friday-picker.compact button{border-radius:10px !important}
+body.shell-desk #view .shop-panel-seg.lager-plan-tabs{
+  background:var(--bg-deep) !important; border-radius:12px !important; padding:3px !important; gap:2px;
+}
+body.shell-desk #view .shop-panel-seg.lager-plan-tabs button{
+  border-radius:9px !important; font-weight:650 !important; background:none !important; color:var(--muted) !important;
+}
+body.shell-desk #view .shop-panel-seg.lager-plan-tabs button.on{
+  background:#fff !important; box-shadow:var(--shadow) !important; color:var(--ink) !important;
+}
+
+body.shell-desk #view .shop-easy-strip.lager-plan-quickrow{
+  display:flex !important; gap:8px !important; flex-wrap:wrap; margin:12px 0 0 !important;
+}
+body.shell-desk #view .shop-add-row .cart-quick.lager-plan-add{
+  display:flex !important; align-items:center;
+  border:1px solid var(--line) !important; border-radius:14px !important; background:#fff !important;
+  padding:4px 4px 4px 14px !important; box-shadow:none !important;
+}
+body.shell-desk #view .shop-add-row .cart-quick.lager-plan-add input{
+  border:0 !important; background:none !important; height:44px !important; font-size:14px !important;
+}
+body.shell-desk #view .shop-add-row .cart-quick.lager-plan-add .btn{border-radius:10px !important}
+
+body.shell-desk #view .shop-list-card.lager-plan-listcard{
+  background:none !important; border:0 !important; box-shadow:none !important; padding:0 !important;
+}
+body.shell-desk #view .lager-plan-list{display:flex !important; flex-direction:column; gap:8px !important; padding:0 !important}
+body.shell-desk #view .shop-list-card .shop-item.lager-plan-row{
+  display:flex !important; align-items:center !important; gap:12px !important;
+  grid-template-columns:none !important;
+  border-radius:14px !important; border:1px solid var(--line) !important; background:#fff !important;
+  padding:10px 12px 10px 10px !important;
+}
+body.shell-desk #view .shop-item.lager-plan-row.selected{
+  border-color:var(--brand) !important; box-shadow:inset 0 0 0 1px var(--brand) !important;
+}
+body.shell-desk #view .lager-plan-row-icon{
+  flex:none; width:42px; height:42px; border-radius:50%; overflow:hidden;
+  display:grid; place-items:center; background:var(--bg-deep); color:var(--muted-soft);
+}
+body.shell-desk #view .lager-plan-row-icon img{width:100%; height:100%; object-fit:cover}
+body.shell-desk #view .lager-plan-row-icon svg{width:20px !important; height:20px !important; margin:0 !important}
+body.shell-desk #view .shop-list-card .shop-item.lager-plan-row .shop-item-name{
+  display:flex !important; font-size:14.5px !important; font-weight:650 !important; color:var(--ink) !important; gap:0 !important;
+}
+body.shell-desk #view .shop-list-card .shop-item.lager-plan-row .shop-item-sub{
+  font-size:12px !important; color:var(--meta) !important;
+}
+
+body.shell-desk #view .shop-list-card .shop-empty.lager-plan-empty{
+  text-align:center !important; padding:36px 20px !important; background:#fff !important;
+  border:1px solid var(--line) !important; border-radius:var(--radius,18px) !important;
+}
+body.shell-desk #view .shop-empty.lager-plan-empty .big{font-size:34px !important; margin-bottom:6px !important}
+body.shell-desk #view .shop-empty.lager-plan-empty h3{font:600 19px/1.2 var(--font-display,serif) !important; margin:6px 0 2px !important}
+body.shell-desk #view .shop-empty.lager-plan-empty p{color:var(--muted) !important; font-size:13px !important; margin:0 0 14px !important}
+
+/* ── Everything not inside the desktop shell (mobile/tablet) falls back to
+   the plain, lower-specificity rules — no !important war there since no
+   competing compact-desktop pass exists for those breakpoints. ── */
+body:not(.shell-desk) .shop-shell-plan .lager-plan-hero{
+  background:linear-gradient(150deg, var(--brand,#2a6b52) 0%, #16281f 100%);
+  border-radius:var(--radius,18px); padding:22px 18px 18px; margin-bottom:12px;
+}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-hero h2{
+  font:600 26px/1.1 var(--font-display,serif); color:#fff; margin:4px 0 2px;
+}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-hero .brand-kicker{color:rgba(255,255,255,.62)}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-hero .shop-overview-copy > span{color:rgba(255,255,255,.72)}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-stats{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-stats > div{
+  background:rgba(255,255,255,.09); border-radius:12px; padding:9px 12px; flex:1; min-width:80px;
+}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-stats b{font:600 18px/1 var(--font-display,serif); color:#fff}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-stats span{color:rgba(255,255,255,.68); font-size:10.5px}
+body:not(.shell-desk) .shop-shell-plan .lager-plan-row{
+  display:flex !important; align-items:center; gap:10px;
+  border-radius:14px; border:1px solid var(--line); background:#fff; padding:9px 10px;
+}
+.shop-shell-plan .lager-plan-row-icon{
+  flex:none; width:38px; height:38px; border-radius:50%; overflow:hidden;
+  display:grid; place-items:center; background:var(--bg-deep);
+}
+.shop-shell-plan .lager-plan-row-icon img{width:100%; height:100%; object-fit:cover}

@@ -1,0 +1,56 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ui-v250.css — Home: bento shortcut row (Lager/Plan/Liste/Momente)
+
+   Four always-visible, clickable tiles with live counts, replacing the old
+   behaviour where day/shop/stock only appeared as pulse chips when their
+   count was non-zero (and only the top 2 at that). Desktop keeps the
+   wide+2-squares+slim composition; mobile stacks everything full-width.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.home-bento-row{display:flex; gap:14px; margin:18px 0}
+.home-bento-tile{
+  display:flex; align-items:center; gap:12px; padding:16px 18px; border-radius:16px;
+  border:0; cursor:pointer; text-align:left; flex:1; min-width:0;
+  transition:transform .15s ease;
+}
+.home-bento-tile:active{transform:scale(.98)}
+.home-bento-tile.wide{flex:1.3}
+.home-bento-square-row{display:flex; gap:14px; flex:2; min-width:0}
+.home-bento-square-row .home-bento-tile{flex:1; min-width:0}
+.home-bento-tile.slim{flex:1.1}
+/* Squares are the narrowest tiles — stack the dot above the copy instead of
+   beside it, so long labels (esp. Greek) get the tile's full width. */
+.home-bento-square-row .home-bento-tile{flex-direction:column; align-items:flex-start; gap:14px}
+.home-bento-dot{width:28px; height:28px; border-radius:50%; flex:none}
+.home-bento-copy{display:flex; flex-direction:column; gap:1px; min-width:0; width:100%}
+.home-bento-copy b{
+  font-family:var(--font-display); font-size:15px; font-weight:650;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.home-bento-copy small{
+  font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+.home-bento-tile.tone-amber{background:#fdf3e0}
+.home-bento-tile.tone-amber .home-bento-dot{background:rgba(180,130,20,.18)}
+.home-bento-tile.tone-amber b, .home-bento-tile.tone-amber small{color:#8a6417}
+
+.home-bento-tile.tone-sea{background:#e7eef0}
+.home-bento-tile.tone-sea .home-bento-dot{background:rgba(47,90,99,.16)}
+.home-bento-tile.tone-sea b{color:var(--ink)}
+.home-bento-tile.tone-sea small{color:#2f5a63}
+
+.home-bento-tile.tone-terra{background:#fbeae2}
+.home-bento-tile.tone-terra .home-bento-dot{background:rgba(194,65,12,.16)}
+.home-bento-tile.tone-terra b{color:var(--ink)}
+.home-bento-tile.tone-terra small{color:#c2410c}
+
+.home-bento-tile.tone-dark{background:#152922}
+.home-bento-tile.tone-dark .home-bento-dot{background:rgba(255,255,255,.12)}
+.home-bento-tile.tone-dark b{color:#fff}
+.home-bento-tile.tone-dark small{color:#9bc4b0}
+
+@media(max-width:899px){
+  .home-bento-row{flex-direction:column; margin:14px 0}
+  .home-bento-tile.wide, .home-bento-square-row, .home-bento-tile.slim{flex:none}
+}

@@ -1,3 +1,177 @@
+# v294 — Mobile QA: overflows, orphaned buttons, crushed dock labels
+
+- Staff dock no longer caps each item at 64px, so **Πρόγραμμα** stays readable instead of "Πρόγρ…".
+- Kid dock is a 6-column grid with clamped labels so Αρχή / Παιχνίδια / Αξιολόγηση / Χαρτζιλίκι / Σημειώσεις / Άλλα no longer collide.
+- Kid directory: edit/delete icons sit beside the card instead of floating underneath as orphaned buttons.
+- Plan Ημέρα/Εβδομάδα switcher stays in document flow (sticky + `overflow-x: clip` had clipped it off the screen). Week agenda shows the selected day only instead of stacking all 7.
+- Account uses the pane picker only (duplicate clipped pill row removed). Kid games stack full-width. Pocket calendar and Home CTAs clear the dock. Stock-check sheet footer stacks on one column.
+- Follow-up: `#homeShiftJournal` lives in the shift card header (step row is status-only) so sticky dock no longer steals taps; kid home CTA hides dock-duplicate tiles on `/m/`; `ensureSheetChromeConsistent()` clears orphan `#sheetBg.on`; Book/Pocket/list pages use dock-height bottom padding.
+- Follow-up (aspects): Home is shift-first with inbox capped at 2 rows (no trailing «Περισσότερα σήμερα» under dock); kid dock uses short labels «Βαθμοί» / «Τσέπη» on `/m/`.
+- Follow-up (kid hunt): idle «Στα παιχνίδια» is the whole next-up card (no chip under dock); Pro plan/stars home CTA tiles no longer hidden by the desktop `pro-only` wipe; buttons QA closes Mehr before `#btnNotifs`.
+- Follow-up (staff hunt): no P0s; home `.m-cta` sits under the shift card (clears dock); “hidden” dock tabs = intentional 4+Άλλα.
+- Overhaul notes executed: kid dock **3+Άλλα**; bento real icons + 2 tiles; `unitLabel()` (Stk→τμχ); plan empty-day no zero strip; landscape force day; admin ops text links; header ≤375 density; pocket chip grid; Book howto hide; tablet desk handoff chip; shift stock CTA outline-only.
+- Deep QA follow-up: remove idle kid next-up on `/m/`; sticky Talk compose above dock; dock `aria-label`s for icon-only ≤360; hide admin desk stat tiles; book save clearance; shop `unitLabel`.
+
+# v293 — Έλεγχος αποθήκης: exact quantity on Λίγο/Άδειο
+
+- Tapping Λίγο or Άδειο on a product row now reveals a number input (defaulting to the existing auto-estimate — `min(base, threshold)` for Λίγο, `0` for Άδειο) so staff can log a precise count instead of a rough guess. Tapping OK still needs no input, keeping the fast one-tap path for the common case.
+- `shiftStockCheckQty`/`shiftStockCheckFixed` translation keys already existed but were unused dead weight from an earlier pass — now wired up.
+- New `ui-v293.css`.
+
+# v292 — Fix: v287's kid-profile hero stayed white on mobile (for real this time)
+
+- v288's attempted mobile fix (adding higher-specificity selectors) didn't work, and looked like a cascade/specificity problem — it wasn't. `document.styleSheets` inspection showed the entire hero rule missing from the parsed stylesheet (23 of 24 rules present, the hero background rule silently gone), even though the raw served CSS text was byte-for-byte correct.
+- Root cause: the file's opening comment contained the substring `kid-profile-*/` (meant as prose, "kid-profile-star-slash" referring to a class-name family) — but `*/` is a comment terminator, so it closed the comment three lines early. Everything from that point up to the next `{` — several lines of prose — got parsed as one garbage CSS selector, and the browser silently dropped the entire (structurally fine) hero rule as unparseable. No error surfaced anywhere; it just vanished.
+- Fix: reworded the comment to avoid the accidental `*/`. Verified via `document.styleSheets` that all 24 rules (including the hero) now parse, and confirmed visually on mobile.
+
+# v290 — Fix: Αποθήκη (Lager list) overflowed the screen on mobile
+
+- Reported bug: the stepper's "+" button was invisible on every product row, and the house-selector pills and "+ Προσθήκη" button text were cut off at the right edge on mobile.
+- Root cause: `#fridgeStorage.stock-list-mode` (the list-mode wrapper) has `max-width:720px; margin:0 auto` so it centers on wide desktop screens. On mobile it sits inside `.m-page` — a `display:flex; flex-direction:column` page wrapper — and flex's cross-axis auto side-margins override `align-items:stretch`, making the element shrink-to-fit its own content instead of filling the viewport. The widest unshrinkable content (the house-pill row, a long product name) then silently pushed the whole page wider than the screen, with everything past the visible width just invisibly clipped (not scrollable) rather than reachable.
+- Fix: `body.shell-m #view #fridgeStorage.stock-list-mode{ width:100% !important; margin-left:0 !important; margin-right:0 !important; }` — forces full width on mobile, where the desktop centering behavior was never applicable anyway. Verified: every row's "+" now visible, house pills fit, and the stock-check sheet's Αποθήκευση button (previously cut off at the bottom) now renders in full.
+- (v288/v289 were intermediate steps in diagnosing this — v288 also shipped the kid-profile hero mobile fix below; v289 was a `min-width:0` fix that turned out insufficient on its own.)
+
+# v287 — Kid profile Σχολείο & Αξιολόγηση overhaul — Figma Concept A, desktop + mobile
+
+- Shipped the "Two-Column Workspace" Figma concept into `viewKidProfile()`: dark gradient hero on the kid masthead, a new `.kid-rating-workspace` (subjects grading table | team-rating panel with calendar + average + colored bars + a highlighted "your weekly rating" box) pulled out of the generic 8-card `.kid-profile-grid` into its own prominent 2-column row right under the hero. The remaining 6 cards (game progress, attendance, homework, materials, activity, badges) stay in `.kid-profile-grid` below, unchanged.
+- `.grade-pick`/`.school-sub-row`/`.staff-rating-row` etc. are shared classes used elsewhere in the app too, so every new rule is scoped under `.kid-rating-hero-v2`/`.kid-rating-workspace` rather than restyling those classes globally.
+- New `ui-v287.css`.
+
+# v286 — Fix: v285's stat rows were too bright to read
+
+- The stat rows inside the new dark hero (`Αυτός ο μήνας` / `Καταθέσεις` / `Αναλήψεις`) used a `rgba(255,255,255,.1)` background meant to read as a subtle lightening of the pine gradient underneath. In practice it rendered far brighter than 10% white-over-dark-green should — confirmed via computed-style + outline inspection that the CSS was applying exactly as written, so this wasn't a selector/specificity bug, just a bad assumption about how that particular translucency would look against the gradient in practice.
+- Fix: swapped the white-tint overlay for a dark one (`rgba(0,0,0,.22)`) — a darkening overlay is safe regardless of the exact gradient tone underneath, unlike a lightening one which can blow out. Verified on both desktop and mobile.
+
+# v285 — Χαρτζιλίκι (Pocket money) visual overhaul — Figma Concept A, desktop + mobile
+
+- Shipped the "Ledger Split" Figma concept the user picked (`PC — Pocket A`) into the real `viewPocket()` ledger pane: dark pine-gradient balance hero (kicker/title/big number/stats/by-source all recolored for the dark bg), clean bordered kid rail, segmented Ιστορικό/Ρυθμίσεις tabs, pill-shaped staff action buttons. Same additive-compound-class technique as the Λίστα/Εβδομάδα passes — Settings pane and the compose sheet are untouched.
+- **Mobile included this time** (`ui-v285.css` has no `shell-desk`-only gating on the hero itself): the kid rail keeps the app's existing horizontal-scroll-strip pattern (just reskinned), and `mobile.css`'s pre-existing `!important` dark-grey text rules on `.pocket-balance-card`/`.pocket-stats` — meant for the old light card — are overridden at matching specificity so the hero text stays white/light instead of near-invisible dark-on-dark.
+- New `ui-v285.css`.
+
+# v284 — Fix: v283's week columns overflowed on narrower desktop windows
+
+- The block header row (`.week-agenda-block-h span`, e.g. "Πρωινό πρόγραμμα") and the day-column header (`.week-agenda-head span`/`b`) are flex/grid children with no explicit `min-width` — browsers default that to `auto`, which means "never shrink below your own text's width." At narrower desktop windows (~1024px and below, 7 columns), the label text couldn't shrink to fit its ~98px column, so it overflowed the column box — invisible on wide screens (hence why it passed my own verification), reported by the user on a narrower window.
+- Fix: `min-width:0` on those elements (so they're actually allowed to shrink) + `text-overflow:ellipsis` so the truncation reads as intentional ("Παρασκ...") instead of broken.
+
+# v283 — Πρόγραμμα · Εβδομάδα (Desktop) visual overhaul
+
+- Restyled the week schedule (desktop only, `body.shell-desk`) with new additive `.sched-*` classes alongside the existing `.plan-week-chrome`/`.week-jump`/`.week-agenda-*` markup — same technique as the Λίστα pass, so Day view (which shares `.schedule-agenda-entry`/`.schedule-agenda-empty`) and mobile (which has its own dedicated schedule CSS) are both untouched.
+- Dark gradient hero with glass stat chips (Εβδομάδα/Ημέρες/Χωρίς άτομο), day-jump strip restyled as rounded day tiles, day columns as bordered cards, block sub-sections get a colored left rail (amber/sea/pine per morning/afternoon/evening), entries render as colorful accent chips using the per-caregiver color that was already being passed via `--agenda-accent` inline, and empty cells collapsed from a full-width "Δεν έχει προγραμματιστεί κάτι" box repeated 3× per day down to one quiet dashed tile.
+- New `ui-v283.css`.
+
+# v282 — Product photos refreshed from a single consistent batch
+
+- Re-cropped 70 of the 103 product icons in `icons/fridge/` using only the newest, cleanest generated grid sheets (produce, dairy, meat, bakery, frozen/drinks, pantry, household — `scripts/crop-product-icons-round3.py`), replacing crops that had come from several earlier, visually inconsistent batches. Same trim-and-pad-to-square pipeline as before, so every icon stays circular-crop-safe.
+- Icons are served with `no-store` (no `?v=` on `/icons/fridge/*.png`), so the new crops are live immediately with no cache-bust needed.
+
+# v281 — Fix: v280's Λίστα hero stayed white on desktop
+
+- `desk.css` has an earlier "compact desktop" pass for this exact screen (`body.shell-desk #view .shop-overview{background:#fff !important; ...}`, same treatment for `.shop-command`/`.house-selector`/`.friday-picker`/`.shop-panel-seg`/`.cart-quick`/`.shop-item`/`.shop-empty`) — every property `!important`, `#view`-anchored for high specificity. My new `.lager-plan-*` classes lost that fight outright. Rewrote `ui-v252.css` to target the compound class (`.shop-overview.lager-plan-hero`, `.shop-item.lager-plan-row`, ...) prefixed with the same `body.shell-desk #view` and matching `!important` — verified the dark hero, stat chips, and photo rows actually render now, not just accepted on faith.
+
+# v280 — Λίστα (Shop/Plan) overhaul implemented for real
+
+- Actually shipped the Figma "PC — Shop Plan" concept into `viewShop()`, not just prototyped it: dark hero band with live stat chips (list/requests/bought), house pills, segmented panel tabs, a bordered quick-add bar, and category-less product rows with real circular photo thumbnails + the existing stepper — same underlying data and wiring, purely a class-additive visual pass (new `.lager-plan-*` classes alongside the existing `.shop-*` ones, scoped under `.shop-shell-plan` so nothing else sharing `.shop-item`/`.shop-command` is affected).
+- Swapped `svgIcon(prodIconId(...))` → `fridgeKitArt(...)` in both the plan list rows and the store-mode checklist rows, so the shopping list now shows the same real product photos as Lager instead of abstract SVG icons.
+- New `ui-v252.css`. Store-mode and the Requests panel are unchanged for now — this pass covers the Plan panel, which is what was actually visible/complained about.
+
+# v279 — Boot loading screen rebuilt inline, dropped ui-v249.css dependency
+
+- The user kept seeing the raw unstyled `data-gate-view="loading"` markup (concatenated "AArmonia Thassos", no spacing) despite v270-272's fixes verifying fine in testing — meaning `ui-v249.css` was failing to load for them in a way that never reproduced in-session (network hiccup, CDN edge, a stale service-worker cache entry — never pinned down). Root cause aside: a loading screen that depends on a second CSS file arriving successfully is fragile *by construction* — it's the one screen that most needs to survive a slow or flaky connection.
+- Rebuilt it: dropped the `.gate-landmark` aside entirely from the static pre-JS loading markup (kept for the login/PIN views only, where `ui-v249.css` already renders correctly), replaced with a single centered `.gate-loading-mark` badge + heading + status + dots. All of its CSS now lives **inline** in each shell's own `<style>` block — no separate stylesheet request, so it physically cannot fail to load independently of the HTML document itself.
+- New look: a pulsing gradient mark, the heading/status fading up together, three animated dots. Respects `prefers-reduced-motion`.
+
+# v278 — Smart product autofill + real icon picker
+
+- Added 32 more product photos (`crop-extra-icons.py`, same square/circle-safe trim as v277) covering items not yet in the catalog — chili pepper, potato, leek, celery, ginger, red cabbage, schnitzel, deli meat, sausages, tuna, bougatsa, cake, baklava, frozen spinach/peas, sparkling water (glass), fruit juice, flour, sugar, frappé, tomato paste, oregano, vegetable bouillon, honey, canned peaches, vanilla pudding, koulourakia, glass cleaner, fabric softener, rubber gloves, napkins, air freshener. Deliberately skipped grid cells showing a real recognizable brand (Heinz, Kellogg's) in favor of the generic-labeled alternative cells or fictional-brand ones (icons/fridge/ now has 93 files total).
+- **New: smart "add product" autofill.** `productSuggestions()` merges the real catalog/custom-product pool with this new reference-only icon library, so typing a name suggests a photo + category + unit even for products that have never been stocked anywhere — tapping a "Νέο προϊόν" suggestion snaps the name to the canonical spelling and pre-fills everything else, same one-tap flow as picking an existing product.
+- **New: manual icon picker uses real photos, not abstract SVGs.** `photoIconPickerHtml()` replaces `foodIconPickerHtml()` in both the add-product sheet and the product-edit sheet — a scrollable grid of all 93 photos plus a "∅ Automatisch" option to clear back to the regex auto-match. Selection is stored in a new `p.photo` field (`resolvePhotoIcon()`: explicit override → regex match against name → null), threaded through `applyProductOverride`/`persistProductFields` alongside the existing `icon`/`alias` override plumbing so it works for both custom and built-in products.
+- `fridgeKitArt()` now calls `resolvePhotoIcon()` instead of re-deriving the match inline — same behavior for the 68 already-covered products, but now respects a manual override everywhere it's used (Lager rows/tiles, receipt sheet, shop list, featured cards).
+
+# v277 — Product photos re-cropped square + circle-safe, +2 items
+
+- The v276 crops were tight rectangular trims — fine for the list-row thumbnails, but clipped at the edges once dropped into a circular (`object-fit:cover`) placeholder (bananas, the broom handle, anything wider/taller than the frame). Regenerated the 4 source sheets with an explicit "everything must fit inside the inner 55% of the cell, imagine a circular crop" prompt, and reworked `crop-product-icons.py`'s `trim_and_square()` to pad the trimmed subject out to a centered square canvas — every icon is now safe for any circular frame regardless of the product's natural aspect ratio.
+- Re-mapped all 4 sheets since the actual generated grids drifted from the requested column counts (dairy came out 6×4, pantry 6×3, with a few duplicate cells) — picked the clearest cell per product by hand.
+- 2 new icons that weren't in the original crop: `salt.png` (Salz/Αλάτι — added to `fridgeKitArt()`'s regex table *after* washing-machine-salt's entry since "Salz" is a substring of "Waschmaschinensalz") and `cornflakes.png`.
+
+# v276 — Real product photos for 55 more Lager items
+
+- Cropped the 4 generated grid-sheet contact sheets (dairy, pantry, household, produce) into 60 individual product PNGs via `scripts/crop-product-icons.py` (Pillow: slice each cell, trim tight to the subject by diffing against white). 5 overwrote existing placeholder-generation art (garlic, oil, rice, tomato-sauce, yogurt); 55 are new.
+- Expanded `fridgeKitArt()`'s name→icon regex table from 13 to 68 entries, matching against the product's German/Greek name (post-`norm()`, so no spaces/accents/dots — patterns ordered specific-before-generic where one name is a substring of another, e.g. Streukäse/Frischkäse before the generic Käse, Frühlingszwiebeln before Zwiebeln, Sprudelwasser before Wasser).
+
+# v275 — Fix: bento tile text overflow from v274
+
+- The square Plan/Liste tiles were only ~127px wide at typical viewport widths and the icon sat beside the label, leaving too little room for "Πρόγραμμα" / "Ελεύθερο σήμερα" — text ellipsis-truncated after 3-4 characters. Square tiles now stack the icon above the label (full tile width for text instead of sharing it with a 30px dot), and the stat strings are shorter across all four tiles.
+
+# v274 — Home: bento shortcut row (Lager/Plan/Liste/Momente), PC + mobile
+
+- Implemented Home Concept C ("Bento-Raster") from the Figma exploration: `homeBentoRowHtml()` renders four always-visible, clickable tiles — Lager (stock low count), Plan (today's open tasks), Liste (open shop list), Momente (gallery) — instead of the old behaviour where day/shop/stock only surfaced as pulse chips, and only the top 2 non-zero ones at that.
+- Wired into both `viewHome()` (desktop, inserted between the hero and the existing two-column grid) and `renderMobileHome()` (mobile, stacks full-width via `ui-v250.css`'s `@media(max-width:899px)` rule) — same helper function, one implementation for both.
+- Trimmed the old pulse-chip row on both to overdue-only, since day/shop/stock now have permanent tiles instead — showing both would have just repeated the same three numbers twice on screen.
+- New `ui-v250.css` for the tile styling (wide/square/slim shapes, four color tones).
+
+# v273 — Removed the interactive fridge illustration
+
+- Pulled `fridgeToyHtml()` and its `#fridgeToyToggle` wiring, the `.fridge-toy*` CSS (both `ui-v248.css` and `stock-fridge.css`), and the `fridgeToyHint` i18n strings. The Lager empty state is back to just the message + reset button.
+
+# v272 — Fix: v271's View Transition also broke login buttons
+
+- `document.startViewTransition()` from v271 threw `InvalidStateError: Transition was aborted because of invalid state` when `paintGate()` ran again while a prior transition was still in flight (happens during boot's back-to-back gate repaints). A `startViewTransition()` call that throws never invokes its callback, so the DOM swap silently never happened — same end symptom as v270 (unresponsive login buttons), different cause. Dropped the View Transition API entirely; `paintGate()` is back to a plain, always-synchronous swap. Kept the fade-**in** (a class + cleanup timeout added after the swap, which can't affect swap timing) and dropped fade-**out** — a real crossfade needs either the async browser API (fragile, just proved) or keeping two DOM trees alive at once (real restructuring); not worth the risk twice in one session. Verified by clicking through Personal → PIN → back on a real logout, not just a computed-style check.
+
+# v271 — Fix: login screen buttons stopped responding (v270 regression)
+
+- v270's fade-out attempt added `body.classList.add('gate-leaving')` and deferred the DOM swap by `setTimeout(..., 120)`. Two bugs: (1) `body` inside `gate.js` is `document.getElementById('gateBody')` — i.e. `.gate-wrap` — not the real `<body>` element, so every `body.gate-leaving`/`body.gate-enter` CSS selector silently matched nothing; (2) `renderEntrance()` (and every other view function) wires its click handlers immediately after calling `paintGate()`, synchronously, expecting the new markup to already be in the DOM — the 120ms delay meant `body.querySelectorAll('[data-mode]')` ran against the *old* DOM and wired zero buttons, so "Personal"/"Kinder" (and every other gate button) silently did nothing.
+- Rewrote `paintGate()` to keep the DOM swap fully synchronous (fixes the click-wiring race outright) and hand the actual cross-fade to the browser's native View Transitions API (`document.startViewTransition()`) when available — old and new content fade into each other automatically; unsupported browsers just get the instant swap plus the entrance stagger, never a stuck or broken state. Fixed the `#gateBody` vs `body` selector mismatch in `ui-v249.css` at the same time.
+
+# v270 — Boot/login screen redesign: simpler, with real fade transitions
+
+- Reworked `ui-v249.css` after the first pass shipped broken: it depended on a `@media(min-width:900px)` two-column split of `#gate` that never actually got exercised (and, separately, the file 404'd for a while because the local dev server needed a restart to pick up the new static-file allowlist entry — restarted it). Replaced with something much simpler and more robust: `.gate-landmark` is now a compact brand row (mark + "Armonia Thassos") sitting on top of the existing card, styled for the light theme that's actually rendered in practice instead of a dark panel that was never confirmed to show.
+- Real fade choreography, not just a static screen: `gate.js`'s `paintGate()` (the function every gate view — loading, entrance, profiles, PIN, reset — swaps through) now adds `body.gate-leaving` for ~120ms before replacing the content, then `body.gate-enter` for the incoming view, so screens visibly fade out and the next one fades/rises in staggered by element instead of popping. The pure-static first paint (before gate.js has even run) plays the same entrance animation directly off `[data-gate-view="loading"]`, so there's motion even before any JS executes. Respects `prefers-reduced-motion`.
+
+# v269 — Real "unsaved changes" card; animated boot screen
+
+- **Fixed a real navigation bug**: every "leave with unsaved changes?" guard (switching Lager house, switching staff tabs, hash routing, Taschengeld compose, Buch, logout) went through `window.confirm()`. That native dialog gets silently auto-dismissed — no visible popup, instant "Cancel" — inside embedded WebViews and automated browser contexts, which looked exactly like "I try to leave and nothing happens, no message, I'm just stuck." Replaced every one of those 8 call sites with `openUnsavedLeaveConfirm()`, an in-app sheet that always renders (lists what's unsaved, "Zurück" / "Verwerfen & verlassen"). `window.confirm()` is gone from the codebase entirely for this flow.
+- New `ui-v249.css`: the boot loading screen (`#gate[data-gate-view="loading"]`, shown for the brief window before `gate.js` swaps in the real login view) finally has its own styling — `.gate-landmark`/`.gate-main` existed in the markup but had zero CSS. Desktop gets a two-column split with a drifting gradient wash, a pulsing ring behind the brand mark, and a shimmering wordmark; mobile deliberately stays flat (per the existing v109 "no decorative glass/blobs" mobile rule) and only gets a quiet three-dot brand-green progress indicator. Respects `prefers-reduced-motion`.
+
+# v268 — Lager list (PC): louder rename affordance, warning-colored minus
+
+- Desktop-only refinement of the compact Lager list rows, matching the 3-concepts Figma exploration ("Regal-Liste"): the existing rename pencil (`.lager-edit-mark`, already wired to open the product-detail sheet) is now larger and brightens to brand-green on row hover instead of sitting at a flat low opacity; the stepper's "–" button switches to the app's existing `--out` warning color instead of the shared white/pine styling. Scoped inside the `@media(min-width:960px)` block that already widens the Lager list for desktop, so mobile's touch stepper is untouched.
+
+# v263 — Tresen floats on PC too, once you scroll past the header
+
+- On desktop the counter icon was only reachable in the header — scroll a long shelf list and it's gone. Now: a `window` scroll listener (registered once; `main.app-stage` has no overflow of its own, the page itself scrolls) toggles `body.stock-counter-floating` past 140px, which switches the same button to `position:fixed` bottom-right — same treatment as the mobile FAB. Scrolls back to inline automatically near the top.
+
+# v262 — Tresen floats on mobile; new Admin "Belege" (Receipts) panel
+
+- Counter icon is now `position:fixed` bottom-right on the mobile shell (thumb-reachable FAB), above the bottom nav dock. Stays inline in the header on desktop and inside the FriDge tile header.
+- New Admin pane "Belege": groups the existing `DB.log` audit rows by `operationId` (every Receipt confirm already writes one log row per line, sharing one operationId) into receipt-styled cards — date, staff, house, itemized ± with reasons. No new stored images or a new persisted collection; this re-renders the same data live, so it can't go stale and doesn't bloat the database with duplicate bytes.
+- **Fixed a real pre-existing bug found while wiring this**: the mobile admin rail's tab buttons shared a `data-admin-go` attribute with unrelated home-screen shortcut buttons. The one handler for that attribute didn't know about pane-switching, so every admin tab except Übersicht/Team silently routed to Schedule instead. Rail buttons now use their own `data-admin-pane-go` attribute with dedicated wiring; desktop was unaffected (it already routes via `#admin/<pane>` hash links).
+
+# v261 — Lager-Tresen becomes a header cart icon; real save-crash fixed
+
+- Replace the bottom Tresen pill with a cart icon + count badge in the Lager header (both list and tile views) — tap opens the Receipt, same as before. No more fixed bar competing with page content.
+- Add a "Verwerfen" (discard all) link inside the Receipt sheet, since the pill's inline clear button no longer exists.
+- **Root-cause fix**: `server.py` read `domain-catalog.json` (which contains Greek text) without an explicit encoding. On Windows with a Greek system locale, this crashed every `/api/operations` call with `UnicodeDecodeError`, silently caught and surfaced only as "Nicht gespeichert. Bitte erneut versuchen." — explains why saves never actually completed. Fixed with `encoding="utf-8"`; verified a real stock write now persists.
+- Removed now-dead wiring for `#stockDraftClear`/`#stockReasonClear`/`#stockDraftSave` (no longer emitted anywhere).
+
+# v260 — Lager: Beleg (Receipt) checkout for the Tresen
+
+- Replace the counter's inline chip list with a minimal always-on pill (count only) — tapping/removing during a shelf-walk no longer shows anything but the running total.
+- Tapping the pill opens a Receipt sheet: every counter line, a single default reason for all removed items (change once, applies to all), and a per-line reason override for the odd exception — no checkboxes.
+- `commitStockDraft()` now resolves each OUT line's reason from the per-item override first, falling back to the receipt's default; `stockPendingStep`'s old single-reason blocking modal is no longer the primary path (still used by bulk-select actions, unchanged).
+- "Left at the counter" unsaved-leave copy now names the Tresen explicitly.
+
+# v259 — Lager: Tresen counter + compact list view
+
+- Add a compact list view for storage (grouped by shelf, house pills, Leer/Achtung/Alle tabs, ± steppers) alongside the existing FriDge tile view; toggle button switches and remembers the choice, same as before.
+- Rename the pending ±-changes tray to "Tresen" (counter) — a shop-counter metaphor distinct from the shopping list/cart — with per-item removable chips.
+- Persist the Tresen draft (and its province house) to localStorage so it survives a reload or closed tab, not just an in-app tab switch; greet the carer with a resume toast if they left something uncommitted.
+- No change to underlying stock logic: same draft/commit/reason-required/undo-guard functions as before, only the surrounding template and storage of the draft.
+
+# v258 — Responsive shell reliability
+
+- Self-host the interface fonts so the app shell and its navigation load reliably without an external stylesheet.
+- Audit responsive layouts, top bars and bottom navigation across phone, tablet, laptop and desktop aspect ratios.
+
 # v251 — FriDge reference implementation
 
 - Rebuild storage from the supplied UI kit with Ubuntu, original food artwork, centered header, filter menu, horizontal featured rail, quantity badges and two-column mobile ingredient cards.

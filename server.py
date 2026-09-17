@@ -2266,7 +2266,7 @@ def execute_operation(body: dict, session: dict | None) -> tuple[int, dict]:
     if paidia_db is None:
         return 503, {"error":"Durable storage unavailable", "code":"storage", "durable":False}
     try:
-        catalog=json.loads((Path(__file__).resolve().parent / "domain-catalog.json").read_text())
+        catalog=json.loads((Path(__file__).resolve().parent / "domain-catalog.json").read_text(encoding="utf-8"))
         with OPS_LOCK:
             # Do not use the warm-instance cache as the revision authority.
             updated, result = paidia_db.update_json_atomic('ops', lambda value: apply_operation(
@@ -5372,6 +5372,11 @@ def parse_json_output(text: str) -> dict:
 
 
 class Handler(SimpleHTTPRequestHandler):
+    # Default http.server is HTTP/1.0 (closes the socket after every response).
+    # Keep-alive avoids per-request TCP setup/teardown, which some proxied /
+    # sandboxed browser environments handle poorly (seen as connection resets).
+    protocol_version = "HTTP/1.1"
+
     def json_response(self, status: int, payload: dict, headers: dict | None = None) -> None:
         raw = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
@@ -5731,7 +5736,8 @@ class Handler(SimpleHTTPRequestHandler):
             "ui-v244.css",
             "ui-v245.css",
             "ui-v246.css",
-            "ui-v247.css", "stock-fridge.css", "icons/fridge/ubuntu-400.ttf", "icons/fridge/ubuntu-500.ttf", "icons/fridge/ubuntu-700.ttf",
+            "ui-v247.css", "ui-v248.css", "ui-v249.css", "ui-v250.css", "ui-v251.css", "ui-v252.css", "ui-v283.css", "ui-v285.css", "ui-v287.css", "ui-v293.css", "ui-v294.css", "stock-fridge.css", "app-fonts.css", "icons/fridge/ubuntu-400.ttf", "icons/fridge/ubuntu-500.ttf", "icons/fridge/ubuntu-700.ttf",
+            "icons/fonts/fraunces-600.ttf", "icons/fonts/fraunces-700.ttf", "icons/fonts/outfit-400.ttf", "icons/fonts/outfit-500.ttf", "icons/fonts/outfit-600.ttf", "icons/fonts/outfit-700.ttf",
             "sw.js",
             "manifest.webmanifest",
             # Login shows the running version + DE/EL "what changed" from this.

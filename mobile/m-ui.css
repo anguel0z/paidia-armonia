@@ -49,7 +49,24 @@ body.shell-m #view {
   margin: 0 !important;
   padding: 10px var(--m-pad) calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 20px) !important;
   box-sizing: border-box !important;
-  overflow-x: clip !important;
+  /* Must stay visible — any overflow on #view traps position:fixed (book/talk/shop chrome) */
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  scroll-padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 12px) !important;
+  transform: none !important;
+  filter: none !important;
+  perspective: none !important;
+}
+body.shell-m #app.app-shell {
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+body.shell-m #view > .m-page,
+body.shell-m #view > * {
+  transform: none !important;
+  max-width: 100% !important;
 }
 
 /* Page shell */
@@ -150,8 +167,9 @@ body.shell-m #view .m-rail > * {
   scroll-snap-align: start;
 }
 
-/* Hide desktop-only chrome when mobile renderers wrap legacy bits */
-body.shell-m #view .m-page .pro-only.mode-pro-block:not(.m-keep-pro),
+/* Hide desktop-only chrome when mobile renderers wrap legacy bits.
+   Keep kid home Pro CTA tiles (plan/stars) — they are intentional /m/ actions. */
+body.shell-m #view .m-page .pro-only.mode-pro-block:not(.m-keep-pro):not(.kid-home-cta-tile),
 body.shell-m #view .m-page .desk-only,
 body.shell-m #view .m-page .week-matrix-desktop,
 body.shell-m #view .m-page .stock-overview,
@@ -302,4 +320,835 @@ body.shell-m #view .m-rail button.on {
   background: var(--brand, #2a6b52);
   border-color: var(--brand, #2a6b52);
   color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   v294 — Mobile QA: overflows, orphaned buttons, clipped chrome, dock crush
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body.shell-m #view,
+body.shell-m main.app-stage#view {
+  /* Do not set overflow-x:hidden here — it forces overflow-y:auto and traps position:fixed */
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 56px) !important;
+}
+body.shell-m #view .m-page::after {
+  content: "";
+  display: block;
+  height: 28px;
+}
+
+/* Staff dock: 5 equal slots — never cap width so Πρόγραμμα isn't "Πρόγρ…" */
+body.shell-m:not(.mode-child) nav.dock {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  gap: 0 !important;
+}
+body.shell-m:not(.mode-child) nav.dock button {
+  flex: 1 1 0 !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  padding: 4px 2px !important;
+}
+body.shell-m:not(.mode-child) nav.dock button span:not(.i):not(.nav-ico) {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 11px !important;
+  letter-spacing: 0 !important;
+}
+
+/* Kid dock: 3 primary + More (pocket/notes in Άλλα) */
+body.shell-m.mode-child .kid-dock,
+body.shell-m.mode-child nav.kid-dock {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  gap: 0 !important;
+  padding: 4px 2px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+  overflow: hidden !important;
+}
+body.shell-m.mode-child .kid-dock .kid-dock-label {
+  display: none !important;
+}
+body.shell-m.mode-child .kid-dock button {
+  min-width: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  padding: 4px 1px !important;
+  gap: 2px !important;
+}
+body.shell-m.mode-child .kid-dock button span:not(.i):not(.nav-ico) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden !important;
+  white-space: normal !important;
+  text-overflow: ellipsis !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Kid directory: card + admin icons on one row (icons were orphaned below) */
+body.shell-m #view .kid-dir-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+body.shell-m #view .kid-dir-row,
+body.shell-m #view .m-page .kid-dir-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+body.shell-m #view .kid-dir-card {
+  min-width: 0 !important;
+  width: auto !important;
+}
+body.shell-m #view .kid-dir-admin {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  width: 44px !important;
+}
+body.shell-m #view .kid-dir-admin .btn,
+body.shell-m #view .kid-dir-admin .kid-dir-ico {
+  flex: 0 0 44px !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  padding: 0 !important;
+}
+
+/* Horizontal rails: keep last chip peekable, never report as page overflow */
+body.shell-m #view .kids-pane-tabs,
+body.shell-m #view .planner-focus-switch,
+body.shell-m #view .planner-seg,
+body.shell-m #view .shop-panel-seg,
+body.shell-m #view .m-admin-panes,
+body.shell-m #view .m-rail,
+body.shell-m #view .section-shell-nav {
+  padding-right: 28px !important;
+}
+
+/* Plan view switcher: stay in flow. Sticky + overflow-x:clip hid Ημέρα/Εβδομάδα. */
+body.shell-m[data-tab="schedule"] #view .planner-focus-switch {
+  position: relative !important;
+  top: auto !important;
+  z-index: 2 !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  gap: 6px !important;
+  padding: 4px !important;
+}
+body.shell-m[data-tab="schedule"] #view .planner-focus-switch button {
+  flex: 1 0 auto !important;
+  min-width: 0 !important;
+}
+body.shell-m[data-tab="schedule"] #view .planner-focus-switch .lbl-full {
+  display: none !important;
+}
+body.shell-m[data-tab="schedule"] #view .planner-focus-switch .lbl-short {
+  display: inline !important;
+}
+
+/* Week agenda: show the selected day only (7 stacked days duplicated the page) */
+body.shell-m #view .week-agenda-board {
+  display: block !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+body.shell-m #view .week-agenda-column {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+body.shell-m #view .week-agenda-column:not(.is-focus) {
+  display: none !important;
+}
+body.shell-m #view .week-agenda-column.is-focus,
+body.shell-m #view .week-agenda-board:not(:has(.is-focus)) .week-agenda-column:first-child {
+  display: block !important;
+}
+body.shell-m #view .week-agenda-shell > header {
+  display: none !important;
+}
+body.shell-m #view .plan-week-chrome-actions {
+  display: none !important;
+}
+body.shell-m #view .plan-week-chrome .plan-week-summary {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+/* Pocket calendar must clear the dock */
+body.shell-m #view .m-pocket,
+body.shell-m #view .pocket-cal-wrap {
+  padding-bottom: 12px !important;
+}
+body.shell-m #view .paidia-cal {
+  margin-bottom: 16px !important;
+}
+
+/* Account / section shells: picker only — pills + dropdown was duplicate + clipped */
+body.shell-m #view .section-shell-nav {
+  display: none !important;
+}
+body.shell-m #view .section-shell-picker {
+  display: block !important;
+  margin: 0 0 12px !important;
+}
+body.shell-m #view .section-shell-picker select {
+  width: 100% !important;
+  min-height: 48px !important;
+  border-radius: 12px !important;
+  padding: 0 12px !important;
+}
+
+/* Kid games: full-width stack, not a broken 82% carousel */
+body.shell-m.mode-child #view .arcade-rail,
+body.shell-m.mode-child #view .m-kid .arcade-rail {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+  gap: 10px !important;
+  max-width: 100% !important;
+}
+body.shell-m.mode-child #view .arcade-rail > .arcade-tile,
+body.shell-m.mode-child #view .m-kid .arcade-rail > .arcade-tile {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Shop plan tabs */
+body.shell-m #view .shop-panel-seg {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100% !important;
+}
+body.shell-m #view .shop-panel-seg button {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}
+
+/* Stock-check sheet: stack footer, 44px close */
+body.shell-m .shift-check-actions,
+body.shell-m #sheet .shift-check-actions {
+  grid-template-columns: 1fr !important;
+}
+body.shell-m .sheet-close,
+body.shell-m #sheet .sheet-close,
+body.shell-m .shift-check-sheet .sheet-close {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+/* Kid rating score buttons: 44px taps */
+body.shell-m #view .kid-rating-subjects-v2 .grade-pick,
+body.shell-m #view .kid-rating-panel-v2 .grade-pick {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+/* Home shift steps: keep CTA on the same row so "Άνοιξε σελίδα" clears the dock */
+body.shell-m #view .home-shift-step {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+body.shell-m #view .home-shift-step-cta,
+body.shell-m #view .home-shift-step-done {
+  grid-column: auto !important;
+  width: auto !important;
+  max-width: 42vw !important;
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  white-space: nowrap !important;
+  justify-content: center !important;
+  position: relative !important;
+  z-index: 46 !important; /* above dock (z≈40–45) so peeking CTAs still receive taps */
+}
+/* Journal / presence primary lives in the card head — keep it compact + tappable */
+body.shell-m #view .home-shift-start-head {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+}
+body.shell-m #view .home-shift-start-head .home-shift-primary {
+  flex: 0 0 auto !important;
+  max-width: 42vw !important;
+  min-height: 44px !important;
+  padding: 8px 12px !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  z-index: 46 !important;
+}
+body.shell-m #view .home-shift-start {
+  margin-bottom: 12px !important;
+}
+body.shell-m #view .home-shift-hint {
+  display: none !important; /* frees ~40px so bottom step CTAs clear the dock band */
+}
+body.shell-m #view .home-shift-start-head h2 {
+  font-size: 18px !important;
+  margin: 2px 0 !important;
+}
+body.shell-m #view .home-shift-step {
+  padding: 6px 10px !important;
+}
+body.shell-m #view .m-home .m-cta {
+  margin-bottom: 8px !important;
+}
+
+/* Kid today CTA grid — last tile was fully under the kid dock */
+body.shell-m.mode-child #view .kid-home-cta,
+body.shell-m.mode-child #view .m-kid .kid-home-cta {
+  margin-bottom: calc(var(--kid-dock-h, 84px) + env(safe-area-inset-bottom, 0px) + 40px) !important;
+}
+body.shell-m.mode-child #view .kid-home-cta-tile {
+  min-height: 72px !important;
+  padding: 12px !important;
+}
+body.shell-m.mode-child #view .m-kid {
+  padding-bottom: calc(var(--kid-dock-h, 84px) + env(safe-area-inset-bottom, 0px) + 48px) !important;
+}
+/* Idle next-up is the whole games CTA — no trailing chip under the dock */
+body.shell-m.mode-child #view button.next-up {
+  display: grid !important;
+  width: 100% !important;
+  border: 0 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  font: inherit !important;
+  color: inherit !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+body.shell-m.mode-child #view .next-up.next-up-idle {
+  grid-template-columns: 46px minmax(0, 1fr) !important;
+}
+/* Short viewports: keep last home actions scrollable past the dock */
+@media (max-height: 700px) {
+  body.shell-m #view .m-home {
+    padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 48px) !important;
+  }
+  body.shell-m.mode-child #view .m-kid {
+    padding-bottom: calc(var(--kid-dock-h, 84px) + env(safe-area-inset-bottom, 0px) + 64px) !important;
+  }
+}
+
+/* Hide leftover desktop heroes that fight the compact mobile page */
+body.shell-m #view .m-kids .kids-hero .brand-kicker,
+body.shell-m #view .m-kids .kids-hero .ui-mode-row,
+body.shell-m #view .m-admin .admin-ops-hero .admin-pane-seg {
+  display: none !important;
+}
+
+/* Admin hero: never white-on-white from leftover pane-seg rules */
+body.shell-m #view .admin-ops-hero {
+  color: #193d31 !important;
+}
+body.shell-m #view .admin-ops-hero .muted {
+  color: #4a5c54 !important;
+}
+
+/* Empty-task row had a duplicate Πρόγραμμα chip that letter-stacked */
+body.shell-m #view .m-home .task-list .m-row > .btn {
+  display: none !important;
+}
+
+/* Kid profile KPIs: 4 skinny columns wrapped labels; 2×2 is readable */
+body.shell-m #view .kid-profile-kpis,
+body.shell-m #view .kid-rating-kpis-v2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* ── Fleet matrix follow-ups (≤360 + Book + Pocket cal + landscape) ──────── */
+@media (max-width: 360px) {
+  body.shell-m:not(.mode-child) nav.dock button span:not(.i):not(.nav-ico),
+  body.shell-m.mode-child .kid-dock button span:not(.i):not(.nav-ico) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+  }
+  body.shell-m:not(.mode-child) header.app-chrome h1 {
+    max-width: 96px !important;
+  }
+}
+
+/* Long lists must scroll clear of the dock (sticky-cover P1s) */
+body.shell-m #view .m-stock,
+body.shell-m #view .m-kids,
+body.shell-m #view .m-pocket,
+body.shell-m #view .m-plan,
+body.shell-m #view .m-home,
+body.shell-m #view .m-book,
+body.shell-m #view .m-admin {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 28px) !important;
+}
+body.shell-m #view .stock-list,
+body.shell-m #view .kid-dir-list,
+body.shell-m #view #fridgeStorage {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 24px) !important;
+}
+
+/* Host for teleported fixed chrome (book/talk/shop) — viewport-fixed, above dock */
+body.shell-m #mFixedChrome {
+  position: contents;
+}
+body.shell-m #mFixedChrome .journal-write-actions,
+body.shell-m #mFixedChrome .talk-compose,
+body.shell-m #mFixedChrome .store-finish.bottom-dock {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px)) !important;
+  top: auto !important;
+  z-index: 48 !important;
+  transform: none !important;
+}
+body.shell-m #mFixedChrome .store-finish.bottom-dock {
+  left: 8px !important;
+  right: 8px !important;
+  bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 6px) !important;
+  width: auto !important;
+}
+
+/* Kid PWA must never outrank dock (ui-v245 sets z:61) */
+body.shell-m.mode-child #pwaInstallBar,
+body.shell-m.mode-child .pwa-install-bar,
+body.mode-child.shell-m #pwaInstallBar,
+body.mode-child.shell-m .pwa-install-bar {
+  display: none !important;
+  z-index: 30 !important;
+}
+
+/* Kid hero full-bleed: sync with --m-pad (index.html uses --stage-pad-x which can desync) */
+body.shell-m.mode-child {
+  --stage-pad-x: var(--m-pad, 14px);
+}
+body.shell-m.mode-child #view .kid-hero:not(.kid-hero-compact),
+body.shell-m.mode-child #view .kid-header:not(.kid-hero-compact) {
+  margin-inline: calc(-1 * var(--m-pad, 14px)) !important;
+  width: calc(100% + 2 * var(--m-pad, 14px)) !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+body.shell-m #view .m-book,
+body.shell-m #view .book-shell {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 36px) !important;
+}
+body.shell-m #view .m-pocket .paidia-cal,
+body.shell-m #view .pocket-cal-wrap {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 20px) !important;
+}
+body.shell-m #view .m-book .book-meta,
+body.shell-m #view .m-book .shift-note-meta,
+body.shell-m #view .book-journal-meta {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+body.shell-m #view .book-panes,
+body.shell-m #view .book-day-strip,
+body.shell-m #view .book-cal-strip {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100% !important;
+}
+body.shell-m #view .house-selector,
+body.shell-m #view .stock-house-rail,
+body.shell-m #view .shop-house-rail {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+}
+
+@media (max-height: 420px) and (orientation: landscape) {
+  body.shell-m:not(.mode-child) header.app-chrome {
+    min-height: 44px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+  body.shell-m #view .week-jump {
+    max-height: 56px !important;
+  }
+}
+
+/* ── Overhaul notes v294b (anti-slop) ─────────────────────────────────────── */
+
+/* Bento: real icons instead of empty circles */
+body.shell-m #view .home-bento-ico {
+  display: grid !important;
+  place-items: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  flex: none !important;
+  color: inherit !important;
+  opacity: .85 !important;
+}
+body.shell-m #view .home-bento-ico .ui-ico {
+  width: 20px !important;
+  height: 20px !important;
+}
+body.shell-m #view .home-bento-dot { display: none !important; }
+body.shell-m #view .home-bento-m2 {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+body.shell-m #view .home-bento-m2 .home-bento-tile {
+  flex: none !important;
+  width: 100% !important;
+}
+
+/* Shift: stock check is outline secondary — header owns the only primary */
+body.shell-m #view .home-shift-step-cta:not(.primary) {
+  background: transparent !important;
+  border: 1px solid color-mix(in srgb, var(--brand, #2a6b52) 45%, transparent) !important;
+  color: var(--brand, #2a6b52) !important;
+  box-shadow: none !important;
+  font-weight: 650 !important;
+}
+body.shell-m #view .home-shift-primary {
+  box-shadow: none !important;
+}
+
+/* Admin ops: text-link rows, not four equal tiles */
+body.shell-m #view .ops-metrics {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  grid-template-columns: none !important;
+}
+body.shell-m #view .ops-metric {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 10px !important;
+  padding: 12px 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line, #d5ddd8) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+body.shell-m #view .ops-metric strong {
+  font: 700 16px/1.2 var(--font-display, Fraunces, Georgia, serif) !important;
+  grid-column: auto !important;
+  min-width: 1.5em !important;
+}
+body.shell-m #view .ops-metric span {
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+}
+
+/* Header density ≤375 — bell + avatar only */
+@media (max-width: 375px) {
+  body.shell-m #btnLang,
+  body.shell-m #btnHelp,
+  body.shell-m header.app-chrome [data-page-act="tutorial"],
+  body.shell-m header.app-chrome #btnTutorial {
+    display: none !important;
+  }
+}
+
+/* Pocket: category chips wrap as a grid, not a long soup */
+body.shell-m #view .pocket-source-chips,
+body.shell-m #view .pocket-quick,
+body.shell-m #view [data-pocket-quick-cat] {
+  /* chips themselves sized below via parent */
+}
+body.shell-m #view .pocket-source-chips,
+body.shell-m #view .pocket-quick {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  max-width: 100% !important;
+}
+body.shell-m #view .pocket-source-chip {
+  width: 100% !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Book: one narrative — hide stacked howto / duplicate banner chrome */
+body.shell-m #view .m-book .book-howto,
+body.shell-m #view .m-book .shift-check-howto,
+body.shell-m #view .m-book .book-tutorial-card,
+body.shell-m #view .handoff-flow {
+  display: none !important;
+}
+
+/* Shop empty-state: keep one line on /m/ */
+body.shell-m #view .m-shop .empty-state small,
+body.shell-m #view .m-shop .empty small {
+  display: none !important;
+}
+
+/* Tablet soft handoff to desk shell */
+body.shell-m #view .m-desk-handoff {
+  display: none;
+  margin: 16px 0 8px;
+  padding: 12px 14px;
+  text-align: center;
+  font: 650 14px/1.3 var(--font-ui, Outfit, system-ui, sans-serif);
+  color: var(--brand, #2a6b52);
+  border: 1px dashed color-mix(in srgb, var(--brand, #2a6b52) 40%, transparent);
+  border-radius: 12px;
+  text-decoration: none;
+  background: color-mix(in srgb, var(--brand, #2a6b52) 6%, transparent);
+}
+@media (min-width: 768px) {
+  body.shell-m #view .m-desk-handoff {
+    display: block;
+  }
+}
+
+/* Plan empty lanes: quiet dashed add only */
+body.shell-m #view .schedule-agenda-empty.compact {
+  min-height: 44px !important;
+  padding: 10px 12px !important;
+}
+body.shell-m #view .plan-day-summary:has(b:only-child) {
+  /* no-op fallback when :has unsupported */
+}
+body.shell-m #view .m-plan .plan-day-summary b {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Deep-agent P0 follow-ups ─────────────────────────────────────────────── */
+
+/* Talk: compose pinned above sticky dock (overrides mobile.css position:static) */
+body.shell-m[data-tab="talk"] #view .talk-compose,
+body.shell-m #view .m-talk .talk-compose {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px)) !important;
+  z-index: 45 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto auto !important;
+  gap: 8px !important;
+  align-items: end !important;
+  margin: 0 !important;
+  padding: 10px var(--m-pad, 14px) !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+  background: rgba(244, 247, 245, 0.97) !important;
+  border-top: 1px solid var(--line, #d5ddd8) !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  inset: auto 0 calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px)) 0 !important;
+}
+body.shell-m[data-tab="talk"] #view .m-talk,
+body.shell-m #view .m-talk {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 72px) !important;
+}
+body.shell-m[data-tab="talk"] #view .talk-chat-fast,
+body.shell-m #view .m-talk .talk-chat-fast {
+  max-height: min(42vh, 360px) !important;
+  overflow-y: auto !important;
+}
+body.shell-m[data-tab="talk"] #view .talk-overview-stats {
+  display: none !important;
+}
+
+/* Admin: hide desk stat tile wall */
+body.shell-m #view .admin-ops-desk-stats {
+  display: none !important;
+}
+
+/* Book save: fixed above dock (#view overflow-x:clip breaks sticky) */
+body.shell-m[data-tab="book"] #view .m-book .journal-write-actions {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: auto !important;
+  bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px)) !important;
+  z-index: 45 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 10px var(--m-pad, 14px) calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(244, 247, 245, 0.97) !important;
+  border-top: 1px solid var(--line, #d5ddd8) !important;
+  box-shadow: 0 -6px 18px rgba(28, 45, 38, 0.08) !important;
+}
+body.shell-m[data-tab="book"] #view .m-book #shiftNoteSave {
+  margin-bottom: 0 !important;
+  flex: 1 1 auto !important;
+}
+body.shell-m[data-tab="book"] #view .m-book .journal-write {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 64px) !important;
+}
+
+/* Home: keep bento above dock — compact shift + early shortcuts */
+body.shell-m #view .m-home .m-hero .ui-mode-row {
+  display: none !important;
+}
+body.shell-m #view .m-home .home-shift-hint {
+  display: none !important;
+}
+body.shell-m #view .m-home .home-shift-start {
+  padding: 10px 12px !important;
+  margin-bottom: 0 !important;
+}
+body.shell-m #view .m-home .home-shift-start-head h2 {
+  font-size: 1.15rem !important;
+  margin: 2px 0 !important;
+}
+body.shell-m #view .m-home .home-shift-start-head p {
+  font-size: 0.82rem !important;
+  margin: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+body.shell-m #view .m-home .home-shift-steps {
+  gap: 6px !important;
+  margin-top: 8px !important;
+}
+body.shell-m #view .m-home .home-bento-m2 {
+  margin: 0 !important;
+}
+body.shell-m #view .m-home .home-bento-m2 .home-bento-tile {
+  min-height: 56px !important;
+  padding: 10px 12px !important;
+}
+
+/* Shop: list pad under dock / store chrome */
+body.shell-m #view .m-shop {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 36px) !important;
+}
+body.shell-m.store-fullscreen #bottomPanel {
+  display: flex !important; /* keep dock reachable; don't orphan sticky progress over dock */
+  z-index: 55 !important; /* above .store-page (ui-v110 z:60) */
+  pointer-events: auto !important;
+}
+
+/* Store page must not steal dock taps (was position:fixed; inset:0; z:60) */
+body.shell-m .store-page,
+body.shell-m.store-fullscreen .store-page,
+body.shell-m #view .store-page {
+  z-index: 40 !important;
+  bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px)) !important;
+  inset: 0 0 calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px)) 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+
+/* Shop finish: sit above dock (ui-v110 used bottom:10px + z:65 → 58px dock theft) */
+body.shell-m .store-finish.bottom-dock,
+body.shell-m.store-fullscreen .store-finish.bottom-dock {
+  position: fixed !important;
+  left: 8px !important;
+  right: 8px !important;
+  bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 6px) !important;
+  width: auto !important;
+  max-width: none !important;
+  transform: none !important;
+  z-index: 48 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+  padding: 8px 10px !important;
+  box-sizing: border-box !important;
+}
+body.shell-m .store-finish.bottom-dock .store-finish-copy {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  padding-left: 2px !important;
+  min-width: 0 !important;
+}
+body.shell-m .store-finish.bottom-dock .store-finish-copy b,
+body.shell-m .store-finish.bottom-dock .store-finish-copy span {
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+body.shell-m .store-finish.bottom-dock .row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+body.shell-m .store-finish.bottom-dock .btn {
+  min-height: 44px !important;
+  font-size: 13px !important;
+  padding-inline: 8px !important;
+}
+body.shell-m.store-fullscreen .store-page,
+body.shell-m #view .store-page {
+  padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 148px) !important;
+}
+body.shell-m #view .m-shop .lager-list,
+body.shell-m.store-fullscreen .store-list,
+body.shell-m #view .store-list {
+  padding-bottom: 24px !important;
+}
+
+/* Landscape / short viewports: shrink store chrome so list + finish fit */
+@media (max-height: 420px) {
+  body.shell-m .store-finish.bottom-dock,
+  body.shell-m.store-fullscreen .store-finish.bottom-dock {
+    gap: 4px !important;
+    padding: 6px 8px !important;
+  }
+  body.shell-m .store-finish.bottom-dock .btn {
+    min-height: 40px !important;
+    font-size: 12px !important;
+  }
+  body.shell-m.store-fullscreen .store-top,
+  body.shell-m #view .store-top {
+    padding-block: 6px !important;
+  }
+  body.shell-m.store-fullscreen .store-page,
+  body.shell-m #view .store-page {
+    padding-bottom: calc(var(--m-dock-h) + env(safe-area-inset-bottom, 0px) + 110px) !important;
+  }
+}
+@media (max-width: 300px) {
+  body.shell-m .store-finish.bottom-dock .row {
+    grid-template-columns: 1fr !important;
+  }
+  body.shell-m .store-finish.bottom-dock .btn {
+    min-height: 40px !important;
+    font-size: 12px !important;
+  }
 }

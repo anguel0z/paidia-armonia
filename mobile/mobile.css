@@ -150,14 +150,14 @@ body.shell-m .shell-switch {
   letter-spacing: 0.04em;
 }
 
-/* Motion: route + dock */
+/* Motion: route + dock — opacity only (transform breaks position:fixed chrome) */
 @media (prefers-reduced-motion: no-preference) {
   body.shell-m.route-enter #view > * {
-    animation: paidiaMEnter 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: paidiaMEnter 0.28s ease-out both;
   }
   @keyframes paidiaMEnter {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: none; }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   body.shell-m nav.dock button:active {
     transform: scale(0.94);
@@ -238,13 +238,28 @@ body.shell-m .bell-count {
 body.shell-m .pwa-install-bar {
   left: 10px !important;
   right: 10px !important;
-  bottom: calc(var(--nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 8px) !important;
+  bottom: calc(var(--m-dock-h, var(--nav-h, 64px)) + env(safe-area-inset-bottom, 0px) + 8px) !important;
   flex-wrap: nowrap !important;
   align-items: center !important;
   gap: 8px !important;
   padding: 10px 12px !important;
   border-radius: 14px !important;
-  z-index: 35;
+  z-index: 34 !important; /* below dock (~50) and below store-finish/talk/book (45–48) */
+}
+/* Yield during critical bottom chrome — agents: sticky wars + kid z>dock */
+body.shell-m.store-fullscreen #pwaInstallBar,
+body.shell-m.store-fullscreen .pwa-install-bar,
+body.shell-m[data-tab="talk"] #pwaInstallBar,
+body.shell-m[data-tab="talk"] .pwa-install-bar,
+body.shell-m[data-tab="book"] #pwaInstallBar,
+body.shell-m[data-tab="book"] .pwa-install-bar,
+body.shell-m[data-tab="shop"] #pwaInstallBar,
+body.shell-m[data-tab="shop"] .pwa-install-bar,
+body.shell-m.mode-child #pwaInstallBar,
+body.shell-m.mode-child .pwa-install-bar,
+body.mode-child.shell-m #pwaInstallBar,
+body.mode-child.shell-m .pwa-install-bar {
+  display: none !important;
 }
 body.shell-m .pwa-install-bar .grow {
   flex: 1 1 auto !important;

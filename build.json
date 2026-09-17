@@ -1,8 +1,8 @@
 {
-  "version": 251,
-  "label": "v251",
+  "version": 294,
+  "label": "v294",
   "changed": {
-    "de": "Lager nach dem FriDge-UI-Kit: Originalschrift und Bilder, zwei Produktspalten, Mengen-Badges und kompakte Filter.",
-    "el": "Αποθήκη με το FriDge UI Kit: αρχική γραμματοσειρά και εικόνες, δύο στήλες, ποσότητες και φίλτρα."
+    "de": "Mobile: überlaufende Leisten, abgeschnittene Dock-Labels, verwaiste Kinder-Buttons und die Wochenansicht — alles aufs Handy gelegt.",
+    "el": "Κινητό: διορθώθηκαν υπερχειλίσεις, κομμένες ετικέτες στο dock, ορφανά κουμπιά παιδιών και η εβδομαδιαία προβολή."
   }
 }

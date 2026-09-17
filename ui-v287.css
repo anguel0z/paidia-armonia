@@ -1,0 +1,74 @@
+/* ui-v287.css -- Kid profile school/rating page, Figma "Kid Rating Concept A"
+   (two-column workspace: subjects table | team-rating panel). Desktop AND
+   mobile. Additive compound classes on top of the existing kid-profile
+   and staff-rating and grade-pick and school-sub-row markup -- those
+   classes are shared across other screens too, so every rule here is
+   scoped under .kid-rating-hero-v2 / .kid-rating-workspace to avoid
+   bleeding into unrelated uses of the same shared classes elsewhere. */
+
+/* Hero */
+.kid-profile-mast.kid-rating-hero-v2,
+body:not(.mode-child) .kid-profile-mast.kid-rating-hero-v2,
+body.layout-mobile:not(.mode-child) .kid-profile-mast.kid-rating-hero-v2{
+  background:linear-gradient(150deg, var(--brand,#286148) 0%, #16281f 100%) !important;
+  border:0 !important; box-shadow:0 14px 34px rgba(16,28,22,.2);
+}
+.kid-rating-hero-v2 .brand-kicker{ color:rgba(255,255,255,.62) !important; opacity:1 !important; }
+.kid-rating-hero-v2 h2{ color:#fff; }
+.kid-rating-hero-v2 .profile-age-line{ color:rgba(255,255,255,.82); }
+.kid-rating-hero-v2 .profile-bio-line{ color:rgba(255,255,255,.62) !important; opacity:1 !important; }
+.kid-rating-hero-v2 .kid-dir-av.lg{ border:2px solid rgba(255,255,255,.4); }
+.kid-rating-hero-v2 .pr-track{ stroke:rgba(255,255,255,.18); }
+.kid-rating-hero-v2 .pr-fill{ stroke:var(--sun,#e8a23a); }
+.kid-rating-hero-v2 .pr-label{ fill:#fff; }
+
+/* KPI strip: align corner radius + lift with the hero family */
+.kid-profile-kpis.kid-rating-kpis-v2{
+  border-radius:16px !important; box-shadow:0 6px 18px rgba(20,30,25,.06);
+}
+
+/* Two-column workspace */
+.kid-rating-workspace{
+  display:grid; gap:14px; margin:14px 0;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr);
+  align-items:start;
+}
+@media (max-width:900px){
+  .kid-rating-workspace{ grid-template-columns:1fr; }
+}
+.kid-rating-workspace > .card{ margin:0; }
+
+/* Subjects card: bigger rows + solid active-state score buttons */
+.kid-rating-subjects-v2 .school-sub-row{
+  padding:12px 0; align-items:center;
+}
+.kid-rating-subjects-v2 .school-sub-row > span:first-child{
+  font-weight:650; font-size:14.5px; flex:1;
+}
+.kid-rating-subjects-v2 .grade-pick{
+  width:32px; height:32px; border-radius:9px;
+}
+.kid-rating-subjects-v2 .grade-pick.on{
+  background:var(--brand,#286148); border-color:var(--brand,#286148);
+  color:#fff; box-shadow:none;
+}
+
+/* Team-rating panel: bigger average, colored bars, highlighted "your rating" */
+.kid-rating-panel-v2 .paidia-cal{ margin-bottom:6px; }
+.kid-rating-panel-v2 .staff-rating-summary{
+  padding:14px 16px; margin:0 0 8px; border-radius:14px; background:var(--bg-deep);
+}
+.kid-rating-panel-v2 .staff-rating-summary > b{ font-size:38px; }
+.kid-rating-panel-v2 .staff-rating-row{ padding:7px 0; }
+.kid-rating-panel-v2 .staff-rating-track{ height:9px; background:var(--bg-deep); }
+.kid-rating-panel-v2 .staff-own-rating{
+  margin-top:16px; padding:16px; border-top:0; border-radius:14px;
+  background:color-mix(in srgb, var(--brand,#286148) 9%, #fff);
+}
+.kid-rating-panel-v2 .staff-own-rating > strong{
+  font-size:14.5px; font-weight:750; color:var(--brand,#286148); margin-bottom:8px;
+}
+.kid-rating-panel-v2 .grade-pick.on{
+  background:var(--brand,#286148); border-color:var(--brand,#286148);
+  color:#fff; box-shadow:none;
+}

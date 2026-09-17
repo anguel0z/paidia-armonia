@@ -901,6 +901,7 @@ body.shell-desk.auth-pending #gate {
 
 /* Narrow window on desk site: keep sidebar usable */
 @media (max-width: 1100px) {
+  body.shell-desk.layout-desktop:not(.mode-child),
   body.shell-desk {
     --rail-w: 200px;
     --desk-pad-x: 18px;
@@ -909,9 +910,13 @@ body.shell-desk.auth-pending #gate {
   body.shell-desk #view .pocket-ledger-top {
     grid-template-columns: 1fr !important;
   }
+  body.shell-desk.layout-desktop:not(.mode-child) #app.app-shell {
+    grid-template-columns: var(--rail-w) minmax(0, 1fr) !important;
+  }
 }
 
 @media (max-width: 900px) {
+  body.shell-desk.layout-desktop:not(.mode-child),
   body.shell-desk {
     --rail-w: 72px;
   }
@@ -924,6 +929,74 @@ body.shell-desk.auth-pending #gate {
   }
   body.shell-desk #bottomPanel .dock-brand-copy {
     display: none;
+  }
+  body.shell-desk nav.kid-dock button span:not(.i):not(.nav-ico) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+}
+
+@media (max-width: 600px) {
+  body.shell-desk {
+    --desk-pad-x: 10px;
+  }
+  body.shell-desk .app-chrome {
+    padding-inline: var(--desk-pad-x) !important;
+  }
+  body.shell-desk .topbar-row,
+  body.shell-desk .topbar-core {
+    gap: 4px !important;
+  }
+  body.shell-desk .chrome-brand {
+    flex: 1 1 44px;
+  }
+  body.shell-desk header h1 {
+    font-size: 15px !important;
+  }
+  body.shell-desk header .who,
+  body.shell-desk #uiModeToggle,
+  body.shell-desk #btnTour {
+    display: none !important;
+  }
+  body.shell-desk .topbtn {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+  }
+  body.shell-desk .shell-switch {
+    font-size: 10px;
+  }
+}
+
+@media (max-height: 800px) and (min-width: 601px) {
+  body.shell-desk #bottomPanel {
+    padding-block: 8px !important;
+    gap: 3px;
+  }
+  body.shell-desk #bottomPanel .dock-brand {
+    padding-block: 3px 7px;
+  }
+  body.shell-desk nav.dock[data-staff-dock] {
+    gap: 0;
+    padding-block: 0 !important;
+  }
+  body.shell-desk.layout-desktop:not(.mode-child) #bottomPanel nav.dock[data-staff-dock] > button,
+  body.shell-desk.layout-desktop.mode-child #bottomPanel nav.kid-dock > button,
+  body.shell-desk nav.dock button {
+    min-height: 34px !important;
+    height: 34px !important;
+    padding-block: 4px !important;
+  }
+  body.shell-desk #dockZoAi,
+  body.shell-desk .dock-zoai {
+    min-height: 38px;
+  }
+  body.shell-desk #dockWho {
+    display: none !important;
   }
 }
 
